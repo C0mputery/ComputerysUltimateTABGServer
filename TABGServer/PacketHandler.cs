@@ -25,148 +25,146 @@ namespace TABGCommunityServer
             }
 
             using (MemoryStream memoryStream = new MemoryStream(buffer))
+            using (BinaryReader binaryReader = new BinaryReader(memoryStream))
             {
-                using (BinaryReader binaryReader = new BinaryReader(memoryStream))
+                switch (code)
                 {
-                    switch (code)
-                    {
-                        case EventCode.RoomInit:
-                            string roomName = "DecompileServer";
-                            byte newIndex = concurrencyHandler.LastID++;
+                    case EventCode.RoomInit:
+                        string roomName = "DecompileServer";
+                        byte newIndex = concurrencyHandler.LastID++;
 
-                            var playerName = binaryReader.ReadString();
-                            var gravestoneText = binaryReader.ReadString();
-                            var loginKey = binaryReader.ReadUInt64();
-                            var squadHost = binaryReader.ReadBoolean();
-                            var squadMembers = binaryReader.ReadByte();
-                            var userGearLength = binaryReader.ReadInt32();
+                        var playerName = binaryReader.ReadString();
+                        var gravestoneText = binaryReader.ReadString();
+                        var loginKey = binaryReader.ReadUInt64();
+                        var squadHost = binaryReader.ReadBoolean();
+                        var squadMembers = binaryReader.ReadByte();
+                        var userGearLength = binaryReader.ReadInt32();
 
-                            int[] gearData = new int[userGearLength];
+                        int[] gearData = new int[userGearLength];
 
-                            for (int i = 0; i < userGearLength; i++)
+                        for (int i = 0; i < userGearLength; i++)
+                        {
+                            var userGear = binaryReader.ReadInt32();
+                            gearData[i] = (int)userGear;
+                        }
+
+                        byte[] sendByte = new byte[4 + 4 + 4 + 4 + 4 + 4 + (roomName.Length + 4)];
+
+                        using (MemoryStream writerMemoryStream = new MemoryStream(sendByte))
+                        {
+                            using (BinaryWriter binaryWriterStream = new BinaryWriter(writerMemoryStream))
                             {
-                                var userGear = binaryReader.ReadInt32();
-                                gearData[i] = (int)userGear;
+                                // accepted or not
+                                binaryWriterStream.Write((byte)ServerResponse.Accepted);
+                                // gamemode
+                                binaryWriterStream.Write((byte)GameMode.BattleRoyale);
+                                // client requires this, but it's useless
+                                binaryWriterStream.Write((byte)1);
+                                // player index
+                                binaryWriterStream.Write(newIndex);
+                                // group index
+                                binaryWriterStream.Write((Byte)0);
+                                // useless
+                                binaryWriterStream.Write(1);
+                                // useless string (but using it to notify server of a custom server)
+                                binaryWriterStream.Write(Encoding.UTF8.GetBytes("CustomServer"));
                             }
+                        }
 
-                            byte[] sendByte = new byte[4 + 4 + 4 + 4 + 4 + 4 + (roomName.Length + 4)];
+                        Console.WriteLine("Sending request RESPONSE to client!");
+                        this.SendMessageToServer(EventCode.RoomInitRequestResponse, sendByte, true);
 
-                            using (MemoryStream writerMemoryStream = new MemoryStream(sendByte))
+                        Console.WriteLine("Sending Login RESPONSE to client!");
+                        this.SendMessageToServer(EventCode.Login, SendJoinMessageToServer(newIndex, playerName, gearData), true);
+
+                        foreach (var item in concurrencyHandler.Players)
+                        {
+                            if (item.Key == newIndex)
                             {
-                                using (BinaryWriter binaryWriterStream = new BinaryWriter(writerMemoryStream))
-                                {
-                                    // accepted or not
-                                    binaryWriterStream.Write((byte)ServerResponse.Accepted);
-                                    // gamemode
-                                    binaryWriterStream.Write((byte)GameMode.BattleRoyale);
-                                    // client requires this, but it's useless
-                                    binaryWriterStream.Write((byte)1);
-                                    // player index
-                                    binaryWriterStream.Write(newIndex);
-                                    // group index
-                                    binaryWriterStream.Write((Byte)0);
-                                    // useless
-                                    binaryWriterStream.Write(1);
-                                    // useless string (but using it to notify server of a custom server)
-                                    binaryWriterStream.Write(Encoding.UTF8.GetBytes("CustomServer"));
-                                }
+                                continue;
                             }
+                            // this has been moved into the natively supported Login event for the main player
+                            //this.SendMessageToServer(ClientEventCode.Login, new PlayerHandler().BroadcastPlayerJoin((byte)item.Key, item.Value.Name, item.Value.GearData), true);
 
-                            Console.WriteLine("Sending request RESPONSE to client!");
-                            this.SendMessageToServer(EventCode.RoomInitRequestResponse, sendByte, true);
+                            // broadcast to ALL players
+                            item.Value.PendingBroadcastPackets.Add(new Packet(EventCode.Login, SendLoginMessageToServer(newIndex, playerName, gearData)));
+                        }
 
-                            Console.WriteLine("Sending Login RESPONSE to client!");
-                            this.SendMessageToServer(EventCode.Login, SendJoinMessageToServer(newIndex, playerName, gearData), true);
+                        this.SendMessageToServer(EventCode.PlayerDead, new PlayerHandler().SendNotification(0, "WELCOME - RUNNING COMMUNITY SERVER V1.TEST"), true);
+                        break;
+                    case EventCode.ChatMessage:
+                        var playerIndex = binaryReader.ReadByte(); // or ReadInt32(), depending on the type of PlayerIndex
+                        var messageLength = binaryReader.ReadByte();
+                        var messageBytes = binaryReader.ReadBytes(messageLength);
+                        var message = Encoding.Unicode.GetString(messageBytes);
+                        Console.WriteLine("Player " + playerIndex + ": " + message);
 
-                            foreach (var item in concurrencyHandler.Players)
-                            {
-                                if (item.Key == newIndex)
-                                {
-                                    continue;
-                                }
-                                // this has been moved into the natively supported Login event for the main player
-                                //this.SendMessageToServer(ClientEventCode.Login, new PlayerHandler().BroadcastPlayerJoin((byte)item.Key, item.Value.Name, item.Value.GearData), true);
+                        var handler = new AdminCommandHandler(message, playerIndex);
+                        handler.Handle(concurrencyHandler);
 
-                                // broadcast to ALL players
-                                item.Value.PendingBroadcastPackets.Add(new Packet(EventCode.Login, SendLoginMessageToServer(newIndex, playerName, gearData)));
-                            }
+                        // test if there needs to be a packet sent back
+                        if (handler.shouldSendPacket)
+                        {
+                            this.SendMessageToServer(handler.code, handler.packetData, true);
+                        }
 
-                            this.SendMessageToServer(EventCode.PlayerDead, new PlayerHandler().SendNotification(0, "WELCOME - RUNNING COMMUNITY SERVER V1.TEST"), true);
-                            return;
-                        case EventCode.ChatMessage:
-                            var playerIndex = binaryReader.ReadByte(); // or ReadInt32(), depending on the type of PlayerIndex
-                            var messageLength = binaryReader.ReadByte();
-                            var messageBytes = binaryReader.ReadBytes(messageLength);
-                            var message = Encoding.Unicode.GetString(messageBytes);
-                            Console.WriteLine("Player " + playerIndex + ": " + message);
+                        if ((handler.notification != null) && (handler.notification != ""))
+                        {
+                            this.SendMessageToServer(EventCode.PlayerDead, new PlayerHandler().SendNotification(playerIndex, handler.notification), true);
+                        }
 
-                            var handler = new AdminCommandHandler(message, playerIndex);
-                            handler.Handle(concurrencyHandler);
+                        break;
+                    case EventCode.RequestItemThrow:
+                        this.BroadcastPacket(EventCode.ItemThrown, Throwables.ClientRequestThrow(binaryReader), true);
+                        break;
+                    case EventCode.RequestItemDrop:
+                        this.BroadcastPacket(EventCode.ItemDrop, Droppables.ClientRequestDrop(binaryReader, weaponConcurrencyHandler), true);
+                        break;
+                    case EventCode.RequestWeaponPickUp:
+                        this.BroadcastPacket(EventCode.WeaponPickUpAccepted, Droppables.ClientRequestPickUp(binaryReader, weaponConcurrencyHandler), true);
+                        break;
+                    case EventCode.PlayerUpdate:
+                        // this packet is different because it can have an unlimited amount of subpackets
+                        UpdatePacket updatePacket = new PlayerHandler().PlayerUpdate(binaryReader, buffer.Length, concurrencyHandler);
 
-                            // test if there needs to be a packet sent back
-                            if (handler.shouldSendPacket)
-                            {
-                                this.SendMessageToServer(handler.code, handler.packetData, true);
-                            }
+                        this.SendMessageToServer(EventCode.PlayerUpdate, updatePacket.Packet, true);
 
-                            if ((handler.notification != null) && (handler.notification != ""))
-                            {
-                                this.SendMessageToServer(EventCode.PlayerDead, new PlayerHandler().SendNotification(playerIndex, handler.notification), true);
-                            }
+                        // have to do this so enumeration is safe
+                        List<Packet> packetList = updatePacket.BroadcastPackets.PendingBroadcastPackets;
 
-                            return;
-                        case EventCode.RequestItemThrow:
-                            this.BroadcastPacket(EventCode.ItemThrown, Throwables.ClientRequestThrow(binaryReader), true);
-                            return;
-                        case EventCode.RequestItemDrop:
-                            this.BroadcastPacket(EventCode.ItemDrop, Droppables.ClientRequestDrop(binaryReader, weaponConcurrencyHandler), true);
-                            return;
-                        case EventCode.RequestWeaponPickUp:
-                            this.BroadcastPacket(EventCode.WeaponPickUpAccepted, Droppables.ClientRequestPickUp(binaryReader, weaponConcurrencyHandler), true);
-                            return;
-                        case EventCode.PlayerUpdate:
-                            // this packet is different because it can have an unlimited amount of subpackets
-                            UpdatePacket updatePacket = new PlayerHandler().PlayerUpdate(binaryReader, buffer.Length, concurrencyHandler);
+                        // also use this packet to send pending broadcast packets
+                        foreach (var item in packetList)
+                        {
+                            this.SendMessageToServer(item.Type, item.Data, true);
+                        }
 
-                            this.SendMessageToServer(EventCode.PlayerUpdate, updatePacket.Packet, true);
+                        updatePacket.BroadcastPackets.PendingBroadcastPackets = new List<Packet>();
 
-                            // have to do this so enumeration is safe
-                            List<Packet> packetList = updatePacket.BroadcastPackets.PendingBroadcastPackets;
+                        break;
+                    case EventCode.WeaponChange:
+                        this.BroadcastPacket(EventCode.WeaponChanged, new PlayerHandler().PlayerChangedWeapon(binaryReader), true);
+                        break;
+                    case EventCode.PlayerFire:
+                        new PlayerHandler().PlayerFire(binaryReader, buffer.Length, concurrencyHandler);
+                        break;
+                    case EventCode.RequestSyncProjectileEvent:
+                        this.BroadcastPacket(EventCode.SyncProjectileEvent, new PlayerHandler().ClientRequestProjectileSyncEvent(concurrencyHandler, binaryReader, buffer.Length), true);
+                        break;
+                    case EventCode.RequestAirplaneDrop:
+                        this.BroadcastPacket(EventCode.PlayerAirplaneDropped, new PlayerHandler().RequestAirplaneDrop(binaryReader), true);
+                        break;
+                    case EventCode.DamageEvent: // damage event breaks damage for some reason
 
-                            // also use this packet to send pending broadcast packets
-                            foreach (var item in packetList)
-                            {
-                                this.SendMessageToServer(item.Type, item.Data, true);
-                            }
-
-                            updatePacket.BroadcastPackets.PendingBroadcastPackets = new List<Packet>();
-
-                            return;
-                        case EventCode.WeaponChange:
-                            this.BroadcastPacket(EventCode.WeaponChanged, new PlayerHandler().PlayerChangedWeapon(binaryReader), true);
-                            return;
-                        case EventCode.PlayerFire:
-                            new PlayerHandler().PlayerFire(binaryReader, buffer.Length, concurrencyHandler);
-                            return;
-                        case EventCode.RequestSyncProjectileEvent:
-                            this.BroadcastPacket(EventCode.SyncProjectileEvent, new PlayerHandler().ClientRequestProjectileSyncEvent(concurrencyHandler, binaryReader, buffer.Length), true);
-                            return;
-                        case EventCode.RequestAirplaneDrop:
-                            this.BroadcastPacket(EventCode.PlayerAirplaneDropped, new PlayerHandler().RequestAirplaneDrop(binaryReader), true);
-                            return;
-                        // damage event breaks damage for some reason
-                        case EventCode.DamageEvent:
-                            new PlayerHandler().PlayerDamagedEvent(concurrencyHandler, binaryReader);
-                            return;
-                        case EventCode.RequestBlessing:
-                            this.BroadcastPacket(EventCode.BlessingRecieved, new PlayerHandler().RequestBlessingEvent(binaryReader), true);
-                            return;
-                        case EventCode.RequestHealthState:
-                            this.BroadcastPacket(EventCode.PlayerHealthStateChanged, new PlayerHandler().RequestHealthState(concurrencyHandler, binaryReader), true);
-                            return;
-                        default:
-                            return;
-                    }
+                        new PlayerHandler().PlayerDamagedEvent(concurrencyHandler, binaryReader);
+                        break;
+                    case EventCode.RequestBlessing:
+                        this.BroadcastPacket(EventCode.BlessingRecieved, new PlayerHandler().RequestBlessingEvent(binaryReader), true);
+                        break;
+                    case EventCode.RequestHealthState:
+                        this.BroadcastPacket(EventCode.PlayerHealthStateChanged, new PlayerHandler().RequestHealthState(concurrencyHandler, binaryReader), true);
+                        break;
+                    default:
+                        break;
                 }
             }
         }
