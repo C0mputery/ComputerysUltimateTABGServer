@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TABGCommunityServer
+﻿namespace TABGCommunityServer
 {
     internal class GameHandler
     {
@@ -21,6 +15,7 @@ namespace TABGCommunityServer
             }
             return sendByte;
         }
+
         public static byte[] SetCountDown(int countdownFrom)
         {
             byte[] sendByte = new byte[512];
@@ -36,6 +31,7 @@ namespace TABGCommunityServer
             }
             return sendByte;
         }
+
         public static byte[] SetFlying(byte matchModifier)
         {
             byte[] sendByte = new byte[512];

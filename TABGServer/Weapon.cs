@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TABGCommunityServer
+﻿namespace TABGCommunityServer
 {
-    internal class Weapon
+    internal struct Weapon
     {
         public int Id { get; set; }
         public int Type { get; set; }

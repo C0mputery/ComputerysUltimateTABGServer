@@ -15,12 +15,11 @@ namespace TABGCommunityServer
         public (float X, float Y) Rotation { get; set; }
         public int[] GearData { get; set; }
         public float Health { get; set; }
-
-        // aim down sights
-        public bool Ads { get; set; }
+        public bool Ads { get; set; } // Aim down sights
         public byte[] OptimizedDirection { get; set; }
         public List<Packet> PendingBroadcastPackets { get; set; }
         public byte MovementFlags { get; set; }
+
         public Player(byte id, byte group, string name, (float X, float Y, float Z) location, (float X, float Y) rotation, int[] gearData)
         {
             Id = id;

@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TABGCommunityServer
+﻿namespace TABGCommunityServer
 {
     internal class PlayerConcurencyHandler
     {
         public Dictionary<int, Player> Players = new Dictionary<int, Player>();
         public byte LastID = 0;
-
-        public PlayerConcurencyHandler() { }
 
         public void AddPlayer(Player player)
         {

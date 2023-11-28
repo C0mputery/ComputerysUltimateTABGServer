@@ -1,12 +1,5 @@
 ﻿using ENet;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.Tracing;
-using System.Linq;
-using System.Numerics;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace TABGCommunityServer
 {
@@ -26,7 +19,8 @@ namespace TABGCommunityServer
         public void Handle(EventCode code, byte[] buffer)
         {
             string? stringCode = Enum.GetName(typeof(EventCode), code);
-            if ((stringCode != "TABGPing") && (stringCode != "PlayerUpdate")) {
+            if ((stringCode != "TABGPing") && (stringCode != "PlayerUpdate"))
+            {
                 Console.WriteLine("Handling packet: " + Enum.GetName(typeof(EventCode), code));
             }
 
@@ -34,7 +28,7 @@ namespace TABGCommunityServer
             {
                 using (BinaryReader binaryReader = new BinaryReader(memoryStream))
                 {
-                    switch(code)
+                    switch (code)
                     {
                         case EventCode.RoomInit:
                             string roomName = "DecompileServer";
@@ -49,7 +43,7 @@ namespace TABGCommunityServer
 
                             int[] gearData = new int[userGearLength];
 
-                            for(int i = 0; i < userGearLength; i++)
+                            for (int i = 0; i < userGearLength; i++)
                             {
                                 var userGear = binaryReader.ReadInt32();
                                 gearData[i] = (int)userGear;
@@ -86,7 +80,7 @@ namespace TABGCommunityServer
 
                             foreach (var item in concurrencyHandler.Players)
                             {
-                                if(item.Key == newIndex)
+                                if (item.Key == newIndex)
                                 {
                                     continue;
                                 }
@@ -97,7 +91,7 @@ namespace TABGCommunityServer
                                 item.Value.PendingBroadcastPackets.Add(new Packet(EventCode.Login, SendLoginMessageToServer(newIndex, playerName, gearData)));
                             }
 
-                                this.SendMessageToServer(EventCode.PlayerDead, new PlayerHandler().SendNotification(0, "WELCOME - RUNNING COMMUNITY SERVER V1.TEST"), true);
+                            this.SendMessageToServer(EventCode.PlayerDead, new PlayerHandler().SendNotification(0, "WELCOME - RUNNING COMMUNITY SERVER V1.TEST"), true);
                             return;
                         case EventCode.ChatMessage:
                             var playerIndex = binaryReader.ReadByte(); // or ReadInt32(), depending on the type of PlayerIndex
@@ -110,12 +104,12 @@ namespace TABGCommunityServer
                             handler.Handle(concurrencyHandler);
 
                             // test if there needs to be a packet sent back
-                            if(handler.shouldSendPacket)
+                            if (handler.shouldSendPacket)
                             {
                                 this.SendMessageToServer(handler.code, handler.packetData, true);
                             }
 
-                            if((handler.notification != null) && (handler.notification != ""))
+                            if ((handler.notification != null) && (handler.notification != ""))
                             {
                                 this.SendMessageToServer(EventCode.PlayerDead, new PlayerHandler().SendNotification(playerIndex, handler.notification), true);
                             }
@@ -176,7 +170,6 @@ namespace TABGCommunityServer
                 }
             }
         }
-
 
         private void BroadcastPacket(EventCode eventCode, byte[] playerData, bool unused)
         {
@@ -255,7 +248,7 @@ namespace TABGCommunityServer
 
                         // gear data
                         binaryWriterStream.Write((Int32)item.Value.GearData.Length);
-                        for(int i = 0; i < item.Value.GearData.Length; i++)
+                        for (int i = 0; i < item.Value.GearData.Length; i++)
                         {
                             binaryWriterStream.Write((Int32)item.Value.GearData[i]);
                         }
@@ -283,7 +276,7 @@ namespace TABGCommunityServer
                     binaryWriterStream.Write((Int32)0);
                     // seats
                     binaryWriterStream.Write((Int32)4);
-                    for(int i = 0; i < 4; i++)
+                    for (int i = 0; i < 4; i++)
                     {
                         binaryWriterStream.Write((Int32)i);
                     }

@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace TABGCommunityServer
 {
     internal class PlayerHandler
     {
-        public PlayerHandler() { }
-
         public byte[] KillPlayer(int victim, int killer, string victimName)
         {
             byte[] sendByte = new byte[128];
@@ -251,7 +243,8 @@ namespace TABGCommunityServer
                         }
                     }
                 }
-            } catch(Exception err)
+            }
+            catch (Exception err)
             {
                 Console.WriteLine(err);
             }
@@ -315,7 +308,7 @@ namespace TABGCommunityServer
                     binaryWriterStream.Write(w4);
                     binaryWriterStream.Write(w5);
                     binaryWriterStream.Write(attachments.Length);
-                    for(int i = 0; i < attachments.Length; i++)
+                    for (int i = 0; i < attachments.Length; i++)
                     {
                         binaryWriterStream.Write(attachments[i]);
                     }
@@ -340,7 +333,7 @@ namespace TABGCommunityServer
                     // amount of players to loop (unimplemented)
                     binaryWriterStream.Write((byte)playerConcurrencyHandler.Players.Count);
 
-                    foreach(var item in playerConcurrencyHandler.Players)
+                    foreach (var item in playerConcurrencyHandler.Players)
                     {
                         // player index
                         binaryWriterStream.Write((byte)item.Key);
@@ -707,7 +700,7 @@ namespace TABGCommunityServer
                     // gear data
                     var player = playerConcurrencyHandler.Players[playerIndex];
                     binaryWriterStream.Write((Int32)player.GearData.Length);
-                    for(int i = 0; i < player.GearData.Length; i++)
+                    for (int i = 0; i < player.GearData.Length; i++)
                     {
                         binaryWriterStream.Write(player.GearData[i]);
                     }

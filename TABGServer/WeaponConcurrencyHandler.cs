@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TABGCommunityServer
+﻿namespace TABGCommunityServer
 {
     internal class WeaponConcurrencyHandler
     {
         public Dictionary<int, Weapon> WeaponDB = new Dictionary<int, Weapon>();
         public int CurrentID = 0;
-
-        public WeaponConcurrencyHandler() { }
 
         public void SpawnWeapon(Weapon weapon)
         {

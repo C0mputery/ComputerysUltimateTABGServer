@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TABGCommunityServer
+﻿namespace TABGCommunityServer
 {
     internal class AdminCommandHandler
     {
@@ -14,7 +8,9 @@ namespace TABGCommunityServer
         public string? notification;
         public byte[] packetData;
         private byte executor;
-        public AdminCommandHandler(string command, byte executor) {
+
+        public AdminCommandHandler(string command, byte executor)
+        {
             this.command = command;
             // filler data
             this.packetData = new byte[1];
@@ -41,7 +37,7 @@ namespace TABGCommunityServer
             }
 
             string[] parts = command.Split(' ');
-            
+
             if (parts.Length == 0)
             {
                 // invalid command (just /)
@@ -53,7 +49,7 @@ namespace TABGCommunityServer
                 case "kill":
                     // format: /kill VictimID KillerID VictimName
                     // example: /kill 0 0 Tester
-                    if(parts.Length != 4)
+                    if (parts.Length != 4)
                     {
                         Console.WriteLine("Ignoring invalid command!");
                         return;
@@ -70,11 +66,12 @@ namespace TABGCommunityServer
 
                         return;
 
-                    } catch(Exception error)
+                    }
+                    catch (Exception error)
                     {
                         Console.WriteLine(error.Message);
                     }
-                    
+
                     return;
                 case "give":
                     // format: /give ItemID ItemAmount
@@ -96,7 +93,8 @@ namespace TABGCommunityServer
                         this.code = EventCode.PlayerLootRecieved;
 
                         return;
-                    } catch(Exception error)
+                    }
+                    catch (Exception error)
                     {
                         Console.WriteLine(error.Message);
                     }
@@ -148,7 +146,8 @@ namespace TABGCommunityServer
                         try
                         {
                             health = float.Parse(parts[1]);
-                        } catch(Exception error)
+                        }
+                        catch (Exception error)
                         {
                             Console.WriteLine("Parsing error!" + error.Message);
                             return;
@@ -171,7 +170,8 @@ namespace TABGCommunityServer
                             item.Value.PendingBroadcastPackets.Add(new Packet(EventCode.PlayerEnteredChunk, new PlayerHandler().SimulateChunkEnter(playerConncurencyHandler, executor, playerState, playerHealth)));
                         }
                         this.notification = "Player state changed!";
-                    } catch(Exception e)
+                    }
+                    catch (Exception e)
                     {
                         Console.WriteLine(e.Message);
                         this.notification = "Player state change ERROR!";
