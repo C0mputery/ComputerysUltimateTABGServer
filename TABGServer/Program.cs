@@ -18,7 +18,6 @@ namespace TABGCommunityServer
             ENet.Library.Initialize();
             enetHost = new Host();
             enetAddress = new Address() { Port = enetPort };
-            enetAddress.SetIP("0.0.0.0");
             enetHost.Create(enetAddress, maxEnetClients);
 
             Console.WriteLine("Server Started!");
