@@ -1,5 +1,6 @@
 ﻿using ENet;
 using TABGCommunityServer.Packets;
+using TABGCommunityServer.ServerData;
 
 namespace TABGCommunityServer
 {
@@ -10,6 +11,7 @@ namespace TABGCommunityServer
         static Host? enetHost;
         static Address enetAddress;
         static Event enetEvent;
+        static Room room = new();
 
         static void Main()
         {
@@ -21,6 +23,9 @@ namespace TABGCommunityServer
             enetHost.Create(enetAddress, maxEnetClients);
 
             Console.WriteLine("Server Started!");
+
+
+
 
             while (!Console.KeyAvailable)
             {
@@ -60,7 +65,7 @@ namespace TABGCommunityServer
                         byte[] buffer = new byte[enetPacket.Length - 1];
                         Array.Copy(enetPacket, 1, buffer, 0, buffer.Length);
 
-                        PacketHandler.Handle(enetEvent.Peer, code, buffer);
+                        PacketHandler.Handle(enetEvent.Peer, code, buffer, room);
 
                         enetEvent.Packet.Dispose();
                         break;

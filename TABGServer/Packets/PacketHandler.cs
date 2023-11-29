@@ -1,33 +1,17 @@
 ﻿using ENet;
 using System.Collections.Frozen;
+using TABGCommunityServer.ServerData;
 
 namespace TABGCommunityServer.Packets
 {
     public interface IPacketHandler
     {
-        void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader);
+        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room);
     }
 
-    internal static class PacketHandler
+    public static class PacketHandler
     {
-        private static readonly FrozenDictionary<EventCode, IPacketHandler> packetHandlers = new Dictionary<EventCode, IPacketHandler>
-        {
-            { EventCode.RoomInit, new RoomInitPacketHandler() },
-            { EventCode.ChatMessage, new ChatMessagePacketHandler() },
-            { EventCode.RequestItemThrow, new RequestItemThrowPacketHandler() },
-            { EventCode.RequestItemDrop, new RequestItemDropPacketHandler() },
-            { EventCode.RequestWeaponPickUp, new RequestWeaponPickUpPacketHandler() },
-            { EventCode.PlayerUpdate, new PlayerUpdatePacketHandler() },
-            { EventCode.WeaponChange, new WeaponChangePacketHandler() },
-            { EventCode.PlayerFire, new PlayerFirePacketHandler() },
-            { EventCode.RequestSyncProjectileEvent, new RequestSyncProjectileEventPacketHandler() },
-            { EventCode.RequestAirplaneDrop, new RequestAirplaneDropPacketHandler() },
-            { EventCode.DamageEvent, new DamageEventPacketHandler() },
-            { EventCode.RequestBlessing, new RequestBlessingPacketHandler() },
-            { EventCode.RequestHealthState, new RequestHealthStatePacketHandler() },
-        }.ToFrozenDictionary();
-
-        public static void Handle(Peer peer, EventCode code, byte[] buffer)
+        public static void Handle(Peer peer, EventCode code, byte[] buffer, Room room)
         {
             if ((code != EventCode.TABGPing) && (code != EventCode.PlayerUpdate))
             {
@@ -37,9 +21,9 @@ namespace TABGCommunityServer.Packets
             using (MemoryStream memoryStream = new MemoryStream(buffer))
             using (BinaryReader binaryReader = new BinaryReader(memoryStream))
             {
-                if (packetHandlers.TryGetValue(code, out IPacketHandler? packetHandler))
+                if (room.packetHandlers.TryGetValue(code, out IPacketHandler? packetHandler))
                 {
-                    packetHandler.Handle(peer, buffer, binaryReader);
+                    packetHandler.Handle(peer, buffer, binaryReader, room);
                 }
             }
         }
@@ -56,9 +40,9 @@ namespace TABGCommunityServer.Packets
             peer.Send(0, ref packet);
         }
 
-        public static void BroadcastPacket(EventCode eventCode, byte[] playerData, bool unused)
+        public static void BroadcastPacket(EventCode eventCode, byte[] playerData, bool unused, Room room)
         {
-            foreach (var player in PlayerConcurencyHandler.Players)
+            foreach (var player in room.Players)
             {
                 player.Value.PendingBroadcastPackets.Add(new Packet(eventCode, playerData));
             }

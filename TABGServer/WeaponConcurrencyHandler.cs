@@ -1,19 +1,19 @@
 ﻿namespace TABGCommunityServer
 {
-    internal static class WeaponConcurrencyHandler
+    /*internal static class WeaponConcurrencyHandler
     {
-        public static Dictionary<int, Weapon> WeaponDB = new Dictionary<int, Weapon>();
+        public static Dictionary<int, Item> WeaponDB = new Dictionary<int, Item>();
         public static int CurrentID = 0;
 
-        public static void SpawnWeapon(Weapon weapon)
+        public static void SpawnWeapon(Item weapon)
         {
             WeaponDB[weapon.Id] = weapon;
             CurrentID++;
         }
 
-        public static void RemoveWeapon(Weapon weapon)
+        public static void RemoveWeapon(Item weapon)
         {
             WeaponDB.Remove(weapon.Id);
         }
-    }
+    }*/
 }

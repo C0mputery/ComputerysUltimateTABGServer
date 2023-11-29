@@ -1,14 +1,15 @@
 ﻿using ENet;
 using System.Text;
+using TABGCommunityServer.ServerData;
 
 namespace TABGCommunityServer.Packets
 {
     public class RoomInitPacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
+        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
             string roomName = "DecompileServer";
-            byte newIndex = PlayerConcurencyHandler.LastID++;
+            byte newIndex = room.LastID++;
 
             var playerName = binaryReader.ReadString();
             var gravestoneText = binaryReader.ReadString();
@@ -52,9 +53,9 @@ namespace TABGCommunityServer.Packets
             PacketHandler.SendMessageToPeer(peer, EventCode.RoomInitRequestResponse, sendByte, true);
 
             Console.WriteLine("Sending Login RESPONSE to client!");
-            PacketHandler.SendMessageToPeer(peer, EventCode.Login, SendJoinMessageToServer(newIndex, playerName, gearData), true);
+            PacketHandler.SendMessageToPeer(peer, EventCode.Login, SendJoinMessageToServer(newIndex, playerName, gearData, room), true);
 
-            foreach (KeyValuePair<int, Player> player in PlayerConcurencyHandler.Players)
+            foreach (KeyValuePair<byte, Player> player in room.Players)
             {
                 if (player.Key == newIndex)
                 {
@@ -68,7 +69,7 @@ namespace TABGCommunityServer.Packets
             PacketHandler.SendMessageToPeer(peer, EventCode.PlayerDead, new PlayerHandler().SendNotification(0, "WELCOME - RUNNING COMMUNITY SERVER V1.TEST"), true);
         }
 
-        private byte[] SendJoinMessageToServer(byte playerIndex, string playerName, int[] gearData)
+        private byte[] SendJoinMessageToServer(byte playerIndex, string playerName, int[] gearData, Room room)
         {
             byte[] sendByte = new byte[1024];
             using (MemoryStream writerMemoryStream = new MemoryStream(sendByte))
@@ -88,8 +89,7 @@ namespace TABGCommunityServer.Packets
 
                     // set up locations properly
                     Player player = new(playerIndex, 0, playerName, (0f, 200f, 0f), (0f, 0f), gearData);
-                    PlayerConcurencyHandler.AddPlayer(player);
-                    PlayerConcurencyHandler.UpdatePlayerLocation(playerIndex, (0f, 200f, 0f));
+                    room.AddPlayer(player);
 
                     // x
                     binaryWriterStream.Write(0f);
@@ -110,11 +110,11 @@ namespace TABGCommunityServer.Packets
                     binaryWriterStream.Write(false);
                     // how many players are in the lobby?
                     //binaryWriterStream.Write((byte)concurrencyHandler.Players.Count);
-                    binaryWriterStream.Write((byte)(PlayerConcurencyHandler.Players.Count - 1));
+                    binaryWriterStream.Write((byte)(room.Players.Count - 1));
 
                     // --- OTHER PLAYERS ---
 
-                    foreach (var item in PlayerConcurencyHandler.Players)
+                    foreach (var item in room.Players)
                     {
                         if (item.Key == playerIndex)
                         {
@@ -241,9 +241,9 @@ namespace TABGCommunityServer.Packets
         }
     }
 
-    public class ChatMessagePacketHandler : IPacketHandler
+    internal class ChatMessagePacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
+        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
             var playerIndex = binaryReader.ReadByte(); // or ReadInt32(), depending on the type of PlayerIndex
             var messageLength = binaryReader.ReadByte();
@@ -267,36 +267,36 @@ namespace TABGCommunityServer.Packets
         }
     }
 
-    public class RequestItemThrowPacketHandler : IPacketHandler
+    internal class RequestItemThrowPacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
+        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            PacketHandler.BroadcastPacket(EventCode.ItemThrown, Throwables.ClientRequestThrow(binaryReader), true);
+            PacketHandler.BroadcastPacket(EventCode.ItemThrown, Throwables.ClientRequestThrow(binaryReader), true, room);
         }
     }
 
-    public class RequestItemDropPacketHandler : IPacketHandler
+    internal class RequestItemDropPacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
+        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            PacketHandler.BroadcastPacket(EventCode.ItemDrop, Droppables.ClientRequestDrop(binaryReader), true);
+            PacketHandler.BroadcastPacket(EventCode.ItemDrop, Droppables.ClientRequestDrop(binaryReader, room), true, room);
         }
     }
 
-    public class RequestWeaponPickUpPacketHandler : IPacketHandler
+    internal class RequestWeaponPickUpPacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
+        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            PacketHandler.BroadcastPacket(EventCode.WeaponPickUpAccepted, Droppables.ClientRequestPickUp(binaryReader), true);
+            PacketHandler.BroadcastPacket(EventCode.WeaponPickUpAccepted, Droppables.ClientRequestPickUp(binaryReader, room), true, room);
         }
     }
 
-    public class PlayerUpdatePacketHandler : IPacketHandler
+    internal class PlayerUpdatePacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
+        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
             // this packet is different because it can have an unlimited amount of subpackets
-            UpdatePacket updatePacket = new PlayerHandler().PlayerUpdate(binaryReader, buffer.Length);
+            UpdatePacket updatePacket = new PlayerHandler().PlayerUpdate(binaryReader, buffer.Length, room);
 
             PacketHandler.SendMessageToPeer(peer, EventCode.PlayerUpdate, updatePacket.Packet, true);
 
@@ -313,59 +313,59 @@ namespace TABGCommunityServer.Packets
         }
     }
 
-    public class WeaponChangePacketHandler : IPacketHandler
+    internal class WeaponChangePacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
+        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            PacketHandler.BroadcastPacket(EventCode.WeaponChanged, new PlayerHandler().PlayerChangedWeapon(binaryReader), true);
+            PacketHandler.BroadcastPacket(EventCode.WeaponChanged, new PlayerHandler().PlayerChangedWeapon(binaryReader), true, room);
         }
     }
 
-    public class PlayerFirePacketHandler : IPacketHandler
+    internal class PlayerFirePacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
+        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            new PlayerHandler().PlayerFire(binaryReader, buffer.Length);
+            new PlayerHandler().PlayerFire(binaryReader, buffer.Length, room);
         }
     }
 
-    public class RequestSyncProjectileEventPacketHandler : IPacketHandler
+    internal class RequestSyncProjectileEventPacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
+        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            PacketHandler.BroadcastPacket(EventCode.SyncProjectileEvent, new PlayerHandler().ClientRequestProjectileSyncEvent(binaryReader, buffer.Length), true);
+            PacketHandler.BroadcastPacket(EventCode.SyncProjectileEvent, new PlayerHandler().ClientRequestProjectileSyncEvent(binaryReader, buffer.Length), true, room);
         }
     }
 
-    public class RequestAirplaneDropPacketHandler : IPacketHandler
+    internal class RequestAirplaneDropPacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
+        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            PacketHandler.BroadcastPacket(EventCode.PlayerAirplaneDropped, new PlayerHandler().RequestAirplaneDrop(binaryReader), true);
+            PacketHandler.BroadcastPacket(EventCode.PlayerAirplaneDropped, new PlayerHandler().RequestAirplaneDrop(binaryReader), true, room);
         }
     }
 
-    public class DamageEventPacketHandler : IPacketHandler
+    internal class DamageEventPacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
+        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            new PlayerHandler().PlayerDamagedEvent(binaryReader);
+            new PlayerHandler().PlayerDamagedEvent(binaryReader, room);
         }
     }
 
-    public class RequestBlessingPacketHandler : IPacketHandler
+    internal class RequestBlessingPacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
+        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            PacketHandler.BroadcastPacket(EventCode.BlessingRecieved, new PlayerHandler().RequestBlessingEvent(binaryReader), true);
+            PacketHandler.BroadcastPacket(EventCode.BlessingRecieved, new PlayerHandler().RequestBlessingEvent(binaryReader), true, room);
         }
     }
 
-    public class RequestHealthStatePacketHandler : IPacketHandler
+    internal class RequestHealthStatePacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
+        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            PacketHandler.BroadcastPacket(EventCode.PlayerHealthStateChanged, new PlayerHandler().RequestHealthState(binaryReader), true);
+            PacketHandler.BroadcastPacket(EventCode.PlayerHealthStateChanged, new PlayerHandler().RequestHealthState(binaryReader), true, room);
         }
     }
 }

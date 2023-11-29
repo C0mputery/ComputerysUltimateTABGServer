@@ -1,6 +1,6 @@
 ﻿namespace TABGCommunityServer
 {
-    internal static class PlayerConcurencyHandler
+    /*internal static class PlayerConcurencyHandler
     {
         public static Dictionary<int, Player> Players = new Dictionary<int, Player>();
         public static byte LastID = 0;
@@ -23,5 +23,5 @@
                 player.Location = newLocation;
             }
         }
-    }
+    }*/
 }

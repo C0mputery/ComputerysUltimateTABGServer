@@ -1,8 +1,10 @@
-﻿namespace TABGCommunityServer
+﻿using TABGCommunityServer.ServerData;
+
+namespace TABGCommunityServer
 {
     internal class Droppables
     {
-        public static byte[] ClientRequestDrop(BinaryReader binaryReader)
+        public static byte[] ClientRequestDrop(BinaryReader binaryReader, Room room)
         {
             // player
             var playerIndex = binaryReader.ReadByte();
@@ -16,9 +18,9 @@
             var y = binaryReader.ReadSingle();
             var z = binaryReader.ReadSingle();
 
-            int networkID = WeaponConcurrencyHandler.CurrentID;
-            Weapon weapon = new Weapon(networkID, itemID, itemCount, (x, y, z));
-            WeaponConcurrencyHandler.SpawnWeapon(weapon);
+            int networkID = room.CurrentID;
+            Item weapon = new Item(networkID, itemID, itemCount, (x, y, z));
+            room.SpawnItem(weapon);
 
             return SendItemDropPacket(networkID, itemID, itemCount, (x, y, z));
         }
@@ -46,7 +48,7 @@
             return sendByte;
         }
 
-        public static byte[] ClientRequestPickUp(BinaryReader binaryReader)
+        public static byte[] ClientRequestPickUp(BinaryReader binaryReader, Room room)
         {
             // player
             var playerIndex = binaryReader.ReadByte();
@@ -55,10 +57,10 @@
             // item slot of player
             var itemSlot = binaryReader.ReadByte();
 
-            Weapon weapon = WeaponConcurrencyHandler.WeaponDB[netIndex];
+            Item weapon = room.Items[netIndex];
 
             // clean up DB
-            WeaponConcurrencyHandler.RemoveWeapon(weapon);
+            room.RemoveItem(weapon);
 
             return SendWeaponPickUpAcceptedPacket(playerIndex, netIndex, weapon.Type, weapon.Count, itemSlot);
         }

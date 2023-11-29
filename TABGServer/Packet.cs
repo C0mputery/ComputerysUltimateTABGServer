@@ -1,7 +1,7 @@
 ﻿
 namespace TABGCommunityServer
 {
-    internal struct Packet
+    public struct Packet
     {
         public EventCode Type { get; set; }
 

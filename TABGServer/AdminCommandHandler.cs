@@ -20,7 +20,7 @@
 
         public void Handle()
         {
-            this.notification = null;
+            /*this.notification = null;
             this.packetData = new byte[1];
             this.shouldSendPacket = false;
 
@@ -213,7 +213,7 @@
                     this.shouldSendPacket = true;
                     return;
                 default: return;
-            }
+            }*/
         }
     }
 }

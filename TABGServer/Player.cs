@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TABGCommunityServer
 {
-    internal class Player
+    public class Player
     {
         public byte Id { get; set; }
         public byte Group { get; set; }
