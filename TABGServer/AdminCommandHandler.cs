@@ -18,7 +18,7 @@
             this.executor = executor;
         }
 
-        public void Handle(PlayerConcurencyHandler playerConncurencyHandler)
+        public void Handle()
         {
             this.notification = null;
             this.packetData = new byte[1];
@@ -112,7 +112,7 @@
                     this.notification = "You got the default kit!";
                     return;
                 case "coords":
-                    var executorData = playerConncurencyHandler.Players[executor];
+                    var executorData = PlayerConcurencyHandler.Players[executor];
                     var loc = executorData.Location;
                     string notif = "COORDS- X: " + loc.X.ToString() + " Y: " + loc.Y.ToString() + " Z: " + loc.Z.ToString();
                     this.packetData = new PlayerHandler().SendNotification(executor, notif);
@@ -125,14 +125,14 @@
                         Console.WriteLine("Ignoring invalid command!");
                         return;
                     }
-                    foreach (var item in playerConncurencyHandler.Players)
+                    foreach (var item in PlayerConcurencyHandler.Players)
                     {
                         item.Value.PendingBroadcastPackets.Add(new Packet(EventCode.PlayerDead, new PlayerHandler().SendNotification(item.Value.Id, "ANNOUNCE: " + parts[1])));
                     }
                     return;
                 case "revive":
                     this.shouldSendPacket = false;
-                    foreach (var item in playerConncurencyHandler.Players)
+                    foreach (var item in PlayerConcurencyHandler.Players)
                     {
                         item.Value.PendingBroadcastPackets.Add(new Packet(EventCode.ReviveState, new PlayerHandler().RevivePlayer(executor)));
                         item.Value.PendingBroadcastPackets.Add(new Packet(EventCode.PlayerHealed, new PlayerHandler().SetPlayerHealth(executor, 100f)));
@@ -153,7 +153,7 @@
                             return;
                         }
                     }
-                    foreach (var item in playerConncurencyHandler.Players)
+                    foreach (var item in PlayerConcurencyHandler.Players)
                     {
                         item.Value.PendingBroadcastPackets.Add(new Packet(EventCode.PlayerHealed, new PlayerHandler().SetPlayerHealth(executor, health)));
                     }
@@ -165,9 +165,9 @@
                         TABGPlayerState playerState = (TABGPlayerState)Byte.Parse(parts[1]);
                         float playerHealth = float.Parse(parts[2]);
 
-                        foreach (var item in playerConncurencyHandler.Players)
+                        foreach (var item in PlayerConcurencyHandler.Players)
                         {
-                            item.Value.PendingBroadcastPackets.Add(new Packet(EventCode.PlayerEnteredChunk, new PlayerHandler().SimulateChunkEnter(playerConncurencyHandler, executor, playerState, playerHealth)));
+                            item.Value.PendingBroadcastPackets.Add(new Packet(EventCode.PlayerEnteredChunk, new PlayerHandler().SimulateChunkEnter(executor, playerState, playerHealth)));
                         }
                         this.notification = "Player state changed!";
                     }
@@ -203,7 +203,7 @@
                             break;
                     }
 
-                    foreach (var item in playerConncurencyHandler.Players)
+                    foreach (var item in PlayerConcurencyHandler.Players)
                     {
                         item.Value.PendingBroadcastPackets.Add(new Packet(this.code, this.packetData));
                     }

@@ -123,7 +123,7 @@ namespace TABGCommunityServer
             return sendByte;
         }
 
-        public UpdatePacket PlayerUpdate(BinaryReader binaryReader, int packetLength, PlayerConcurencyHandler playerConncurencyHandler)
+        public UpdatePacket PlayerUpdate(BinaryReader binaryReader, int packetLength)
         {
             // player
             var playerIndex = binaryReader.ReadByte();
@@ -148,7 +148,7 @@ namespace TABGCommunityServer
             // movement flags
             var movementFlags = binaryReader.ReadByte();
 
-            Player player = playerConncurencyHandler.Players[playerIndex];
+            Player player = PlayerConcurencyHandler.Players[playerIndex];
 
             player.Id = playerIndex;
             player.Location = (x, y, z);
@@ -157,12 +157,12 @@ namespace TABGCommunityServer
             player.OptimizedDirection = optimizeDirection;
             player.MovementFlags = movementFlags;
 
-            UpdatePacket fullPacket = new UpdatePacket(SendPlayerUpdateResponsePacket(playerConncurencyHandler), player);
+            UpdatePacket fullPacket = new UpdatePacket(SendPlayerUpdateResponsePacket(), player);
 
             return fullPacket;
         }
 
-        public void PlayerFire(BinaryReader binaryReader, int length, PlayerConcurencyHandler concurrencyHandler)
+        public void PlayerFire(BinaryReader binaryReader, int length)
         {
             // player index
             var playerIndex = binaryReader.ReadByte();
@@ -249,7 +249,7 @@ namespace TABGCommunityServer
                 Console.WriteLine(err);
             }
 
-            foreach (var item in concurrencyHandler.Players)
+            foreach (var item in PlayerConcurencyHandler.Players)
             {
                 if (item.Key == playerIndex)
                 {
@@ -319,7 +319,7 @@ namespace TABGCommunityServer
             return sendByte;
         }
 
-        public byte[] SendPlayerUpdateResponsePacket(PlayerConcurencyHandler playerConcurrencyHandler)
+        public byte[] SendPlayerUpdateResponsePacket()
         {
             byte[] sendByte = new byte[2048];
             using (MemoryStream writerMemoryStream = new MemoryStream(sendByte))
@@ -331,9 +331,9 @@ namespace TABGCommunityServer
                     binaryWriterStream.Write(milliseconds);
 
                     // amount of players to loop (unimplemented)
-                    binaryWriterStream.Write((byte)playerConcurrencyHandler.Players.Count);
+                    binaryWriterStream.Write((byte)PlayerConcurencyHandler.Players.Count);
 
-                    foreach (var item in playerConcurrencyHandler.Players)
+                    foreach (var item in PlayerConcurencyHandler.Players)
                     {
                         // player index
                         binaryWriterStream.Write((byte)item.Key);
@@ -418,7 +418,7 @@ namespace TABGCommunityServer
             return sendByte;
         }
 
-        public byte[] ClientRequestProjectileSyncEvent(PlayerConcurencyHandler playerConcurrencyHandler, BinaryReader binaryReader, int fullLength)
+        public byte[] ClientRequestProjectileSyncEvent(BinaryReader binaryReader, int fullLength)
         {
             // "sync index"
             var syncIndex = binaryReader.ReadInt32();
@@ -585,7 +585,7 @@ namespace TABGCommunityServer
             return sendByte;
         }
 
-        public void PlayerDamagedEvent(PlayerConcurencyHandler playerConcurrencyHandler, BinaryReader binaryReader)
+        public void PlayerDamagedEvent(BinaryReader binaryReader)
         {
             byte[] sendByte = new byte[256];
             Player playerOutside;
@@ -602,10 +602,10 @@ namespace TABGCommunityServer
 
                     // victim id
                     var victim = binaryReader.ReadByte();
-                    Player player = playerConcurrencyHandler.Players[victim];
+                    Player player = PlayerConcurencyHandler.Players[victim];
                     playerOutside = player;
 
-                    Player player2 = playerConcurrencyHandler.Players[attacker];
+                    Player player2 = PlayerConcurencyHandler.Players[attacker];
                     playerOutside2 = player;
 
                     binaryWriterStream.Write(victim);
@@ -652,7 +652,7 @@ namespace TABGCommunityServer
             playerOutside.PendingBroadcastPackets.Add(new Packet(EventCode.PlayerDamaged, sendByte));
             playerOutside2.PendingBroadcastPackets.Add(new Packet(EventCode.PlayerDamaged, sendByte));
 
-            //foreach (var item in playerConcurrencyHandler.Players)
+            //foreach (var item in PlayerConcurencyHandler.Players)
             //{
             //    if (item.Key == attackerOutside)
             //    {
@@ -680,7 +680,7 @@ namespace TABGCommunityServer
             return sendByte;
         }
 
-        public byte[] SimulateChunkEnter(PlayerConcurencyHandler playerConcurrencyHandler, byte playerIndex, TABGPlayerState playerState, float health)
+        public byte[] SimulateChunkEnter(byte playerIndex, TABGPlayerState playerState, float health)
         {
             byte[] sendByte = new byte[1024];
             using (MemoryStream writerMemoryStream = new MemoryStream(sendByte))
@@ -698,7 +698,7 @@ namespace TABGCommunityServer
                     // is skydiving
                     binaryWriterStream.Write(false);
                     // gear data
-                    var player = playerConcurrencyHandler.Players[playerIndex];
+                    var player = PlayerConcurencyHandler.Players[playerIndex];
                     binaryWriterStream.Write((Int32)player.GearData.Length);
                     for (int i = 0; i < player.GearData.Length; i++)
                     {
@@ -719,7 +719,7 @@ namespace TABGCommunityServer
             return sendByte;
         }
 
-        public byte[] RequestHealthState(PlayerConcurencyHandler playerConcurrencyHandler, BinaryReader binaryReader)
+        public byte[] RequestHealthState(BinaryReader binaryReader)
         {
 
             // player's index

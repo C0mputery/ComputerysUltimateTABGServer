@@ -1,22 +1,22 @@
 ﻿namespace TABGCommunityServer
 {
-    internal class PlayerConcurencyHandler
+    internal static class PlayerConcurencyHandler
     {
-        public Dictionary<int, Player> Players = new Dictionary<int, Player>();
-        public byte LastID = 0;
+        public static Dictionary<int, Player> Players = new Dictionary<int, Player>();
+        public static byte LastID = 0;
 
-        public void AddPlayer(Player player)
+        public static void AddPlayer(Player player)
         {
             Players[player.Id] = player;
             LastID++;
         }
 
-        public void RemovePlayer(Player player)
+        public static void RemovePlayer(Player player)
         {
             Players.Remove(player.Id);
         }
 
-        public void UpdatePlayerLocation(int playerId, (float X, float Y, float Z) newLocation)
+        public static void UpdatePlayerLocation(int playerId, (float X, float Y, float Z) newLocation)
         {
             if (Players.TryGetValue(playerId, out Player? player))
             {

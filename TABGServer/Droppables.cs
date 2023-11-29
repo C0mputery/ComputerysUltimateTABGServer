@@ -2,7 +2,7 @@
 {
     internal class Droppables
     {
-        public static byte[] ClientRequestDrop(BinaryReader binaryReader, WeaponConcurrencyHandler weaponConcurrencyHandler)
+        public static byte[] ClientRequestDrop(BinaryReader binaryReader)
         {
             // player
             var playerIndex = binaryReader.ReadByte();
@@ -16,9 +16,9 @@
             var y = binaryReader.ReadSingle();
             var z = binaryReader.ReadSingle();
 
-            int networkID = weaponConcurrencyHandler.CurrentID;
+            int networkID = WeaponConcurrencyHandler.CurrentID;
             Weapon weapon = new Weapon(networkID, itemID, itemCount, (x, y, z));
-            weaponConcurrencyHandler.SpawnWeapon(weapon);
+            WeaponConcurrencyHandler.SpawnWeapon(weapon);
 
             return SendItemDropPacket(networkID, itemID, itemCount, (x, y, z));
         }
@@ -46,7 +46,7 @@
             return sendByte;
         }
 
-        public static byte[] ClientRequestPickUp(BinaryReader binaryReader, WeaponConcurrencyHandler weaponConcurrencyHandler)
+        public static byte[] ClientRequestPickUp(BinaryReader binaryReader)
         {
             // player
             var playerIndex = binaryReader.ReadByte();
@@ -55,10 +55,10 @@
             // item slot of player
             var itemSlot = binaryReader.ReadByte();
 
-            Weapon weapon = weaponConcurrencyHandler.WeaponDB[netIndex];
+            Weapon weapon = WeaponConcurrencyHandler.WeaponDB[netIndex];
 
             // clean up DB
-            weaponConcurrencyHandler.RemoveWeapon(weapon);
+            WeaponConcurrencyHandler.RemoveWeapon(weapon);
 
             return SendWeaponPickUpAcceptedPacket(playerIndex, netIndex, weapon.Type, weapon.Count, itemSlot);
         }
