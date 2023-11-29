@@ -43,7 +43,8 @@ namespace TABGCommunityServer.Packets
                 }
             }
         }
-        public static void BroadcastPacket(Peer peer, EventCode code, byte[] buffer, bool reliable)
+
+        public static void SendMessageToPeer(Peer peer, EventCode code, byte[] buffer, bool reliable)
         {
             byte[] array = new byte[buffer.Length + 1];
             array[0] = (byte)code;
@@ -53,6 +54,14 @@ namespace TABGCommunityServer.Packets
             packet.Create(array, reliable ? PacketFlags.Reliable : PacketFlags.None);
 
             peer.Send(0, ref packet);
+        }
+
+        public static void BroadcastPacket(EventCode eventCode, byte[] playerData, bool unused)
+        {
+            foreach (var player in PlayerConcurencyHandler.Players)
+            {
+                player.Value.PendingBroadcastPackets.Add(new Packet(eventCode, playerData));
+            }
         }
     }
 }
