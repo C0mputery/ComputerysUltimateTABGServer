@@ -33,23 +33,23 @@ namespace TABGCommunityServer.Packets
             {
                 Console.WriteLine("Handling packet: " + code.ToString());
             }
+
             using (MemoryStream memoryStream = new MemoryStream(buffer))
             using (BinaryReader binaryReader = new BinaryReader(memoryStream))
             {
-                if (packetHandlers.TryGetValue(code, out var packetHandler))
+                if (packetHandlers.TryGetValue(code, out IPacketHandler? packetHandler))
                 {
                     packetHandler.Handle(peer, buffer, binaryReader);
                 }
             }
-
         }
         public static void BroadcastPacket(Peer peer, EventCode code, byte[] buffer, bool reliable)
         {
-            ENet.Packet packet = default;
             byte[] array = new byte[buffer.Length + 1];
-
             array[0] = (byte)code;
             Array.Copy(buffer, 0, array, 1, buffer.Length);
+
+            ENet.Packet packet = default;
             packet.Create(array, reliable ? PacketFlags.Reliable : PacketFlags.None);
 
             peer.Send(0, ref packet);

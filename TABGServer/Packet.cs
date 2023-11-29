@@ -1,4 +1,5 @@
-﻿namespace TABGCommunityServer
+﻿
+namespace TABGCommunityServer
 {
     internal struct Packet
     {

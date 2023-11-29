@@ -1,6 +1,6 @@
 ﻿namespace TABGCommunityServer
 {
-    internal class Throwables
+    internal static class Throwables
     {
         public static byte[] ClientRequestThrow(BinaryReader binaryReader)
         {

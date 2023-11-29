@@ -7,9 +7,10 @@ namespace TABGCommunityServer.Packets
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
         {
-            PacketHandler.BroadcastPacket(peer, EventCode.PlayerDead, new PlayerHandler().SendNotification(0, "WELCOME - RUNNING COMMUNITY SERVER V1.TEST"), true);
+            PacketHandler.BroadcastPacket(peer, EventCode.PlayerDead, new PlayerHandler().SendNotification(0, "WELCOME - RUNNING COMMUNITY SERVER V2.TEST"), true);
         }
     }
+
     public class ChatMessagePacketHandler : IPacketHandler
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
@@ -35,6 +36,7 @@ namespace TABGCommunityServer.Packets
             }
         }
     }
+
     public class RequestItemThrowPacketHandler : IPacketHandler
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
@@ -104,6 +106,7 @@ namespace TABGCommunityServer.Packets
             PacketHandler.BroadcastPacket(peer, EventCode.SyncProjectileEvent, new PlayerHandler().ClientRequestProjectileSyncEvent(binaryReader, buffer.Length), true);
         }
     }
+
     public class RequestAirplaneDropPacketHandler : IPacketHandler
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
@@ -111,6 +114,7 @@ namespace TABGCommunityServer.Packets
             PacketHandler.BroadcastPacket(peer, EventCode.PlayerAirplaneDropped, new PlayerHandler().RequestAirplaneDrop(binaryReader), true);
         }
     }
+
     public class DamageEventPacketHandler : IPacketHandler
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
@@ -118,6 +122,7 @@ namespace TABGCommunityServer.Packets
             new PlayerHandler().PlayerDamagedEvent(binaryReader);
         }
     }
+
     public class RequestBlessingPacketHandler : IPacketHandler
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
@@ -125,6 +130,7 @@ namespace TABGCommunityServer.Packets
             PacketHandler.BroadcastPacket(peer, EventCode.BlessingRecieved, new PlayerHandler().RequestBlessingEvent(binaryReader), true);
         }
     }
+
     public class RequestHealthStatePacketHandler : IPacketHandler
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader)
