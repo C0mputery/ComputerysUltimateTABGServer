@@ -1,7 +1,7 @@
 ﻿using ENet;
 using System.Text;
 using TABGCommunityServer.DataTypes;
-using TABGCommunityServer.ServerData;
+using TABGCommunityServer.Rooms;
 
 namespace TABGCommunityServer.Packets
 {

@@ -1,6 +1,5 @@
 ﻿using ENet;
 using TABGCommunityServer.Packets;
-using TABGCommunityServer.Rooms;
 
 namespace TABGCommunityServer.Rooms
 {

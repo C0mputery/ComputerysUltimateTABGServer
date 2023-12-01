@@ -1,6 +1,5 @@
 ﻿using ENet;
 using System.Collections.Frozen;
-using TABGCommunityServer.DataTypes;
 using TABGCommunityServer.Packets;
 
 namespace TABGCommunityServer.Rooms
