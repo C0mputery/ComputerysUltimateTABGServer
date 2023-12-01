@@ -1,8 +1,4 @@
-﻿using ENet;
-using System.Collections.Frozen;
-using TABGCommunityServer.Packets;
-
-namespace TABGCommunityServer.Rooms
+﻿namespace TABGCommunityServer.Rooms
 {
     public partial class Room
     {

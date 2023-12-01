@@ -12,18 +12,18 @@ namespace TABGCommunityServer.Packets
             string roomName = "DecompileServer";
             byte newIndex = room.LastID++;
 
-            var playerName = binaryReader.ReadString();
-            var gravestoneText = binaryReader.ReadString();
-            var loginKey = binaryReader.ReadUInt64();
-            var squadHost = binaryReader.ReadBoolean();
-            var squadMembers = binaryReader.ReadByte();
-            var userGearLength = binaryReader.ReadInt32();
+            string playerName = binaryReader.ReadString();
+            string gravestoneText = binaryReader.ReadString();
+            ulong loginKey = binaryReader.ReadUInt64();
+            bool squadHost = binaryReader.ReadBoolean();
+            byte squadMembers = binaryReader.ReadByte();
+            int userGearLength = binaryReader.ReadInt32();
 
             int[] gearData = new int[userGearLength];
 
             for (int i = 0; i < userGearLength; i++)
             {
-                var userGear = binaryReader.ReadInt32();
+                int userGear = binaryReader.ReadInt32();
                 gearData[i] = (int)userGear;
             }
 
@@ -115,7 +115,7 @@ namespace TABGCommunityServer.Packets
 
                     // --- OTHER PLAYERS ---
 
-                    foreach (var item in room.Players)
+                    foreach (KeyValuePair<byte, Player> item in room.Players)
                     {
                         if (item.Key == playerIndex)
                         {
@@ -127,7 +127,7 @@ namespace TABGCommunityServer.Packets
                         binaryWriterStream.Write((Byte)0);
 
                         // convert so bytes can be grabbed
-                        var nameBytes = Encoding.UTF8.GetBytes(item.Value.Name);
+                        byte[] nameBytes = Encoding.UTF8.GetBytes(item.Value.Name);
 
                         // username length
                         binaryWriterStream.Write((Int32)(nameBytes.Length));
@@ -246,10 +246,10 @@ namespace TABGCommunityServer.Packets
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            var playerIndex = binaryReader.ReadByte(); // or ReadInt32(), depending on the type of PlayerIndex
-            var messageLength = binaryReader.ReadByte();
-            var messageBytes = binaryReader.ReadBytes(messageLength);
-            var message = Encoding.Unicode.GetString(messageBytes);
+            byte playerIndex = binaryReader.ReadByte(); // or ReadInt32(), depending on the type of PlayerIndex
+            byte messageLength = binaryReader.ReadByte();
+            byte[] messageBytes = binaryReader.ReadBytes(messageLength);
+            string message = Encoding.Unicode.GetString(messageBytes);
             Console.WriteLine("Player " + playerIndex + ": " + message);
         }
     }

@@ -96,7 +96,7 @@ namespace TABGCommunityServer.Rooms
             return sendByte;
         }
 
-        public byte[] GiveGear()
+        public static byte[] GiveGear()
         {
             byte[] sendByte = new byte[768];
             using (MemoryStream writerMemoryStream = new MemoryStream(sendByte))
@@ -141,27 +141,27 @@ namespace TABGCommunityServer.Rooms
         public UpdatePacket PlayerUpdate(BinaryReader binaryReader, int packetLength, Room room)
         {
             // player
-            var playerIndex = binaryReader.ReadByte();
+            byte playerIndex = binaryReader.ReadByte();
 
             // location
-            var x = binaryReader.ReadSingle();
-            var y = binaryReader.ReadSingle();
-            var z = binaryReader.ReadSingle();
+            float x = binaryReader.ReadSingle();
+            float y = binaryReader.ReadSingle();
+            float z = binaryReader.ReadSingle();
 
             // rotation
-            var rotX = binaryReader.ReadSingle();
-            var rotY = binaryReader.ReadSingle();
+            float rotX = binaryReader.ReadSingle();
+            float rotY = binaryReader.ReadSingle();
 
             // "ads" bool (?)
             // OHH THIS MEANS AIM DOWN SIGHTS
-            var ads = binaryReader.ReadBoolean();
+            bool ads = binaryReader.ReadBoolean();
 
             // optimizeDirection (?)
-            var arrayLen = packetLength - 23;
-            var optimizeDirection = binaryReader.ReadBytes(arrayLen);
+            int arrayLen = packetLength - 23;
+            byte[] optimizeDirection = binaryReader.ReadBytes(arrayLen);
 
             // movement flags
-            var movementFlags = binaryReader.ReadByte();
+            byte movementFlags = binaryReader.ReadByte();
 
             Player player = room.Players[playerIndex];
 
@@ -180,11 +180,11 @@ namespace TABGCommunityServer.Rooms
         public void PlayerFire(BinaryReader binaryReader, int length, Room room)
         {
             // player index
-            var playerIndex = binaryReader.ReadByte();
+            byte playerIndex = binaryReader.ReadByte();
             // firing mode
-            var firingMode = binaryReader.ReadByte();
+            byte firingMode = binaryReader.ReadByte();
             // ammo type
-            var ammoType = binaryReader.ReadInt32();
+            int ammoType = binaryReader.ReadInt32();
 
             // extra data (vectors and more)
             // you gotta be kidding me, did Landfall really just put a flag in rather than passing at least idk like an EMPTY ARRAY?
@@ -245,13 +245,13 @@ namespace TABGCommunityServer.Rooms
 
                                 if ((firingModeFlag & FiringMode.WantsToBeSynced) == FiringMode.WantsToBeSynced)
                                 {
-                                    var syncIndex = binaryReader.ReadInt32();
+                                    int syncIndex = binaryReader.ReadInt32();
                                     binaryWriterStream.Write(syncIndex);
                                 }
 
                                 if ((firingModeFlag & FiringMode.UseBulletEffect) == FiringMode.UseBulletEffect)
                                 {
-                                    var bulletEffectType = binaryReader.ReadByte();
+                                    byte bulletEffectType = binaryReader.ReadByte();
                                     binaryWriterStream.Write(bulletEffectType);
                                 }
                             }
@@ -264,7 +264,7 @@ namespace TABGCommunityServer.Rooms
                 Console.WriteLine(err);
             }
 
-            foreach (var item in room.Players)
+            foreach (KeyValuePair<byte, Player> item in room.Players)
             {
                 if (item.Key == playerIndex)
                 {
@@ -281,33 +281,33 @@ namespace TABGCommunityServer.Rooms
         public byte[] PlayerChangedWeapon(BinaryReader binaryReader)
         {
             // player index
-            var playerIndex = binaryReader.ReadByte();
+            byte playerIndex = binaryReader.ReadByte();
             // slot flag
-            var slotFlag = binaryReader.ReadByte();
+            byte slotFlag = binaryReader.ReadByte();
 
             // UNKNOWN W VALUES
             // w1
-            var w1 = binaryReader.ReadInt16();
+            short w1 = binaryReader.ReadInt16();
             // w2
-            var w2 = binaryReader.ReadInt16();
+            short w2 = binaryReader.ReadInt16();
             // w3
-            var w3 = binaryReader.ReadInt16();
+            short w3 = binaryReader.ReadInt16();
             // w4
-            var w4 = binaryReader.ReadInt16();
+            short w4 = binaryReader.ReadInt16();
             // w5
-            var w5 = binaryReader.ReadInt16();
+            short w5 = binaryReader.ReadInt16();
 
             // attachments
-            var attachmentsLength = binaryReader.ReadByte();
+            byte attachmentsLength = binaryReader.ReadByte();
             short[] attachments = new short[256];
             for (int i = 0; i < attachmentsLength; i++)
             {
-                var attachmentID = binaryReader.ReadInt16();
+                short attachmentID = binaryReader.ReadInt16();
                 attachments[i] = (short)attachmentID;
             }
 
             // is throwable
-            var throwable = binaryReader.ReadInt16();
+            short throwable = binaryReader.ReadInt16();
 
             byte[] sendByte = new byte[2048];
             using (MemoryStream writerMemoryStream = new MemoryStream(sendByte))
@@ -348,7 +348,7 @@ namespace TABGCommunityServer.Rooms
                     // amount of players to loop (unimplemented)
                     binaryWriterStream.Write((byte)room.Players.Count);
 
-                    foreach (var item in room.Players)
+                    foreach (KeyValuePair<byte, Player> item in room.Players)
                     {
                         // player index
                         binaryWriterStream.Write((byte)item.Key);
@@ -361,13 +361,13 @@ namespace TABGCommunityServer.Rooms
                         binaryWriterStream.Write((byte)DrivingState.None);
 
                         // player position (triggered by packet container flag)
-                        var loc = item.Value.Location;
+                        (float X, float Y, float Z) loc = item.Value.Location;
                         binaryWriterStream.Write(loc.X);
                         binaryWriterStream.Write(loc.Y);
                         binaryWriterStream.Write(loc.Z);
 
                         // player rotation (triggered by flag)
-                        var rot = item.Value.Rotation;
+                        (float X, float Y) rot = item.Value.Rotation;
                         binaryWriterStream.Write(rot.X);
                         binaryWriterStream.Write(rot.Y);
 
@@ -391,12 +391,12 @@ namespace TABGCommunityServer.Rooms
         public byte[] RequestAirplaneDrop(BinaryReader binaryReader)
         {
             // player index
-            var index = binaryReader.ReadByte();
+            byte index = binaryReader.ReadByte();
 
             // location
-            var x = binaryReader.ReadSingle();
-            var y = binaryReader.ReadSingle();
-            var z = binaryReader.ReadSingle();
+            float x = binaryReader.ReadSingle();
+            float y = binaryReader.ReadSingle();
+            float z = binaryReader.ReadSingle();
 
             byte[] sendByte = new byte[128];
             using (MemoryStream writerMemoryStream = new MemoryStream(sendByte))
@@ -418,7 +418,7 @@ namespace TABGCommunityServer.Rooms
 
         public byte[] RevivePlayer(byte playerID)
         {
-            var sendByte = new byte[128];
+            byte[] sendByte = new byte[128];
             using (MemoryStream writerMemoryStream = new MemoryStream(sendByte))
             {
                 using (BinaryWriter binaryWriterStream = new BinaryWriter(writerMemoryStream))
@@ -436,20 +436,20 @@ namespace TABGCommunityServer.Rooms
         public byte[] ClientRequestProjectileSyncEvent(BinaryReader binaryReader, int fullLength)
         {
             // "sync index"
-            var syncIndex = binaryReader.ReadInt32();
+            int syncIndex = binaryReader.ReadInt32();
             // removed
-            var removed = binaryReader.ReadBoolean();
+            bool removed = binaryReader.ReadBoolean();
             // "everyone"
-            var everyone = binaryReader.ReadBoolean();
+            bool everyone = binaryReader.ReadBoolean();
             // include self (?)
-            var includeSelf = binaryReader.ReadBoolean();
+            bool includeSelf = binaryReader.ReadBoolean();
             // is static (?)
-            var isStatic = binaryReader.ReadBoolean();
+            bool isStatic = binaryReader.ReadBoolean();
 
             // additional data length
-            var addDataLength = fullLength - 8;
+            int addDataLength = fullLength - 8;
             // additional data byte
-            var additionalData = binaryReader.ReadBytes(addDataLength);
+            byte[] additionalData = binaryReader.ReadBytes(addDataLength);
 
             using (MemoryStream memoryStream = new MemoryStream(additionalData))
             {
@@ -478,15 +478,15 @@ namespace TABGCommunityServer.Rooms
                             {
                                 case 1:
                                     {
-                                        var syncedInt = extraDataBinaryReader.ReadInt32();
+                                        int syncedInt = extraDataBinaryReader.ReadInt32();
                                         binaryWriterStream.Write(syncedInt);
                                         break;
                                     }
                                 case 3:
                                     {
-                                        var x = extraDataBinaryReader.ReadSingle();
-                                        var y = extraDataBinaryReader.ReadSingle();
-                                        var z = extraDataBinaryReader.ReadSingle();
+                                        float x = extraDataBinaryReader.ReadSingle();
+                                        float y = extraDataBinaryReader.ReadSingle();
+                                        float z = extraDataBinaryReader.ReadSingle();
 
                                         binaryWriterStream.Write(x);
                                         binaryWriterStream.Write(y);
@@ -495,13 +495,13 @@ namespace TABGCommunityServer.Rooms
                                     }
                                 case 4:
                                     {
-                                        var x = extraDataBinaryReader.ReadSingle();
-                                        var y = extraDataBinaryReader.ReadSingle();
-                                        var z = extraDataBinaryReader.ReadSingle();
+                                        float x = extraDataBinaryReader.ReadSingle();
+                                        float y = extraDataBinaryReader.ReadSingle();
+                                        float z = extraDataBinaryReader.ReadSingle();
 
-                                        var x2 = extraDataBinaryReader.ReadSingle();
-                                        var y2 = extraDataBinaryReader.ReadSingle();
-                                        var z2 = extraDataBinaryReader.ReadSingle();
+                                        float x2 = extraDataBinaryReader.ReadSingle();
+                                        float y2 = extraDataBinaryReader.ReadSingle();
+                                        float z2 = extraDataBinaryReader.ReadSingle();
 
                                         binaryWriterStream.Write(x);
                                         binaryWriterStream.Write(y);
@@ -540,9 +540,9 @@ namespace TABGCommunityServer.Rooms
                                         byte b = extraDataBinaryReader.ReadByte();
                                         byte b2 = extraDataBinaryReader.ReadByte();
 
-                                        var x = extraDataBinaryReader.ReadSingle();
-                                        var y = extraDataBinaryReader.ReadSingle();
-                                        var z = extraDataBinaryReader.ReadSingle();
+                                        float x = extraDataBinaryReader.ReadSingle();
+                                        float y = extraDataBinaryReader.ReadSingle();
+                                        float z = extraDataBinaryReader.ReadSingle();
 
                                         binaryWriterStream.Write(b);
                                         binaryWriterStream.Write(b2);
@@ -580,11 +580,11 @@ namespace TABGCommunityServer.Rooms
         public byte[] RequestBlessingEvent(BinaryReader binaryReader)
         {
             // player index
-            var playerIndex = binaryReader.ReadByte();
+            byte playerIndex = binaryReader.ReadByte();
             // blessing slots
-            var slot1 = binaryReader.ReadInt32();
-            var slot2 = binaryReader.ReadInt32();
-            var slot3 = binaryReader.ReadInt32();
+            int slot1 = binaryReader.ReadInt32();
+            int slot2 = binaryReader.ReadInt32();
+            int slot3 = binaryReader.ReadInt32();
 
             byte[] sendByte = new byte[256];
             using (MemoryStream writerMemoryStream = new MemoryStream(sendByte))
@@ -612,11 +612,11 @@ namespace TABGCommunityServer.Rooms
                 using (BinaryWriter binaryWriterStream = new BinaryWriter(writerMemoryStream))
                 {
                     // attacker id
-                    var attacker = binaryReader.ReadByte();
+                    byte attacker = binaryReader.ReadByte();
                     attackerOutside = attacker;
 
                     // victim id
-                    var victim = binaryReader.ReadByte();
+                    byte victim = binaryReader.ReadByte();
                     Player player = room.Players[victim];
                     playerOutside = player;
 
@@ -627,30 +627,30 @@ namespace TABGCommunityServer.Rooms
                     binaryWriterStream.Write(attacker);
 
                     // health
-                    var health = binaryReader.ReadSingle();
+                    float health = binaryReader.ReadSingle();
                     binaryWriterStream.Write(health);
                     player.Health = health;
 
                     Console.WriteLine("Attacker: " + attacker + ". Victim: " + victim + ". New health value: " + health);
 
                     // direction
-                    var x = binaryReader.ReadSingle();
-                    var y = binaryReader.ReadSingle();
-                    var z = binaryReader.ReadSingle();
+                    float x = binaryReader.ReadSingle();
+                    float y = binaryReader.ReadSingle();
+                    float z = binaryReader.ReadSingle();
                     binaryWriterStream.Write(x);
                     binaryWriterStream.Write(y);
                     binaryWriterStream.Write(z);
 
                     // "flag" for force
-                    var flag = binaryReader.ReadBoolean();
+                    bool flag = binaryReader.ReadBoolean();
                     binaryWriterStream.Write((byte)1);
                     if (flag)
                     {
-                        var forceX = binaryReader.ReadSingle();
-                        var forceY = binaryReader.ReadSingle();
-                        var forceZ = binaryReader.ReadSingle();
-                        var rigIndex = binaryReader.ReadByte();
-                        var forceMode = binaryReader.ReadByte();
+                        float forceX = binaryReader.ReadSingle();
+                        float forceY = binaryReader.ReadSingle();
+                        float forceZ = binaryReader.ReadSingle();
+                        byte rigIndex = binaryReader.ReadByte();
+                        byte forceMode = binaryReader.ReadByte();
                         binaryWriterStream.Write(forceX);
                         binaryWriterStream.Write(forceY);
                         binaryWriterStream.Write(forceZ);
@@ -659,7 +659,7 @@ namespace TABGCommunityServer.Rooms
                     }
                     else
                     {
-                        var returnToSender = binaryReader.ReadBoolean();
+                        bool returnToSender = binaryReader.ReadBoolean();
                     }
                 }
             }
@@ -695,7 +695,7 @@ namespace TABGCommunityServer.Rooms
             return sendByte;
         }
 
-        public byte[] SimulateChunkEnter(byte playerIndex, TABGPlayerState playerState, float health, Room room)
+        public static byte[] SimulateChunkEnter(byte playerIndex, TABGPlayerState playerState, float health, Room room)
         {
             byte[] sendByte = new byte[1024];
             using (MemoryStream writerMemoryStream = new MemoryStream(sendByte))
@@ -713,7 +713,7 @@ namespace TABGCommunityServer.Rooms
                     // is skydiving
                     binaryWriterStream.Write(false);
                     // gear data
-                    var player = room.Players[playerIndex];
+                    Player player = room.Players[playerIndex];
                     binaryWriterStream.Write((Int32)player.GearData.Length);
                     for (int i = 0; i < player.GearData.Length; i++)
                     {
@@ -738,9 +738,9 @@ namespace TABGCommunityServer.Rooms
         {
 
             // player's index
-            var playerIndex = binaryReader.ReadByte();
+            byte playerIndex = binaryReader.ReadByte();
             // new health
-            var newHealth = binaryReader.ReadSingle();
+            float newHealth = binaryReader.ReadSingle();
 
             // same packet as heal
             return SetPlayerHealth(playerIndex, newHealth);

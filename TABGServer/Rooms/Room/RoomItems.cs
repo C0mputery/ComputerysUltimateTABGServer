@@ -4,7 +4,7 @@ namespace TABGCommunityServer.Rooms
 {
     public partial class Room
     {
-        public Dictionary<int, Item> Items { get; private set; } = new Dictionary<int, Item>();
+        public Dictionary<int, Item> Items { get; private set; } = [];
         public int CurrentID = 0;
 
         public void SpawnItem(Item item)
@@ -21,16 +21,16 @@ namespace TABGCommunityServer.Rooms
         public static byte[] ClientRequestDrop(BinaryReader binaryReader, Room room)
         {
             // player
-            var playerIndex = binaryReader.ReadByte();
+            byte playerIndex = binaryReader.ReadByte();
             // item id
-            var itemID = binaryReader.ReadInt32();
+            int itemID = binaryReader.ReadInt32();
             // count of items
-            var itemCount = binaryReader.ReadInt32();
+            int itemCount = binaryReader.ReadInt32();
 
             // location
-            var x = binaryReader.ReadSingle();
-            var y = binaryReader.ReadSingle();
-            var z = binaryReader.ReadSingle();
+            float x = binaryReader.ReadSingle();
+            float y = binaryReader.ReadSingle();
+            float z = binaryReader.ReadSingle();
 
             int networkID = room.CurrentID;
             Item weapon = new Item(networkID, itemID, itemCount, (x, y, z));
@@ -65,11 +65,11 @@ namespace TABGCommunityServer.Rooms
         public static byte[] ClientRequestPickUp(BinaryReader binaryReader, Room room)
         {
             // player
-            var playerIndex = binaryReader.ReadByte();
+            byte playerIndex = binaryReader.ReadByte();
             // item network index
-            var netIndex = binaryReader.ReadInt32();
+            int netIndex = binaryReader.ReadInt32();
             // item slot of player
-            var itemSlot = binaryReader.ReadByte();
+            byte itemSlot = binaryReader.ReadByte();
 
             Item weapon = room.Items[netIndex];
 
@@ -104,21 +104,21 @@ namespace TABGCommunityServer.Rooms
         public static byte[] ClientRequestThrow(BinaryReader binaryReader)
         {
             // player
-            var playerIndex = binaryReader.ReadByte();
+            byte playerIndex = binaryReader.ReadByte();
             // not sure what this is..? maybe the throwable ID?
-            var throwableID = binaryReader.ReadInt32();
+            int throwableID = binaryReader.ReadInt32();
             // count of throwables
-            var throwableCount = binaryReader.ReadInt32();
+            int throwableCount = binaryReader.ReadInt32();
 
             // location
-            var x = binaryReader.ReadSingle();
-            var y = binaryReader.ReadSingle();
-            var z = binaryReader.ReadSingle();
+            float x = binaryReader.ReadSingle();
+            float y = binaryReader.ReadSingle();
+            float z = binaryReader.ReadSingle();
 
             // rotation
-            var rotX = binaryReader.ReadSingle();
-            var rotY = binaryReader.ReadSingle();
-            var rotZ = binaryReader.ReadSingle();
+            float rotX = binaryReader.ReadSingle();
+            float rotY = binaryReader.ReadSingle();
+            float rotZ = binaryReader.ReadSingle();
 
             return SendItemThrowPacket(playerIndex, throwableID, throwableCount, (x, y, z), (rotX, rotY, rotZ));
         }
