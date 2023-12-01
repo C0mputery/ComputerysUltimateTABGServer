@@ -5,11 +5,11 @@ namespace TABGCommunityServer.Rooms
 {
     public static class RoomManager
     {
-        public static List<Room> Rooms { get; private set; } = new List<Room>();
+        public static List<Room> Rooms { get; private set; } = [];
 
         public static void MakeRoom(ushort port, int maxPlayers)
         {
-            Room room = new Room(port, maxPlayers);
+            Room room = new(port, maxPlayers);
             Rooms.Add(room);
             RegisterOnServerList(room);
         }
@@ -57,7 +57,7 @@ namespace TABGCommunityServer.Rooms
         /// <summary>
         /// To be implemented
         /// </summary>
-        static Timer? serverListHeartbeat;
+        private static Timer? serverListHeartbeat;
 
         /// <summary>
         /// To be implemented

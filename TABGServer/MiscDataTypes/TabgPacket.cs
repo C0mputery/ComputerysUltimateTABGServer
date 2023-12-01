@@ -1,15 +1,9 @@
-﻿namespace TABGCommunityServer.DataTypes
+﻿namespace TABGCommunityServer.MiscDataTypes
 {
-    public struct TabgPacket
+    public struct TabgPacket(EventCode type, byte[] data)
     {
-        public EventCode Type { get; set; }
+        public EventCode Type { get; set; } = type;
 
-        public byte[] Data { get; set; }
-
-        public TabgPacket(EventCode type, byte[] data)
-        {
-            Data = data;
-            Type = type;
-        }
+        public byte[] Data { get; set; } = data;
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using TABGCommunityServer.DataTypes;
+using TABGCommunityServer.MiscDataTypes;
 
 namespace TABGCommunityServer.Rooms
 {

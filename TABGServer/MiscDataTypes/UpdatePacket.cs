@@ -1,14 +1,8 @@
-﻿namespace TABGCommunityServer.DataTypes
+﻿namespace TABGCommunityServer.MiscDataTypes
 {
-    public struct UpdatePacket
+    public struct UpdatePacket(byte[] packet, Player broadcastPlayer)
     {
-        public byte[] Packet { get; set; }
-        public Player BroadcastPackets { get; set; }
-
-        public UpdatePacket(byte[] packet, Player broadcastPlayer)
-        {
-            Packet = packet;
-            BroadcastPackets = broadcastPlayer;
-        }
+        public byte[] Packet { get; set; } = packet;
+        public Player BroadcastPackets { get; set; } = broadcastPlayer;
     }
 }

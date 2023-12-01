@@ -1,4 +1,4 @@
-﻿using TABGCommunityServer.DataTypes;
+﻿using TABGCommunityServer.MiscDataTypes;
 
 namespace TABGCommunityServer.Rooms
 {

@@ -1,6 +1,6 @@
 ﻿using ENet;
 using System.Text;
-using TABGCommunityServer.DataTypes;
+using TABGCommunityServer.MiscDataTypes;
 using TABGCommunityServer.Rooms;
 
 namespace TABGCommunityServer.Packets
