@@ -1,5 +1,4 @@
 ﻿using ENet;
-using System.Collections.Frozen;
 using TABGCommunityServer.ServerData;
 
 namespace TABGCommunityServer.Packets
@@ -40,9 +39,9 @@ namespace TABGCommunityServer.Packets
             peer.Send(0, ref packet);
         }
 
-        public static void BroadcastPacket(EventCode eventCode, byte[] playerData, bool unused, Room room)
+        public static void BroadcastPacket(EventCode eventCode, byte[] playerData, Room room)
         {
-            foreach (var player in room.Players)
+            foreach (KeyValuePair<byte, Player> player in room.Players)
             {
                 player.Value.PendingBroadcastPackets.Add(new Packet(eventCode, playerData));
             }

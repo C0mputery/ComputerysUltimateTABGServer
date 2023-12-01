@@ -1,40 +1,11 @@
-﻿using System;
+﻿using ENet;
 using System.Collections.Frozen;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TABGCommunityServer.Packets;
 
 namespace TABGCommunityServer.ServerData
 {
     public class Room
     {
-        public Dictionary<byte, Player> Players = new Dictionary<byte, Player>();
-        public byte LastID = 0;
-        public void AddPlayer(Player player)
-        {
-            Players[player.Id] = player;
-            LastID++;
-        }
-        public void RemovePlayer(Player player)
-        {
-            Players.Remove(player.Id);
-        }
-
-
-        public Dictionary<int, Item> Items = new Dictionary<int, Item>();
-        public int CurrentID = 0;
-        public void SpawnItem(Item item)
-        {
-            Items[item.Id] = item;
-            CurrentID++;
-        }
-        public void RemoveItem(Item item)
-        {
-            Items.Remove(item.Id);
-        }
-
         public readonly FrozenDictionary<EventCode, IPacketHandler> packetHandlers = new Dictionary<EventCode, IPacketHandler>
         {
             { EventCode.RoomInit, new RoomInitPacketHandler() },
@@ -52,9 +23,40 @@ namespace TABGCommunityServer.ServerData
             { EventCode.RequestHealthState, new RequestHealthStatePacketHandler() },
         }.ToFrozenDictionary();
 
-
-        public Room()
+        public Dictionary<byte, Player> Players { get; private set; } = new Dictionary<byte, Player>();
+        public byte LastID = 0;
+        public void AddPlayer(Player player)
         {
+            Players[player.Id] = player;
+            LastID++;
+        }
+        public void RemovePlayer(Player player)
+        {
+            Players.Remove(player.Id);
+        }
+
+        public Dictionary<int, Item> Items { get; private set; } = new Dictionary<int, Item>();
+        public int CurrentID = 0;
+        public void SpawnItem(Item item)
+        {
+            Items[item.Id] = item;
+            CurrentID++;
+        }
+        public void RemoveItem(Item item)
+        {
+            Items.Remove(item.Id);
+        }
+
+        public int roomID;
+        public Host enetServer;
+        public Address enetAddress;
+        public Event enetEvent;
+
+        public Room(ushort Port, int maxClients)
+        {
+            enetServer = new Host();
+            enetAddress = new Address() { Port = Port };
+            enetServer.Create(enetAddress, maxClients);
         }
     }
 }
