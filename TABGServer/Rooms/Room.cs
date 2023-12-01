@@ -1,10 +1,11 @@
 ﻿using ENet;
 using System.Collections.Frozen;
+using TABGCommunityServer.DataTypes;
 using TABGCommunityServer.Packets;
 
 namespace TABGCommunityServer.ServerData
 {
-    public class Room
+    public partial class Room
     {
         public readonly FrozenDictionary<EventCode, IPacketHandler> packetHandlers = new Dictionary<EventCode, IPacketHandler>
         {

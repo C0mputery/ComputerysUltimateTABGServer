@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using TABGCommunityServer.DataTypes;
 using TABGCommunityServer.ServerData;
 
 namespace TABGCommunityServer
@@ -258,7 +259,7 @@ namespace TABGCommunityServer
                 }
 
                 // broadcast to ALL players but the shooter
-                item.Value.PendingBroadcastPackets.Add(new Packet(EventCode.PlayerFire, sendByte));
+                item.Value.PendingBroadcastPackets.Add(new TabgPacket(EventCode.PlayerFire, sendByte));
             }
 
             //return sendByte;
@@ -650,8 +651,8 @@ namespace TABGCommunityServer
                 }
             }
 
-            playerOutside.PendingBroadcastPackets.Add(new Packet(EventCode.PlayerDamaged, sendByte));
-            playerOutside2.PendingBroadcastPackets.Add(new Packet(EventCode.PlayerDamaged, sendByte));
+            playerOutside.PendingBroadcastPackets.Add(new TabgPacket(EventCode.PlayerDamaged, sendByte));
+            playerOutside2.PendingBroadcastPackets.Add(new TabgPacket(EventCode.PlayerDamaged, sendByte));
 
             //foreach (var item in PlayerConcurencyHandler.Players)
             //{

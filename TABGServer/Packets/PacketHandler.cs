@@ -1,4 +1,5 @@
 ﻿using ENet;
+using TABGCommunityServer.DataTypes;
 using TABGCommunityServer.ServerData;
 
 namespace TABGCommunityServer.Packets
@@ -43,7 +44,7 @@ namespace TABGCommunityServer.Packets
         {
             foreach (KeyValuePair<byte, Player> player in room.Players)
             {
-                player.Value.PendingBroadcastPackets.Add(new Packet(eventCode, playerData));
+                player.Value.PendingBroadcastPackets.Add(new TabgPacket(eventCode, playerData));
             }
         }
     }

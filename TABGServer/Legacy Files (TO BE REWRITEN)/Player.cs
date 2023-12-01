@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TABGCommunityServer.DataTypes;
 
 namespace TABGCommunityServer
 {
@@ -17,7 +18,7 @@ namespace TABGCommunityServer
         public float Health { get; set; }
         public bool Ads { get; set; } // Aim down sights
         public byte[] OptimizedDirection { get; set; }
-        public List<Packet> PendingBroadcastPackets { get; set; }
+        public List<TabgPacket> PendingBroadcastPackets { get; set; }
         public byte MovementFlags { get; set; }
 
         public Player(byte id, byte group, string name, (float X, float Y, float Z) location, (float X, float Y) rotation, int[] gearData)
@@ -31,7 +32,7 @@ namespace TABGCommunityServer
             GearData = gearData;
             OptimizedDirection = new byte[3];
             MovementFlags = 0;
-            PendingBroadcastPackets = new List<Packet>();
+            PendingBroadcastPackets = new List<TabgPacket>();
             Health = 100f;
         }
     }

@@ -1,5 +1,6 @@
 ﻿using ENet;
 using System.Text;
+using TABGCommunityServer.DataTypes;
 using TABGCommunityServer.ServerData;
 
 namespace TABGCommunityServer.Packets
@@ -63,7 +64,7 @@ namespace TABGCommunityServer.Packets
                 }
 
                 // broadcast to ALL players
-                player.Value.PendingBroadcastPackets.Add(new Packet(EventCode.Login, SendLoginMessageToServer(newIndex, playerName, gearData)));
+                player.Value.PendingBroadcastPackets.Add(new TabgPacket(EventCode.Login, SendLoginMessageToServer(newIndex, playerName, gearData)));
             }
 
             PacketHandler.SendMessageToPeer(peer, EventCode.PlayerDead, new PlayerHandler().SendNotification(0, "WELCOME - RUNNING COMMUNITY SERVER V1.TEST"), true);
@@ -301,15 +302,15 @@ namespace TABGCommunityServer.Packets
             PacketHandler.SendMessageToPeer(peer, EventCode.PlayerUpdate, updatePacket.Packet, true);
 
             // have to do this so enumeration is safe
-            List<Packet> packetList = updatePacket.BroadcastPackets.PendingBroadcastPackets;
+            List<TabgPacket> packetList = updatePacket.BroadcastPackets.PendingBroadcastPackets;
 
             // also use this packet to send pending broadcast packets
-            foreach (Packet packet in packetList)
+            foreach (TabgPacket packet in packetList)
             {
                 PacketHandler.SendMessageToPeer(peer, packet.Type, packet.Data, true);
             }
 
-            updatePacket.BroadcastPackets.PendingBroadcastPackets = new List<Packet>();
+            updatePacket.BroadcastPackets.PendingBroadcastPackets = new List<TabgPacket>();
         }
     }
 

@@ -1,13 +1,12 @@
-﻿
-namespace TABGCommunityServer
+﻿namespace TABGCommunityServer.DataTypes
 {
-    public struct Packet
+    public struct TabgPacket
     {
         public EventCode Type { get; set; }
 
         public byte[] Data { get; set; }
 
-        public Packet(EventCode type, byte[] data)
+        public TabgPacket(EventCode type, byte[] data)
         {
             Data = data;
             Type = type;
