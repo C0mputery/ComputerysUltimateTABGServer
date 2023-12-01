@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TABGCommunityServer.DataTypes;
-
-namespace TABGCommunityServer
+﻿namespace TABGCommunityServer.DataTypes
 {
     public class Player
     {

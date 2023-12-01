@@ -1,4 +1,4 @@
-﻿namespace TABGCommunityServer
+﻿namespace TABGCommunityServer.DataTypes
 {
     public struct Item
     {

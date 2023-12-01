@@ -11,6 +11,7 @@ namespace TABGCommunityServer
             ENet.Library.Initialize();
 
             RoomManager.MakeRoom(9997, 100);
+            RoomManager.StartServerListHeartbeat();
 
             while (!Console.KeyAvailable) { MainLoop(); }
 

@@ -67,7 +67,7 @@ namespace TABGCommunityServer.Packets
                 player.Value.PendingBroadcastPackets.Add(new TabgPacket(EventCode.Login, SendLoginMessageToServer(newIndex, playerName, gearData)));
             }
 
-            PacketHandler.SendMessageToPeer(peer, EventCode.PlayerDead, new PlayerHandler().SendNotification(0, "WELCOME - RUNNING COMMUNITY SERVER V1.TEST"), true);
+            PacketHandler.SendMessageToPeer(peer, EventCode.PlayerDead, room.SendNotification(0, "WELCOME - RUNNING COMMUNITY SERVER V1.TEST"), true);
         }
 
         private byte[] SendJoinMessageToServer(byte playerIndex, string playerName, int[] gearData, Room room)
@@ -242,7 +242,7 @@ namespace TABGCommunityServer.Packets
         }
     }
 
-    internal class ChatMessagePacketHandler : IPacketHandler
+    internal class ChatMessagePacketHandler : IPacketHandler // UPDATE THIS NON WORKING
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
@@ -251,20 +251,6 @@ namespace TABGCommunityServer.Packets
             var messageBytes = binaryReader.ReadBytes(messageLength);
             var message = Encoding.Unicode.GetString(messageBytes);
             Console.WriteLine("Player " + playerIndex + ": " + message);
-
-            var handler = new AdminCommandHandler(message, playerIndex);
-            handler.Handle();
-
-            // test if there needs to be a packet sent back
-            if (handler.shouldSendPacket)
-            {
-                PacketHandler.SendMessageToPeer(peer, handler.code, handler.packetData, true);
-            }
-
-            if ((handler.notification != null) && (handler.notification != ""))
-            {
-                PacketHandler.SendMessageToPeer(peer, EventCode.PlayerDead, new PlayerHandler().SendNotification(playerIndex, handler.notification), true);
-            }
         }
     }
 
@@ -272,7 +258,7 @@ namespace TABGCommunityServer.Packets
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            PacketHandler.BroadcastPacket(EventCode.ItemThrown, Throwables.ClientRequestThrow(binaryReader), room);
+            PacketHandler.BroadcastPacket(EventCode.ItemThrown, Room.ClientRequestThrow(binaryReader), room);
         }
     }
 
@@ -280,7 +266,7 @@ namespace TABGCommunityServer.Packets
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            PacketHandler.BroadcastPacket(EventCode.ItemDrop, Droppables.ClientRequestDrop(binaryReader, room), room);
+            PacketHandler.BroadcastPacket(EventCode.ItemDrop, Room.ClientRequestDrop(binaryReader, room), room);
         }
     }
 
@@ -288,7 +274,7 @@ namespace TABGCommunityServer.Packets
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            PacketHandler.BroadcastPacket(EventCode.WeaponPickUpAccepted, Droppables.ClientRequestPickUp(binaryReader, room), room);
+            PacketHandler.BroadcastPacket(EventCode.WeaponPickUpAccepted, Room.ClientRequestPickUp(binaryReader, room), room);
         }
     }
 
@@ -297,7 +283,7 @@ namespace TABGCommunityServer.Packets
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
             // this packet is different because it can have an unlimited amount of subpackets
-            UpdatePacket updatePacket = new PlayerHandler().PlayerUpdate(binaryReader, buffer.Length, room);
+            UpdatePacket updatePacket = room.PlayerUpdate(binaryReader, buffer.Length, room);
 
             PacketHandler.SendMessageToPeer(peer, EventCode.PlayerUpdate, updatePacket.Packet, true);
 
@@ -318,7 +304,7 @@ namespace TABGCommunityServer.Packets
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            PacketHandler.BroadcastPacket(EventCode.WeaponChanged, new PlayerHandler().PlayerChangedWeapon(binaryReader), room);
+            PacketHandler.BroadcastPacket(EventCode.WeaponChanged, room.PlayerChangedWeapon(binaryReader), room);
         }
     }
 
@@ -326,7 +312,7 @@ namespace TABGCommunityServer.Packets
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            new PlayerHandler().PlayerFire(binaryReader, buffer.Length, room);
+            room.PlayerFire(binaryReader, buffer.Length, room);
         }
     }
 
@@ -334,7 +320,7 @@ namespace TABGCommunityServer.Packets
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            PacketHandler.BroadcastPacket(EventCode.SyncProjectileEvent, new PlayerHandler().ClientRequestProjectileSyncEvent(binaryReader, buffer.Length), room);
+            PacketHandler.BroadcastPacket(EventCode.SyncProjectileEvent, room.ClientRequestProjectileSyncEvent(binaryReader, buffer.Length), room);
         }
     }
 
@@ -342,7 +328,7 @@ namespace TABGCommunityServer.Packets
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            PacketHandler.BroadcastPacket(EventCode.PlayerAirplaneDropped, new PlayerHandler().RequestAirplaneDrop(binaryReader), room);
+            PacketHandler.BroadcastPacket(EventCode.PlayerAirplaneDropped, room.RequestAirplaneDrop(binaryReader), room);
         }
     }
 
@@ -350,7 +336,7 @@ namespace TABGCommunityServer.Packets
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            new PlayerHandler().PlayerDamagedEvent(binaryReader, room);
+            room.PlayerDamagedEvent(binaryReader, room);
         }
     }
 
@@ -358,7 +344,7 @@ namespace TABGCommunityServer.Packets
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            PacketHandler.BroadcastPacket(EventCode.BlessingRecieved, new PlayerHandler().RequestBlessingEvent(binaryReader), room);
+            PacketHandler.BroadcastPacket(EventCode.BlessingRecieved, room.RequestBlessingEvent(binaryReader), room);
         }
     }
 
@@ -366,7 +352,7 @@ namespace TABGCommunityServer.Packets
     {
         public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
         {
-            PacketHandler.BroadcastPacket(EventCode.PlayerHealthStateChanged, new PlayerHandler().RequestHealthState(binaryReader), room);
+            PacketHandler.BroadcastPacket(EventCode.PlayerHealthStateChanged, room.RequestHealthState(binaryReader), room);
         }
     }
 }

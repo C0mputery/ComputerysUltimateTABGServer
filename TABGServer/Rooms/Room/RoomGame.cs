@@ -1,6 +1,10 @@
-﻿namespace TABGCommunityServer
+﻿using ENet;
+using System.Collections.Frozen;
+using TABGCommunityServer.Packets;
+
+namespace TABGCommunityServer.Rooms
 {
-    internal class GameHandler
+    public partial class Room
     {
         public static byte[] SetWaitingForPlayersState()
         {

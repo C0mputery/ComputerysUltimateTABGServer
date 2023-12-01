@@ -9,7 +9,9 @@ namespace TABGCommunityServer.Rooms
 
         public static void MakeRoom(ushort port, int maxPlayers)
         {
-            Rooms.Add(new Room(port, maxPlayers));
+            Room room = new Room(port, maxPlayers);
+            Rooms.Add(room);
+            RegisterOnServerList(room);
         }
 
         public static void UpdateRooms()
@@ -49,6 +51,38 @@ namespace TABGCommunityServer.Rooms
 
                     room.enetEvent.Packet.Dispose();
                     break;
+            }
+        }
+
+        /// <summary>
+        /// To be implemented
+        /// </summary>
+        static Timer? serverListHeartbeat;
+
+        /// <summary>
+        /// To be implemented
+        /// </summary>
+        private static void RegisterOnServerList(Room room)
+        {
+
+        }
+
+        /// <summary>
+        /// To be implemented
+        /// </summary>
+        public static void StartServerListHeartbeat()
+        {
+            serverListHeartbeat = new Timer(ServerListHeartbeat, null, 0, 5000);
+        }
+
+        /// <summary>
+        /// To be implemented
+        /// </summary>
+        private static void ServerListHeartbeat(object? state)
+        {
+            foreach (Room room in Rooms)
+            {
+
             }
         }
     }

@@ -1,6 +1,6 @@
-﻿namespace TABGCommunityServer
+﻿namespace TABGCommunityServer.DataTypes
 {
-    internal class UpdatePacket
+    public struct UpdatePacket
     {
         public byte[] Packet { get; set; }
         public Player BroadcastPackets { get; set; }
