@@ -13,7 +13,7 @@ namespace TABGCommunityServer
 
             ENet.Library.Initialize();
 
-            RoomManager.MakeRoom();
+            RoomManager.MakeRoom(9997, 100);
 
             while (!Console.KeyAvailable) { MainLoop(); }
 

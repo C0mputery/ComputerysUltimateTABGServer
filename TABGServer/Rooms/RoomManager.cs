@@ -8,9 +8,9 @@ namespace TABGCommunityServer.Rooms
     {
         public static List<Room> Rooms { get; private set; } = new List<Room>();
 
-        public static void MakeRoom()
+        public static void MakeRoom(ushort port, int maxPlayers)
         {
-            Rooms.Add(new Room(9997, 100));
+            Rooms.Add(new Room(port, maxPlayers));
         }
 
         public static void UpdateRooms()
