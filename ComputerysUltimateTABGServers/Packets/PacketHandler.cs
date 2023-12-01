@@ -42,9 +42,9 @@ namespace TABGCommunityServer.Packets
 
         public static void BroadcastPacket(EventCode eventCode, byte[] playerData, Room room)
         {
-            foreach (KeyValuePair<byte, Player> player in room.Players)
+            foreach (Player player in room.Players.Values)
             {
-                player.Value.PendingBroadcastPackets.Add(new TabgPacket(eventCode, playerData));
+                player.PendingBroadcastPackets.Add(new TabgPacket(eventCode, playerData));
             }
         }
     }

@@ -3,7 +3,7 @@ using System.Text;
 using TABGCommunityServer.MiscDataTypes;
 using TABGCommunityServer.Rooms;
 
-namespace TABGCommunityServer.Packets
+namespace TABGCommunityServer.Packets.PacketTypes
 {
     public class RoomInitPacketHandler : IPacketHandler
     {
@@ -24,10 +24,10 @@ namespace TABGCommunityServer.Packets
             for (int i = 0; i < userGearLength; i++)
             {
                 int userGear = binaryReader.ReadInt32();
-                gearData[i] = (int)userGear;
+                gearData[i] = userGear;
             }
 
-            byte[] sendByte = new byte[4 + 4 + 4 + 4 + 4 + 4 + (roomName.Length + 4)];
+            byte[] sendByte = new byte[4 + 4 + 4 + 4 + 4 + 4 + roomName.Length + 4];
 
             using (MemoryStream writerMemoryStream = new MemoryStream(sendByte))
             {
@@ -42,7 +42,7 @@ namespace TABGCommunityServer.Packets
                     // player index
                     binaryWriterStream.Write(newIndex);
                     // group index
-                    binaryWriterStream.Write((Byte)0);
+                    binaryWriterStream.Write((byte)0);
                     // useless
                     binaryWriterStream.Write(1);
                     // useless string (but using it to notify server of a custom server)
@@ -78,11 +78,11 @@ namespace TABGCommunityServer.Packets
                 using (BinaryWriter binaryWriterStream = new BinaryWriter(writerMemoryStream))
                 {
                     // player index
-                    binaryWriterStream.Write((Byte)playerIndex);
+                    binaryWriterStream.Write(playerIndex);
                     // group index
-                    binaryWriterStream.Write((Byte)0);
+                    binaryWriterStream.Write((byte)0);
                     // username length
-                    binaryWriterStream.Write((Int32)(playerName.Length));
+                    binaryWriterStream.Write(playerName.Length);
                     // username
                     binaryWriterStream.Write(Encoding.UTF8.GetBytes(playerName));
                     // is dev
@@ -122,53 +122,53 @@ namespace TABGCommunityServer.Packets
                             continue;
                         }
                         // player index
-                        binaryWriterStream.Write((Byte)item.Key);
+                        binaryWriterStream.Write(item.Key);
                         // group index
-                        binaryWriterStream.Write((Byte)0);
+                        binaryWriterStream.Write((byte)0);
 
                         // convert so bytes can be grabbed
                         byte[] nameBytes = Encoding.UTF8.GetBytes(item.Value.Name);
 
                         // username length
-                        binaryWriterStream.Write((Int32)(nameBytes.Length));
+                        binaryWriterStream.Write(nameBytes.Length);
                         // username
                         binaryWriterStream.Write(nameBytes);
                         // gun (this has been disabled for efficiency)
-                        binaryWriterStream.Write((Int32)0);
+                        binaryWriterStream.Write(0);
 
                         // gear data
-                        binaryWriterStream.Write((Int32)item.Value.GearData.Length);
+                        binaryWriterStream.Write(item.Value.GearData.Length);
                         for (int i = 0; i < item.Value.GearData.Length; i++)
                         {
-                            binaryWriterStream.Write((Int32)item.Value.GearData[i]);
+                            binaryWriterStream.Write(item.Value.GearData[i]);
                         }
 
                         // is dev
                         binaryWriterStream.Write(true);
                         // colour (disabled amongus gamemode)
-                        binaryWriterStream.Write((Int32)0);
+                        binaryWriterStream.Write(0);
                     }
 
                     // --- END OTHER PLAYERS ---
 
                     // --- WEAPONS SECTION ---
                     // number of weapons to spawn, just leave this empty...
-                    binaryWriterStream.Write((Int32)0);
+                    binaryWriterStream.Write(0);
                     // --- END WEAPONS SECTION ---
 
                     // --- CARS SECTION ---
 
                     // THIS IS CONFUSING AND BROKEN!!!
-                    binaryWriterStream.Write((Int32)1);
+                    binaryWriterStream.Write(1);
                     // car id
-                    binaryWriterStream.Write((Int32)1);
+                    binaryWriterStream.Write(1);
                     // car index
-                    binaryWriterStream.Write((Int32)0);
+                    binaryWriterStream.Write(0);
                     // seats
-                    binaryWriterStream.Write((Int32)4);
+                    binaryWriterStream.Write(4);
                     for (int i = 0; i < 4; i++)
                     {
-                        binaryWriterStream.Write((Int32)i);
+                        binaryWriterStream.Write(i);
                     }
                     // parts of car
                     binaryWriterStream.Write((byte)4);
@@ -193,11 +193,11 @@ namespace TABGCommunityServer.Packets
                     // something ring-related, just set to false to disable
                     binaryWriterStream.Write((byte)0);
                     // lives
-                    binaryWriterStream.Write((Int32)2);
+                    binaryWriterStream.Write(2);
                     // kills to win
                     binaryWriterStream.Write((ushort)10);
                     // gamestate
-                    binaryWriterStream.Write((Byte)GameState.Started);
+                    binaryWriterStream.Write((byte)GameState.Started);
 
                     // flying stuff (?)
                     //binaryWriterStream.Write(0f);
@@ -219,19 +219,19 @@ namespace TABGCommunityServer.Packets
                 using (BinaryWriter binaryWriterStream = new BinaryWriter(writerMemoryStream))
                 {
                     // player index
-                    binaryWriterStream.Write((Byte)playerIndex);
+                    binaryWriterStream.Write(playerIndex);
                     // group index
-                    binaryWriterStream.Write((Byte)0);
+                    binaryWriterStream.Write((byte)0);
                     // username length
-                    binaryWriterStream.Write((Int32)(playerName.Length));
+                    binaryWriterStream.Write(playerName.Length);
                     // username
                     binaryWriterStream.Write(Encoding.UTF8.GetBytes(playerName));
 
                     // gear data
-                    binaryWriterStream.Write((Int32)gearData.Length);
+                    binaryWriterStream.Write(gearData.Length);
                     for (int i = 0; i < gearData.Length; i++)
                     {
-                        binaryWriterStream.Write((Int32)gearData[i]);
+                        binaryWriterStream.Write(gearData[i]);
                     }
 
                     // is dev
@@ -296,7 +296,7 @@ namespace TABGCommunityServer.Packets
                 PacketHandler.SendMessageToPeer(peer, packet.Type, packet.Data, true);
             }
 
-            updatePacket.BroadcastPackets.PendingBroadcastPackets = new List<TabgPacket>();
+            updatePacket.BroadcastPackets.PendingBroadcastPackets.Clear(); ;
         }
     }
 

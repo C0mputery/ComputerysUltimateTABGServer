@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TABGCommunityServer", "TABGServer\TABGCommunityServer.csproj", "{1A0856FF-D2A8-411A-9A3B-0DF6565A29CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComputerysUltimateTABGServers", "TABGServer\ComputerysUltimateTABGServers.csproj", "{1A0856FF-D2A8-411A-9A3B-0DF6565A29CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,7 @@
 ﻿using ENet;
 using System.Collections.Frozen;
 using TABGCommunityServer.Packets;
+using TABGCommunityServer.Packets.PacketTypes;
 
 namespace TABGCommunityServer.Rooms
 {
@@ -22,6 +23,7 @@ namespace TABGCommunityServer.Rooms
             { EventCode.RequestBlessing, new RequestBlessingPacketHandler() },
             { EventCode.RequestHealthState, new RequestHealthStatePacketHandler() },
         }.ToFrozenDictionary();
+
         public int roomID;
         public Host enetServer;
         public Address enetAddress;

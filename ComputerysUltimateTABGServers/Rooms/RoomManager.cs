@@ -23,7 +23,6 @@ namespace TABGCommunityServer.Rooms
                     UpdateRoom(room);
                 }
             }
-
         }
 
         public static void CloseAllRooms()
