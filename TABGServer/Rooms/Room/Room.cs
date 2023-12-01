@@ -3,7 +3,7 @@ using System.Collections.Frozen;
 using TABGCommunityServer.DataTypes;
 using TABGCommunityServer.Packets;
 
-namespace TABGCommunityServer.ServerData
+namespace TABGCommunityServer.Rooms
 {
     public partial class Room
     {
@@ -23,31 +23,6 @@ namespace TABGCommunityServer.ServerData
             { EventCode.RequestBlessing, new RequestBlessingPacketHandler() },
             { EventCode.RequestHealthState, new RequestHealthStatePacketHandler() },
         }.ToFrozenDictionary();
-
-        public Dictionary<byte, Player> Players { get; private set; } = new Dictionary<byte, Player>();
-        public byte LastID = 0;
-        public void AddPlayer(Player player)
-        {
-            Players[player.Id] = player;
-            LastID++;
-        }
-        public void RemovePlayer(Player player)
-        {
-            Players.Remove(player.Id);
-        }
-
-        public Dictionary<int, Item> Items { get; private set; } = new Dictionary<int, Item>();
-        public int CurrentID = 0;
-        public void SpawnItem(Item item)
-        {
-            Items[item.Id] = item;
-            CurrentID++;
-        }
-        public void RemoveItem(Item item)
-        {
-            Items.Remove(item.Id);
-        }
-
         public int roomID;
         public Host enetServer;
         public Address enetAddress;

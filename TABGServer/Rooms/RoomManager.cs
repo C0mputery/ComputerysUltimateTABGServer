@@ -1,6 +1,6 @@
 ﻿using ENet;
 using TABGCommunityServer.Packets;
-using TABGCommunityServer.ServerData;
+using TABGCommunityServer.Rooms;
 
 namespace TABGCommunityServer.Rooms
 {
@@ -38,21 +38,6 @@ namespace TABGCommunityServer.Rooms
         {
             switch (room.enetEvent.Type)
             {
-                case EventType.None:
-                    break;
-
-                case EventType.Connect:
-                    Console.WriteLine("Client connected - ID: " + room.enetEvent.Peer.ID + ", IP: " + room.enetEvent.Peer.IP);
-                    break;
-
-                case EventType.Disconnect:
-                    Console.WriteLine("Client disconnected - ID: " + room.enetEvent.Peer.ID + ", IP: " + room.enetEvent.Peer.IP);
-                    break;
-
-                case EventType.Timeout:
-                    Console.WriteLine("Client timeout - ID: " + room.enetEvent.Peer.ID + ", IP: " + room.enetEvent.Peer.IP);
-                    break;
-
                 case EventType.Receive:
                     byte[] enetPacket = new byte[room.enetEvent.Packet.Length];
                     room.enetEvent.Packet.CopyTo(enetPacket);
