@@ -7,15 +7,15 @@ namespace TABGCommunityServer.Packets.PacketTypes
 {
     public class RoomInitPacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
+        public void Handle(Peer peer, int bufferLength, BinaryReader binaryReader, Room room)
         {
-            string roomName = "DecompileServer";
-            byte newIndex = room.LastID++;
+            string roomName = room.roomName;
+            byte newIndex = room.lastPlayerID++;
 
             string playerName = binaryReader.ReadString();
             string gravestoneText = binaryReader.ReadString();
             ulong loginKey = binaryReader.ReadUInt64();
-            bool squadHost = binaryReader.ReadBoolean();
+            bool isSquadHost = binaryReader.ReadBoolean();
             byte squadMembers = binaryReader.ReadByte();
             int userGearLength = binaryReader.ReadInt32();
 
@@ -30,24 +30,22 @@ namespace TABGCommunityServer.Packets.PacketTypes
             byte[] sendByte = new byte[4 + 4 + 4 + 4 + 4 + 4 + roomName.Length + 4];
 
             using (MemoryStream writerMemoryStream = new MemoryStream(sendByte))
+            using (BinaryWriter binaryWriterStream = new BinaryWriter(writerMemoryStream))
             {
-                using (BinaryWriter binaryWriterStream = new BinaryWriter(writerMemoryStream))
-                {
-                    // accepted or not
-                    binaryWriterStream.Write((byte)ServerResponse.Accepted);
-                    // gamemode
-                    binaryWriterStream.Write((byte)GameMode.BattleRoyale);
-                    // client requires this, but it's useless
-                    binaryWriterStream.Write((byte)1);
-                    // player index
-                    binaryWriterStream.Write(newIndex);
-                    // group index
-                    binaryWriterStream.Write((byte)0);
-                    // useless
-                    binaryWriterStream.Write(1);
-                    // useless string (but using it to notify server of a custom server)
-                    binaryWriterStream.Write(Encoding.UTF8.GetBytes("CustomServer"));
-                }
+                // accepted or not
+                binaryWriterStream.Write((byte)ServerResponse.Accepted);
+                // gamemode
+                binaryWriterStream.Write((byte)GameMode.BattleRoyale);
+                // client requires this, but it's useless
+                binaryWriterStream.Write((byte)1);
+                // player index
+                binaryWriterStream.Write(newIndex);
+                // group index
+                binaryWriterStream.Write((byte)0);
+                // useless
+                binaryWriterStream.Write(1);
+                // useless string (but using it to notify server of a custom server)
+                binaryWriterStream.Write(Encoding.UTF8.GetBytes("CustomServer"));
             }
 
             Console.WriteLine("Sending request RESPONSE to client!");
@@ -56,7 +54,7 @@ namespace TABGCommunityServer.Packets.PacketTypes
             Console.WriteLine("Sending Login RESPONSE to client!");
             PacketHandler.SendMessageToPeer(peer, EventCode.Login, SendJoinMessageToServer(newIndex, playerName, gearData, room), true);
 
-            foreach (KeyValuePair<byte, Player> player in room.Players)
+            foreach (KeyValuePair<byte, Player> player in room.players)
             {
                 if (player.Key == newIndex)
                 {
@@ -111,11 +109,11 @@ namespace TABGCommunityServer.Packets.PacketTypes
                     binaryWriterStream.Write(false);
                     // how many players are in the lobby?
                     //binaryWriterStream.Write((byte)concurrencyHandler.Players.Count);
-                    binaryWriterStream.Write((byte)(room.Players.Count - 1));
+                    binaryWriterStream.Write((byte)(room.players.Count - 1));
 
                     // --- OTHER PLAYERS ---
 
-                    foreach (KeyValuePair<byte, Player> item in room.Players)
+                    foreach (KeyValuePair<byte, Player> item in room.players)
                     {
                         if (item.Key == playerIndex)
                         {
@@ -244,7 +242,7 @@ namespace TABGCommunityServer.Packets.PacketTypes
 
     internal class ChatMessagePacketHandler : IPacketHandler // UPDATE THIS NON WORKING
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
+        public void Handle(Peer peer, int bufferLength, BinaryReader binaryReader, Room room)
         {
             byte playerIndex = binaryReader.ReadByte(); // or ReadInt32(), depending on the type of PlayerIndex
             byte messageLength = binaryReader.ReadByte();
@@ -256,7 +254,7 @@ namespace TABGCommunityServer.Packets.PacketTypes
 
     internal class RequestItemThrowPacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
+        public void Handle(Peer peer, int bufferLength, BinaryReader binaryReader, Room room)
         {
             PacketHandler.BroadcastPacket(EventCode.ItemThrown, Room.ClientRequestThrow(binaryReader), room);
         }
@@ -264,7 +262,7 @@ namespace TABGCommunityServer.Packets.PacketTypes
 
     internal class RequestItemDropPacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
+        public void Handle(Peer peer, int bufferLength, BinaryReader binaryReader, Room room)
         {
             PacketHandler.BroadcastPacket(EventCode.ItemDrop, Room.ClientRequestDrop(binaryReader, room), room);
         }
@@ -272,7 +270,7 @@ namespace TABGCommunityServer.Packets.PacketTypes
 
     internal class RequestWeaponPickUpPacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
+        public void Handle(Peer peer, int bufferLength, BinaryReader binaryReader, Room room)
         {
             PacketHandler.BroadcastPacket(EventCode.WeaponPickUpAccepted, Room.ClientRequestPickUp(binaryReader, room), room);
         }
@@ -280,10 +278,10 @@ namespace TABGCommunityServer.Packets.PacketTypes
 
     internal class PlayerUpdatePacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
+        public void Handle(Peer peer, int bufferLength, BinaryReader binaryReader, Room room)
         {
             // this packet is different because it can have an unlimited amount of subpackets
-            UpdatePacket updatePacket = room.PlayerUpdate(binaryReader, buffer.Length, room);
+            UpdatePacket updatePacket = room.PlayerUpdate(binaryReader, bufferLength, room);
 
             PacketHandler.SendMessageToPeer(peer, EventCode.PlayerUpdate, updatePacket.Packet, true);
 
@@ -302,7 +300,7 @@ namespace TABGCommunityServer.Packets.PacketTypes
 
     internal class WeaponChangePacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
+        public void Handle(Peer peer, int bufferLength, BinaryReader binaryReader, Room room)
         {
             PacketHandler.BroadcastPacket(EventCode.WeaponChanged, room.PlayerChangedWeapon(binaryReader), room);
         }
@@ -310,23 +308,23 @@ namespace TABGCommunityServer.Packets.PacketTypes
 
     internal class PlayerFirePacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
+        public void Handle(Peer peer, int bufferLength, BinaryReader binaryReader, Room room)
         {
-            room.PlayerFire(binaryReader, buffer.Length, room);
+            room.PlayerFire(binaryReader, bufferLength, room);
         }
     }
 
     internal class RequestSyncProjectileEventPacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
+        public void Handle(Peer peer, int bufferLength, BinaryReader binaryReader, Room room)
         {
-            PacketHandler.BroadcastPacket(EventCode.SyncProjectileEvent, room.ClientRequestProjectileSyncEvent(binaryReader, buffer.Length), room);
+            PacketHandler.BroadcastPacket(EventCode.SyncProjectileEvent, room.ClientRequestProjectileSyncEvent(binaryReader, bufferLength), room);
         }
     }
 
     internal class RequestAirplaneDropPacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
+        public void Handle(Peer peer, int bufferLength, BinaryReader binaryReader, Room room)
         {
             PacketHandler.BroadcastPacket(EventCode.PlayerAirplaneDropped, room.RequestAirplaneDrop(binaryReader), room);
         }
@@ -334,7 +332,7 @@ namespace TABGCommunityServer.Packets.PacketTypes
 
     internal class DamageEventPacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
+        public void Handle(Peer peer, int bufferLength, BinaryReader binaryReader, Room room)
         {
             room.PlayerDamagedEvent(binaryReader, room);
         }
@@ -342,7 +340,7 @@ namespace TABGCommunityServer.Packets.PacketTypes
 
     internal class RequestBlessingPacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
+        public void Handle(Peer peer, int bufferLength, BinaryReader binaryReader, Room room)
         {
             PacketHandler.BroadcastPacket(EventCode.BlessingRecieved, room.RequestBlessingEvent(binaryReader), room);
         }
@@ -350,7 +348,7 @@ namespace TABGCommunityServer.Packets.PacketTypes
 
     internal class RequestHealthStatePacketHandler : IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room)
+        public void Handle(Peer peer, int bufferLength, BinaryReader binaryReader, Room room)
         {
             PacketHandler.BroadcastPacket(EventCode.PlayerHealthStateChanged, room.RequestHealthState(binaryReader), room);
         }

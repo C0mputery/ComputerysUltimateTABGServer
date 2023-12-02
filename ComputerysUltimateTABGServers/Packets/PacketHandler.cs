@@ -6,7 +6,7 @@ namespace TABGCommunityServer.Packets
 {
     public interface IPacketHandler
     {
-        public void Handle(Peer peer, byte[] buffer, BinaryReader binaryReader, Room room);
+        public void Handle(Peer peer, int bufferLength, BinaryReader binaryReader, Room room);
     }
 
     public static class PacketHandler
@@ -23,7 +23,7 @@ namespace TABGCommunityServer.Packets
             {
                 if (room.packetHandlers.TryGetValue(code, out IPacketHandler? packetHandler))
                 {
-                    packetHandler.Handle(peer, buffer, binaryReader, room);
+                    packetHandler.Handle(peer, buffer.Length, binaryReader, room);
                 }
             }
         }
@@ -42,7 +42,7 @@ namespace TABGCommunityServer.Packets
 
         public static void BroadcastPacket(EventCode eventCode, byte[] playerData, Room room)
         {
-            foreach (Player player in room.Players.Values)
+            foreach (Player player in room.players.Values)
             {
                 player.PendingBroadcastPackets.Add(new TabgPacket(eventCode, playerData));
             }

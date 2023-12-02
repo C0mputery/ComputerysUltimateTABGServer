@@ -24,7 +24,7 @@ namespace TABGCommunityServer.Rooms
             { EventCode.RequestHealthState, new RequestHealthStatePacketHandler() },
         }.ToFrozenDictionary();
 
-        public int roomID;
+        public string roomName = "";
         public Host enetServer;
         public Address enetAddress;
         public Event enetEvent;

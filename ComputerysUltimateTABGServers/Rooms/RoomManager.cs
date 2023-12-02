@@ -10,8 +10,8 @@ namespace TABGCommunityServer.Rooms
         public static void MakeRoom(ushort port, int maxPlayers)
         {
             Room room = new(port, maxPlayers);
-            Rooms.Add(room);
             RegisterOnServerList(room);
+            Rooms.Add(room);
         }
 
         public static void UpdateRooms()

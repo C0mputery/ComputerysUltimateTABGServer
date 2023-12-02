@@ -5,18 +5,18 @@ namespace TABGCommunityServer.Rooms
 {
     public partial class Room
     {
-        public Dictionary<byte, Player> Players { get; private set; } = new Dictionary<byte, Player>();
-        public byte LastID = 0;
+        public Dictionary<byte, Player> players { get; private set; } = new Dictionary<byte, Player>();
+        public byte lastPlayerID = 0;
 
         public void AddPlayer(Player player)
         {
-            Players[player.Id] = player;
-            LastID++;
+            players[player.Id] = player;
+            lastPlayerID++;
         }
 
         public void RemovePlayer(Player player)
         {
-            Players.Remove(player.Id);
+            players.Remove(player.Id);
         }
 
         public byte[] KillPlayer(int victim, int killer, string victimName)
@@ -163,7 +163,7 @@ namespace TABGCommunityServer.Rooms
             // movement flags
             byte movementFlags = binaryReader.ReadByte();
 
-            Player player = room.Players[playerIndex];
+            Player player = room.players[playerIndex];
 
             player.Id = playerIndex;
             player.Location = (x, y, z);
@@ -264,7 +264,7 @@ namespace TABGCommunityServer.Rooms
                 Console.WriteLine(err);
             }
 
-            foreach (KeyValuePair<byte, Player> item in room.Players)
+            foreach (KeyValuePair<byte, Player> item in room.players)
             {
                 if (item.Key == playerIndex)
                 {
@@ -346,9 +346,9 @@ namespace TABGCommunityServer.Rooms
                     binaryWriterStream.Write(milliseconds);
 
                     // amount of players to loop (unimplemented)
-                    binaryWriterStream.Write((byte)room.Players.Count);
+                    binaryWriterStream.Write((byte)room.players.Count);
 
-                    foreach (KeyValuePair<byte, Player> item in room.Players)
+                    foreach (KeyValuePair<byte, Player> item in room.players)
                     {
                         // player index
                         binaryWriterStream.Write((byte)item.Key);
@@ -617,10 +617,10 @@ namespace TABGCommunityServer.Rooms
 
                     // victim id
                     byte victim = binaryReader.ReadByte();
-                    Player player = room.Players[victim];
+                    Player player = room.players[victim];
                     playerOutside = player;
 
-                    Player player2 = room.Players[attacker];
+                    Player player2 = room.players[attacker];
                     playerOutside2 = player;
 
                     binaryWriterStream.Write(victim);
@@ -713,7 +713,7 @@ namespace TABGCommunityServer.Rooms
                     // is skydiving
                     binaryWriterStream.Write(false);
                     // gear data
-                    Player player = room.Players[playerIndex];
+                    Player player = room.players[playerIndex];
                     binaryWriterStream.Write((Int32)player.GearData.Length);
                     for (int i = 0; i < player.GearData.Length; i++)
                     {
