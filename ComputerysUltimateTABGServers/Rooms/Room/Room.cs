@@ -7,30 +7,21 @@ namespace TABGCommunityServer.Rooms
 {
     public partial class Room
     {
-        public readonly FrozenDictionary<EventCode, IPacketHandler> packetHandlers = new Dictionary<EventCode, IPacketHandler>
+        public delegate void HandlePacketDelegate();
+
+        public readonly FrozenDictionary<EventCode, IPacket> packetHandlers = new Dictionary<EventCode, IPacket>
         {
-            { EventCode.RoomInit, new RoomInitPacketHandler() },
-            { EventCode.ChatMessage, new ChatMessagePacketHandler() },
-            { EventCode.RequestItemThrow, new RequestItemThrowPacketHandler() },
-            { EventCode.RequestItemDrop, new RequestItemDropPacketHandler() },
-            { EventCode.RequestWeaponPickUp, new RequestWeaponPickUpPacketHandler() },
-            { EventCode.PlayerUpdate, new PlayerUpdatePacketHandler() },
-            { EventCode.WeaponChange, new WeaponChangePacketHandler() },
-            { EventCode.PlayerFire, new PlayerFirePacketHandler() },
-            { EventCode.RequestSyncProjectileEvent, new RequestSyncProjectileEventPacketHandler() },
-            { EventCode.RequestAirplaneDrop, new RequestAirplaneDropPacketHandler() },
-            { EventCode.DamageEvent, new DamageEventPacketHandler() },
-            { EventCode.RequestBlessing, new RequestBlessingPacketHandler() },
-            { EventCode.RequestHealthState, new RequestHealthStatePacketHandler() },
+            { EventCode.RoomInit, new RoomInitPacket() },
         }.ToFrozenDictionary();
 
-        public string roomName = "";
+        public string m_RoomName;
         public Host enetServer;
         public Address enetAddress;
         public Event enetEvent;
 
-        public Room(ushort Port, int maxClients)
+        public Room(ushort Port, int maxClients, string roomName)
         {
+            m_RoomName = roomName ?? ""; // This is too make sure the m_roomName is not null.
             enetServer = new Host();
             enetAddress = new Address() { Port = Port };
             enetServer.Create(enetAddress, maxClients);

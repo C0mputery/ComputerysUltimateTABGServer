@@ -9,7 +9,7 @@ namespace TABGCommunityServer.Rooms
 
         public static void MakeRoom(ushort port, int maxPlayers)
         {
-            Room room = new(port, maxPlayers);
+            Room room = new(port, maxPlayers, "testServer");
             RegisterOnServerList(room);
             Rooms.Add(room);
         }
@@ -42,11 +42,11 @@ namespace TABGCommunityServer.Rooms
                     byte[] enetPacket = new byte[room.enetEvent.Packet.Length];
                     room.enetEvent.Packet.CopyTo(enetPacket);
 
-                    EventCode code = (EventCode)enetPacket[0];
-                    byte[] buffer = new byte[enetPacket.Length - 1];
-                    Array.Copy(enetPacket, 1, buffer, 0, buffer.Length);
+                    EventCode eventCode = (EventCode)enetPacket[0];
+                    byte[] packetData = new byte[enetPacket.Length - 1];
+                    Array.Copy(enetPacket, 1, packetData, 0, packetData.Length);
 
-                    PacketHandler.Handle(room.enetEvent.Peer, code, buffer, room);
+                    PacketHandler.Handle(eventCode, (byte)room.enetEvent.Peer.ID, packetData, room);
 
                     room.enetEvent.Packet.Dispose();
                     break;

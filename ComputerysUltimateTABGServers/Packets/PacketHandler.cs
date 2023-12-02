@@ -4,48 +4,54 @@ using TABGCommunityServer.Rooms;
 
 namespace TABGCommunityServer.Packets
 {
-    public interface IPacketHandler
+    public interface IPacket
     {
-        public void Handle(Peer peer, int bufferLength, BinaryReader binaryReader, Room room);
+        public void Handle(byte peerID, BinaryReader receivedPacketData, Room room);
     }
 
     public static class PacketHandler
     {
-        public static void Handle(Peer peer, EventCode code, byte[] buffer, Room room)
+        public static void Handle(EventCode eventCode, byte peerID, byte[] packetData, Room room)
         {
-            if ((code != EventCode.TABGPing) && (code != EventCode.PlayerUpdate))
+            if ((eventCode != EventCode.TABGPing) && (eventCode != EventCode.PlayerUpdate))
             {
-                Console.WriteLine("Handling packet: " + code.ToString());
+                Console.WriteLine("Handling packet: " + eventCode.ToString());
             }
 
-            using (MemoryStream memoryStream = new MemoryStream(buffer))
-            using (BinaryReader binaryReader = new BinaryReader(memoryStream))
+            using (MemoryStream packetDataMemoryStream = new MemoryStream(packetData))
+            using (BinaryReader packetDataBinaryReader = new BinaryReader(packetDataMemoryStream))
             {
-                if (room.packetHandlers.TryGetValue(code, out IPacketHandler? packetHandler))
+                if (room.packetHandlers.TryGetValue(eventCode, out IPacket? packetHandler))
                 {
-                    packetHandler.Handle(peer, buffer.Length, binaryReader, room);
+                    packetHandler.Handle(peerID, packetDataBinaryReader, room);
                 }
             }
         }
 
-        public static void SendMessageToPeer(Peer peer, EventCode code, byte[] buffer, bool reliable)
+        public static void SendPacketToPlayer(EventCode eventCode, byte[] packetData, Player recipent, Room room)
         {
-            byte[] array = new byte[buffer.Length + 1];
-            array[0] = (byte)code;
-            Array.Copy(buffer, 0, array, 1, buffer.Length);
-
-            ENet.Packet packet = default;
-            packet.Create(array, reliable ? PacketFlags.Reliable : PacketFlags.None);
-
-            peer.Send(0, ref packet);
+            byte[] packetByteArray = new byte[packetData.Length + 1];
+            packetByteArray[0] = (byte)eventCode;
+            Array.Copy(packetData, 0, packetByteArray, 1, packetData.Length);
+            Packet packet = default(Packet);
+            packet.Create(packetByteArray, PacketFlags.Reliable);
+            recipent.m_Peer.Send(0, ref packet);
         }
 
-        public static void BroadcastPacket(EventCode eventCode, byte[] playerData, Room room)
+        public static void SendPacketToPlayers(EventCode eventCode, byte[] packetData, Player[] recipents, Room room)
         {
-            foreach (Player player in room.players.Values)
-            {
-                player.PendingBroadcastPackets.Add(new TabgPacket(eventCode, playerData));
-            }
+            byte[] packetByteArray = new byte[packetData.Length + 1];
+            packetByteArray[0] = (byte)eventCode;
+            Array.Copy(packetData, 0, packetByteArray, 1, packetData.Length);
+            Packet packet = default(Packet);
+            packet.Create(packetByteArray, PacketFlags.Reliable);
+            Peer[] peersArray = recipents.Select(player => player.m_Peer).ToArray();
+            room.enetServer.Broadcast(0, ref packet, peersArray);
+        }
+
+        public static void SendPacketAllPlayers(EventCode eventCode, byte[] packetData, Room room)
+        {
+            SendPacketToPlayers(eventCode, packetData, room.players.Values.ToArray(), room);
         }
     }
 }
