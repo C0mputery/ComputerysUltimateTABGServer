@@ -28,7 +28,7 @@ namespace ComputerysUltimateTABGServers.Rooms
             return false;
         }
 
-        public byte JoinOrCreateGroup(Peer peer, ulong loginKey, bool autoTeam)
+        public byte JoinOrCreateGroup(ulong loginKey, bool autoTeam)
         {
             List<byte> sortedKeys = groups.Keys.OrderBy(k => k).ToList();
             byte groupIndex = (byte)(sortedKeys.Last() + 1);
