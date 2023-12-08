@@ -37,7 +37,7 @@ namespace ComputerysUltimateTABGServers.Rooms
             }
             if (autoTeam)
             {
-                foreach (Group group in groups.Values.Where(group => group.m_ShouldAutoFill && group.m_Players.Count() < group.m_MaxPlayers))
+                foreach (Group group in groups.Values.Where(group => group.m_ShouldAutoFill && group.m_PlayerIDs.Count() < group.m_MaxPlayers))
                 {
                     return group.m_GroupIndex;
                 }

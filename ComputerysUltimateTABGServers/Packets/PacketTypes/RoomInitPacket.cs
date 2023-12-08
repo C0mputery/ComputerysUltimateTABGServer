@@ -39,6 +39,7 @@ namespace ComputerysUltimateTABGServers.Packets.PacketTypes
 
             byte groupIndex = room.FindOrCreateGroup(loginKey, shouldAutoFillSquad);
             Player player = new Player(peer, playerName, groupIndex, gearData, playfabID, color);
+            room.groups[groupIndex].m_PlayerIDs.Add((byte)player.m_Peer.ID);
             room.AddPlayer(player);
 
             /*byte[] playerNameUTF8 = Encoding.UTF8.GetBytes(playerName);
