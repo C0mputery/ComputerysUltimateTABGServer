@@ -1,7 +1,7 @@
 ﻿using ENet;
-using TABGCommunityServer.Packets;
+using ComputerysUltimateTABGServers.Packets;
 
-namespace TABGCommunityServer.Rooms
+namespace ComputerysUltimateTABGServers.Rooms
 {
     public static class RoomManager
     {
@@ -18,7 +18,7 @@ namespace TABGCommunityServer.Rooms
         {
             foreach (Room room in Rooms)
             {
-                if (room.enetServer.CheckEvents(out room.enetEvent) >= 0 && room.enetServer.Service(15, out room.enetEvent) >= 0)
+                if (room.m_EnetServer.CheckEvents(out room.m_EnetEvent) >= 0 && room.m_EnetServer.Service(15, out room.m_EnetEvent) >= 0)
                 {
                     UpdateRoom(room);
                 }
@@ -29,26 +29,26 @@ namespace TABGCommunityServer.Rooms
         {
             foreach (Room room in Rooms)
             {
-                room.enetServer.Flush();
+                room.m_EnetServer.Flush();
             }
             Rooms.Clear();
         }
 
         private static void UpdateRoom(Room room)
         {
-            switch (room.enetEvent.Type)
+            switch (room.m_EnetEvent.Type)
             {
                 case EventType.Receive:
-                    byte[] enetPacket = new byte[room.enetEvent.Packet.Length];
-                    room.enetEvent.Packet.CopyTo(enetPacket);
+                    byte[] enetPacket = new byte[room.m_EnetEvent.Packet.Length];
+                    room.m_EnetEvent.Packet.CopyTo(enetPacket);
 
                     EventCode eventCode = (EventCode)enetPacket[0];
                     byte[] packetData = new byte[enetPacket.Length - 1];
                     Array.Copy(enetPacket, 1, packetData, 0, packetData.Length);
 
-                    PacketHandler.Handle(eventCode, (byte)room.enetEvent.Peer.ID, packetData, room);
+                    PacketHandler.Handle(eventCode, room.m_EnetEvent.Peer, packetData, room);
 
-                    room.enetEvent.Packet.Dispose();
+                    room.m_EnetEvent.Packet.Dispose();
                     break;
             }
         }

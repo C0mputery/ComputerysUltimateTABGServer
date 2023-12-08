@@ -1,17 +1,17 @@
 ﻿using ENet;
-using TABGCommunityServer.MiscDataTypes;
-using TABGCommunityServer.Rooms;
+using ComputerysUltimateTABGServers.MiscDataTypes;
+using ComputerysUltimateTABGServers.Rooms;
 
-namespace TABGCommunityServer.Packets
+namespace ComputerysUltimateTABGServers.Packets
 {
     public interface IPacket
     {
-        public void Handle(byte peerID, BinaryReader receivedPacketData, Room room);
+        public void Handle(Peer peer, BinaryReader receivedPacketData, Room room);
     }
 
     public static class PacketHandler
     {
-        public static void Handle(EventCode eventCode, byte peerID, byte[] packetData, Room room)
+        public static void Handle(EventCode eventCode, Peer peer, byte[] packetData, Room room)
         {
             if ((eventCode != EventCode.TABGPing) && (eventCode != EventCode.PlayerUpdate))
             {
@@ -21,9 +21,9 @@ namespace TABGCommunityServer.Packets
             using (MemoryStream packetDataMemoryStream = new MemoryStream(packetData))
             using (BinaryReader packetDataBinaryReader = new BinaryReader(packetDataMemoryStream))
             {
-                if (room.packetHandlers.TryGetValue(eventCode, out IPacket? packetHandler))
+                if (room.m_PacketHandlers.TryGetValue(eventCode, out IPacket? packetHandler))
                 {
-                    packetHandler.Handle(peerID, packetDataBinaryReader, room);
+                    packetHandler.Handle(peer, packetDataBinaryReader, room);
                 }
             }
         }
@@ -46,7 +46,7 @@ namespace TABGCommunityServer.Packets
             Packet packet = default(Packet);
             packet.Create(packetByteArray, PacketFlags.Reliable);
             Peer[] peersArray = recipents.Select(player => player.m_Peer).ToArray();
-            room.enetServer.Broadcast(0, ref packet, peersArray);
+            room.m_EnetServer.Broadcast(0, ref packet, peersArray);
         }
 
         public static void SendPacketAllPlayers(EventCode eventCode, byte[] packetData, Room room)

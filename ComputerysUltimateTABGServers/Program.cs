@@ -1,6 +1,6 @@
-﻿using TABGCommunityServer.Rooms;
+﻿using ComputerysUltimateTABGServers.Rooms;
 
-namespace TABGCommunityServer
+namespace ComputerysUltimateTABGServers
 {
     class TABGCommunityServer
     {

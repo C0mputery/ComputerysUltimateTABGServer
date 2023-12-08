@@ -1,30 +1,39 @@
 ﻿using ComputerysUltimateTABGServers.MiscDataTypes;
+using ENet;
 using System.Text;
-using TABGCommunityServer.MiscDataTypes;
 
-namespace TABGCommunityServer.Rooms
+namespace ComputerysUltimateTABGServers.Rooms
 {
     public partial class Room
     {
-        public Dictionary<uint, Player> players { get; private set; } = []; // PlayerID, PlayerGroup
-        public Dictionary<uint, PlayerGroup> groups { get; private set; } = []; // GroupID, PlayerGroup
+        public Dictionary<byte, Player> players { get; private set; } = [];
+        public Dictionary<byte, Group> groups { get; private set; } = [];
 
-        public byte lastPlayerID = 0;
 
         public void AddPlayer(Player player)
         {
-            players[player.m_Peer.ID] = player;
-            lastPlayerID++;
+            players[(byte)player.m_Peer.ID] = player;
         }
 
         public void RemovePlayer(Player player)
         {
-            players.Remove(player.m_Peer.ID);
+            players.Remove((byte)player.m_Peer.ID);
         }
 
-        public void AddPlayerToGroup()
+        public bool TryToGetPlayer(Peer peer, out Player? player)
         {
+            if (players.TryGetValue((byte)peer.ID, out player)) {
+                return true;
+            }
+            return false;
+        }
 
+        public byte JoinOrCreateGroup(Peer peer, ulong loginKey, bool autoTeam)
+        {
+            List<byte> sortedKeys = groups.Keys.OrderBy(k => k).ToList();
+            byte groupIndex = (byte)(sortedKeys.Last() + 1);
+            groups.Add(groupIndex, new Group());
+            return groupIndex;
         }
     }
 }
