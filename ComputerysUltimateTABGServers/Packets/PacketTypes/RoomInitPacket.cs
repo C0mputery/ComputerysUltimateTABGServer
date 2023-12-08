@@ -46,7 +46,17 @@ namespace ComputerysUltimateTABGServers.Packets.PacketTypes
             using (MemoryStream memoryStream = new MemoryStream(buffer))
             using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
             {
-
+                binaryWriter.Write(peer.ID);
+                binaryWriter.Write(groupIndex);
+                binaryWriter.Write(playerNameUTF8.Length);
+                binaryWriter.Write(playerNameUTF8);
+                binaryWriter.Write(gearData.Length);
+                for (int i = 0; i < gearData.Length; i++)
+                {
+                    binaryWriter.Write(gearData[i]);
+                }
+                binaryWriter.Write(0);
+                binaryWriter.Write(color);
             }
 
                 /*byte[] playerNameUTF8 = Encoding.UTF8.GetBytes(playerName);
