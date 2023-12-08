@@ -25,6 +25,12 @@ namespace ComputerysUltimateTABGServers.Rooms
             }
         }
 
+        public static void CloseRoom(Room room)
+        {
+            room.m_EnetServer.Flush();
+            Rooms.Remove(room);
+        }
+
         public static void CloseAllRooms()
         {
             foreach (Room room in Rooms)

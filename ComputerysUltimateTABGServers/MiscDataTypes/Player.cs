@@ -14,7 +14,9 @@ namespace ComputerysUltimateTABGServers.MiscDataTypes
         public bool m_AimDownSights { get; set; } = false;
         public byte[] m_OptimizedDirection { get; set; } = new byte[3];
         public byte m_MovementFlags { get; set; } = 0;
+
         public string m_PlayFabID = playFabID;
+
         public int color = color;
     }
 }

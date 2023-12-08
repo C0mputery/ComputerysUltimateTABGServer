@@ -28,11 +28,22 @@ namespace ComputerysUltimateTABGServers.Rooms
             return false;
         }
 
-        public byte JoinOrCreateGroup(ulong loginKey, bool autoTeam)
+        // I hate how I made this function but fuck it, somebody else can fix it or smth
+        public byte FindOrCreateGroup(ulong loginKey, bool autoTeam)
         {
-            List<byte> sortedKeys = groups.Keys.OrderBy(k => k).ToList();
-            byte groupIndex = (byte)(sortedKeys.Last() + 1);
-            groups.Add(groupIndex, new Group());
+            foreach (Group group in groups.Values.Where(group => group.m_GroupLoginKey == loginKey))
+            {
+                return group.m_GroupIndex;
+            }
+            if (autoTeam)
+            {
+                foreach (Group group in groups.Values.Where(group => group.m_ShouldAutoFill && group.m_Players.Count() < group.m_MaxPlayers))
+                {
+                    return group.m_GroupIndex;
+                }
+            }
+            byte groupIndex = (byte)(groups.Keys.OrderBy(k => k).Last() + 1);
+            groups.Add(groupIndex, new Group(autoTeam, loginKey, groupIndex));
             return groupIndex;
         }
     }

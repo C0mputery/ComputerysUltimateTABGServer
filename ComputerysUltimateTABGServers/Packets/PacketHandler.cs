@@ -51,7 +51,12 @@ namespace ComputerysUltimateTABGServers.Packets
 
         public static void SendPacketAllPlayers(EventCode eventCode, byte[] packetData, Room room)
         {
-            SendPacketToPlayers(eventCode, packetData, room.players.Values.ToArray(), room);
+            byte[] packetByteArray = new byte[packetData.Length + 1];
+            packetByteArray[0] = (byte)eventCode;
+            Array.Copy(packetData, 0, packetByteArray, 1, packetData.Length);
+            Packet packet = default(Packet);
+            packet.Create(packetByteArray, PacketFlags.Reliable);
+            room.m_EnetServer.Broadcast(0, ref packet);
         }
     }
 }
