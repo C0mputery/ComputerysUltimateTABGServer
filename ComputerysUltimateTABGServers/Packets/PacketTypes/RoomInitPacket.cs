@@ -38,7 +38,7 @@ namespace ComputerysUltimateTABGServers.Packets.PacketTypes
             if (receivedPacketData.PeekChar() != -1) { serverPassword = receivedPacketData.ReadString(); }
 
             byte groupIndex = room.FindOrCreateGroup(loginKey, shouldAutoFillSquad);
-            Player player = new Player(peer, playerName, 0, gearData, playfabID, color);
+            Player player = new Player(peer, playerName, groupIndex, gearData, playfabID, color);
             room.AddPlayer(player);
 
             /*byte[] playerNameUTF8 = Encoding.UTF8.GetBytes(playerName);

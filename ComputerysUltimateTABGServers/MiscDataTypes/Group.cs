@@ -2,7 +2,7 @@
 {
     public class Group(bool shouldAutoFill, ulong groupLoginKey, byte groupIndex)
     {
-        public List<Player> m_Players = new List<Player>();
+        public List<byte> m_PlayerIDs = new List<byte>();
 
         public int m_MaxPlayers = 4;
 
@@ -11,10 +11,5 @@
         public ulong m_GroupLoginKey = groupLoginKey;
 
         public byte m_GroupIndex = groupIndex;
-
-        bool IsOpen()
-        {
-            return (m_Players.Count < m_MaxPlayers);
-        }
     }
 }
