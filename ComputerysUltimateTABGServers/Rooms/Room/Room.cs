@@ -22,7 +22,7 @@ namespace ComputerysUltimateTABGServers.Rooms
 
         public Room(ushort Port, int maxClients, string roomName)
         {
-            m_RoomName = roomName ?? ""; // This is too make sure the m_roomName is not null.
+            m_RoomName = roomName ?? "";
             m_EnetServer = new Host();
             m_EnetAddress = new Address() { Port = Port };
             m_EnetServer.Create(m_EnetAddress, maxClients);

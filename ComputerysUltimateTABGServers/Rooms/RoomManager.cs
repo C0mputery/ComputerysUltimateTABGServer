@@ -1,5 +1,7 @@
-﻿using ENet;
-using ComputerysUltimateTABGServers.Packets;
+﻿using ComputerysUltimateTABGServers.Packets;
+using ENet;
+using System.Text;
+using System.Text.Json;
 
 namespace ComputerysUltimateTABGServers.Rooms
 {
@@ -7,10 +9,9 @@ namespace ComputerysUltimateTABGServers.Rooms
     {
         public static List<Room> Rooms { get; private set; } = [];
 
-        public static void MakeRoom(ushort port, int maxPlayers)
+        public static void MakeRoom(ushort port, int maxPlayers, string roomName)
         {
-            Room room = new(port, maxPlayers, "testServer");
-            RegisterOnServerList(room);
+            Room room = new(port, maxPlayers, roomName);
             Rooms.Add(room);
         }
 
@@ -56,38 +57,6 @@ namespace ComputerysUltimateTABGServers.Rooms
 
                     room.m_EnetEvent.Packet.Dispose();
                     break;
-            }
-        }
-
-        /// <summary>
-        /// To be implemented
-        /// </summary>
-        private static Timer? serverListHeartbeat;
-
-        /// <summary>
-        /// To be implemented
-        /// </summary>
-        private static void RegisterOnServerList(Room room)
-        {
-
-        }
-
-        /// <summary>
-        /// To be implemented
-        /// </summary>
-        public static void StartServerListHeartbeat()
-        {
-            serverListHeartbeat = new Timer(ServerListHeartbeat, null, 0, 5000);
-        }
-
-        /// <summary>
-        /// To be implemented
-        /// </summary>
-        private static void ServerListHeartbeat(object? state)
-        {
-            foreach (Room room in Rooms)
-            {
-
             }
         }
     }

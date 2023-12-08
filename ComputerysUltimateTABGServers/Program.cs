@@ -17,8 +17,7 @@ namespace ComputerysUltimateTABGServers
 
             ENet.Library.Initialize();
 
-            RoomManager.MakeRoom(9997, 100);
-            RoomManager.StartServerListHeartbeat();
+            RoomManager.MakeRoom(4949, 100, "CUTS TEST SERVER");
         }
 
         static void MainLoop()

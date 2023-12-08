@@ -9,7 +9,6 @@ namespace ComputerysUltimateTABGServers.Rooms
         public Dictionary<byte, Player> m_Players { get; private set; } = [];
         public Dictionary<byte, Group> m_Groups { get; private set; } = [];
 
-
         public void AddPlayer(Player player)
         {
             m_Players[(byte)player.m_Peer.ID] = player;

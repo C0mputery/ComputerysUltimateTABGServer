@@ -51,12 +51,8 @@ namespace ComputerysUltimateTABGServers.Packets
 
         public static void SendPacketAllPlayers(EventCode eventCode, byte[] packetData, Room room)
         {
-            byte[] packetByteArray = new byte[packetData.Length + 1];
-            packetByteArray[0] = (byte)eventCode;
-            Array.Copy(packetData, 0, packetByteArray, 1, packetData.Length);
-            Packet packet = default(Packet);
-            packet.Create(packetByteArray, PacketFlags.Reliable);
-            room.m_EnetServer.Broadcast(0, ref packet);
+            // We do this rather than a normal broadcast so that if theres a peer thats not a player it will not get the packet (idk if this can happen just being safe)
+            SendPacketToPlayers(eventCode, packetData, room.m_Players.Values.ToArray(), room);
         }
     }
 }
