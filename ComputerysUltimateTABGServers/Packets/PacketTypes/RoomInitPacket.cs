@@ -39,67 +39,74 @@ namespace ComputerysUltimateTABGServers.Packets.PacketTypes
 
             byte groupIndex = room.FindOrCreateGroup(loginKey, shouldAutoFillSquad);
             Player player = new Player(peer, playerName, groupIndex, gearData, playfabID, color);
-            room.groups[groupIndex].m_PlayerIDs.Add((byte)player.m_Peer.ID);
             room.AddPlayer(player);
 
-            /*byte[] playerNameUTF8 = Encoding.UTF8.GetBytes(playerName);
+            byte[] playerNameUTF8 = Encoding.UTF8.GetBytes(playerName);
             byte[] buffer = new byte[15 + playerNameUTF8.Length + (4 * gearData.Length)];
             using (MemoryStream memoryStream = new MemoryStream(buffer))
             using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
             {
-                binaryWriter.Write(tABGPlayerServer3.PlayerIndex);
-                binaryWriter.Write(tABGPlayerServer3.GroupIndex);
-                binaryWriter.Write(playerNameUTF8.Length);
-                binaryWriter.Write(playerNameUTF8);
-                binaryWriter.Write(gearData.Length);
-                for (int i = 0; i < gearData.Length; i++)
-                {
-                    binaryWriter.Write(gearData[i]);
-                }
-                binaryWriter.Write(0);
-                binaryWriter.Write(color);
-            }*/
 
-            /*byte newIndex = room.lastPlayerID++;
-            byte[] sendByte = new byte[4 + 4 + 4 + 4 + 4 + 4 + room.m_RoomName.Length + 4];
-
-            using (MemoryStream writerMemoryStream = new MemoryStream(sendByte))
-            using (BinaryWriter binaryWriterStream = new BinaryWriter(writerMemoryStream))
-            {
-                // accepted or not
-                binaryWriterStream.Write((byte)ServerResponse.Accepted);
-                // gamemode
-                binaryWriterStream.Write((byte)GameMode.BattleRoyale);
-                // client requires this, but it's useless
-                binaryWriterStream.Write((byte)1);
-                // player index
-                binaryWriterStream.Write(newIndex);
-                // group index
-                binaryWriterStream.Write((byte)0);
-                // useless
-                binaryWriterStream.Write(1);
-                // useless string (but using it to notify server of a custom server)
-                binaryWriterStream.Write(Encoding.UTF8.GetBytes("CustomServer"));
             }
 
-            Console.WriteLine("Sending request RESPONSE to client!");
-            PacketHandler.SendMessageToPeer(peer, EventCode.RoomInitRequestResponse, sendByte, true);
-
-            Console.WriteLine("Sending Login RESPONSE to client!");
-            PacketHandler.SendMessageToPeer(peer, EventCode.Login, SendJoinMessageToServer(newIndex, playerName, gearData, room), true);
-
-            foreach (KeyValuePair<byte, Player> player in room.players)
-            {
-                if (player.Key == newIndex)
+                /*byte[] playerNameUTF8 = Encoding.UTF8.GetBytes(playerName);
+                byte[] buffer = new byte[15 + playerNameUTF8.Length + (4 * gearData.Length)];
+                using (MemoryStream memoryStream = new MemoryStream(buffer))
+                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
                 {
-                    continue;
+                    binaryWriter.Write(PlayerIndex);
+                    binaryWriter.Write(GroupIndex);
+                    binaryWriter.Write(playerNameUTF8.Length);
+                    binaryWriter.Write(playerNameUTF8);
+                    binaryWriter.Write(gearData.Length);
+                    for (int i = 0; i < gearData.Length; i++)
+                    {
+                        binaryWriter.Write(gearData[i]);
+                    }
+                    binaryWriter.Write(0);
+                    binaryWriter.Write(color);
+                }*/
+
+                /*byte newIndex = room.lastPlayerID++;
+                byte[] sendByte = new byte[4 + 4 + 4 + 4 + 4 + 4 + room.m_RoomName.Length + 4];
+
+                using (MemoryStream writerMemoryStream = new MemoryStream(sendByte))
+                using (BinaryWriter binaryWriterStream = new BinaryWriter(writerMemoryStream))
+                {
+                    // accepted or not
+                    binaryWriterStream.Write((byte)ServerResponse.Accepted);
+                    // gamemode
+                    binaryWriterStream.Write((byte)GameMode.BattleRoyale);
+                    // client requires this, but it's useless
+                    binaryWriterStream.Write((byte)1);
+                    // player index
+                    binaryWriterStream.Write(newIndex);
+                    // group index
+                    binaryWriterStream.Write((byte)0);
+                    // useless
+                    binaryWriterStream.Write(1);
+                    // useless string (but using it to notify server of a custom server)
+                    binaryWriterStream.Write(Encoding.UTF8.GetBytes("CustomServer"));
                 }
 
-                // broadcast to ALL players
-                player.Value.PendingBroadcastPackets.Add(new TabgPacket(EventCode.Login, SendLoginMessageToServer(newIndex, playerName, gearData)));
-            }
+                Console.WriteLine("Sending request RESPONSE to client!");
+                PacketHandler.SendMessageToPeer(peer, EventCode.RoomInitRequestResponse, sendByte, true);
 
-            PacketHandler.SendMessageToPeer(peer, EventCode.PlayerDead, room.SendNotification(0, "WELCOME - RUNNING COMMUNITY SERVER V1.TEST"), true);*/
-        }
+                Console.WriteLine("Sending Login RESPONSE to client!");
+                PacketHandler.SendMessageToPeer(peer, EventCode.Login, SendJoinMessageToServer(newIndex, playerName, gearData, room), true);
+
+                foreach (KeyValuePair<byte, Player> player in room.players)
+                {
+                    if (player.Key == newIndex)
+                    {
+                        continue;
+                    }
+
+                    // broadcast to ALL players
+                    player.Value.PendingBroadcastPackets.Add(new TabgPacket(EventCode.Login, SendLoginMessageToServer(newIndex, playerName, gearData)));
+                }
+
+                PacketHandler.SendMessageToPeer(peer, EventCode.PlayerDead, room.SendNotification(0, "WELCOME - RUNNING COMMUNITY SERVER V1.TEST"), true);*/
+            }
     }
 }

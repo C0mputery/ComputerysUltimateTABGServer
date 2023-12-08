@@ -13,7 +13,7 @@ namespace ComputerysUltimateTABGServers
 
         static void StartUp()
         {
-            Console.WriteLine("TABG COMMUNITY SERVER V2 BOOTING");
+            Console.WriteLine("CUTS BOOTING, LETS FUCKIN GO");
 
             ENet.Library.Initialize();
 
