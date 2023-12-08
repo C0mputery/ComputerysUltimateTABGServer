@@ -1,4 +1,4 @@
-﻿namespace ComputerysUltimateTABGServers.Rooms
+﻿namespace ComputerysUltimateTABGServer.Rooms
 {
     public partial class Room
     {

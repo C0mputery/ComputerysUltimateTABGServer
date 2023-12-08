@@ -1,8 +1,8 @@
 ﻿using ENet;
-using ComputerysUltimateTABGServers.MiscDataTypes;
-using ComputerysUltimateTABGServers.Rooms;
+using ComputerysUltimateTABGServer.MiscDataTypes;
+using ComputerysUltimateTABGServer.Rooms;
 
-namespace ComputerysUltimateTABGServers.Packets
+namespace ComputerysUltimateTABGServer.Packets
 {
     public interface IPacket
     {

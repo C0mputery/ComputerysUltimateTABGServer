@@ -1,9 +1,9 @@
-﻿using ComputerysUltimateTABGServers.Packets;
+﻿using ComputerysUltimateTABGServer.Packets;
 using ENet;
 using System.Text;
 using System.Text.Json;
 
-namespace ComputerysUltimateTABGServers.Rooms
+namespace ComputerysUltimateTABGServer.Rooms
 {
     public static class RoomManager
     {

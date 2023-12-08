@@ -1,6 +1,6 @@
 ﻿using ENet;
 
-namespace ComputerysUltimateTABGServers.MiscDataTypes
+namespace ComputerysUltimateTABGServer.MiscDataTypes
 {
     public class Player(Peer peer, string name, byte groupID, int[] gearData, string playFabID, int color)
     {

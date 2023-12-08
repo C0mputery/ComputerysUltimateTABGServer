@@ -1,8 +1,8 @@
-﻿using ComputerysUltimateTABGServers.MiscDataTypes;
+﻿using ComputerysUltimateTABGServer.MiscDataTypes;
 using ENet;
 using System.Text;
 
-namespace ComputerysUltimateTABGServers.Rooms
+namespace ComputerysUltimateTABGServer.Rooms
 {
     public partial class Room
     {

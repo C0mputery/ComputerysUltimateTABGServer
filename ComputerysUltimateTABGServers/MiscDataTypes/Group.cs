@@ -1,4 +1,4 @@
-﻿namespace ComputerysUltimateTABGServers.MiscDataTypes
+﻿namespace ComputerysUltimateTABGServer.MiscDataTypes
 {
     public class Group(bool shouldAutoFill, ulong groupLoginKey, byte groupIndex)
     {

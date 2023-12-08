@@ -1,10 +1,10 @@
 ﻿using ENet;
 using System.Text;
-using ComputerysUltimateTABGServers.Rooms;
-using ComputerysUltimateTABGServers.MiscDataTypes;
+using ComputerysUltimateTABGServer.Rooms;
+using ComputerysUltimateTABGServer.MiscDataTypes;
 using System;
 
-namespace ComputerysUltimateTABGServers.Packets.PacketTypes
+namespace ComputerysUltimateTABGServer.Packets.PacketTypes
 {
     public struct RoomInitPacket : IPacket
     {

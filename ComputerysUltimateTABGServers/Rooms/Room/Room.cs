@@ -1,9 +1,9 @@
 ﻿using ENet;
 using System.Collections.Frozen;
-using ComputerysUltimateTABGServers.Packets;
-using ComputerysUltimateTABGServers.Packets.PacketTypes;
+using ComputerysUltimateTABGServer.Packets;
+using ComputerysUltimateTABGServer.Packets.PacketTypes;
 
-namespace ComputerysUltimateTABGServers.Rooms
+namespace ComputerysUltimateTABGServer.Rooms
 {
     public partial class Room
     {
