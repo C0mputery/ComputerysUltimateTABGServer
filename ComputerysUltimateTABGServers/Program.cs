@@ -28,8 +28,8 @@ namespace ComputerysUltimateTABGServer
             ENet.Library.Initialize();
 
             RoomManager.MakeRoom(7777, 50, "CUTS TEST SERVER 1");
-            RoomManager.MakeRoom(7778, 50, "CUTS TEST SERVER 2");
-            RoomManager.MakeRoom(7779, 50, "CUTS TEST SERVER 3");
+            /*RoomManager.MakeRoom(7778, 50, "CUTS TEST SERVER 2");
+            RoomManager.MakeRoom(7779, 50, "CUTS TEST SERVER 3");*/
 
 
 #if UsingTabgServerList

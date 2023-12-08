@@ -45,17 +45,6 @@ namespace ComputerysUltimateTABGServer.Rooms
         {
             switch (room.m_EnetEvent.Type)
             {
-                case EventType.None:
-                    break;
-                case EventType.Connect:
-                    Console.WriteLine("Client connected - ID: " + room.m_EnetEvent.Peer.ID + ", IP: " + room.m_EnetEvent.Peer.IP);
-                    break;
-                case EventType.Disconnect:
-                    Console.WriteLine("Client disconnected - ID: " + room.m_EnetEvent.Peer.ID + ", IP: " + room.m_EnetEvent.Peer.IP);
-                    break;
-                case EventType.Timeout:
-                    Console.WriteLine("Client timeout - ID: " + room.m_EnetEvent.Peer.ID + ", IP: " + room.m_EnetEvent.Peer.IP);
-                    break;
                 case EventType.Receive:
                     byte[] enetPacket = new byte[room.m_EnetEvent.Packet.Length];
                     room.m_EnetEvent.Packet.CopyTo(enetPacket);

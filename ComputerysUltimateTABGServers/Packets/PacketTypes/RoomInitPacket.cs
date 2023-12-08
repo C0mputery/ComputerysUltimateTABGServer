@@ -43,8 +43,8 @@ namespace ComputerysUltimateTABGServer.Packets.PacketTypes
             room.AddPlayer(player);
 
             byte[] playerNameUTF8 = Encoding.UTF8.GetBytes(playerName);
-            byte[] loginData = new byte[15 + playerNameUTF8.Length + (4 * gearData.Length)];
-            using (MemoryStream memoryStream = new MemoryStream(loginData))
+            byte[] loginData;
+            using (MemoryStream memoryStream = new MemoryStream())
             using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
             {
                 binaryWriter.Write(peer.ID);
@@ -58,11 +58,13 @@ namespace ComputerysUltimateTABGServer.Packets.PacketTypes
                 }
                 binaryWriter.Write(false);
                 binaryWriter.Write(color);
+
+                loginData = memoryStream.ToArray();
             }
             PacketHandler.SendPacketAllPlayers(EventCode.Login, loginData, room);
 
-            byte[] initData = new byte[9 + playerNameUTF8.Length];
-            using (MemoryStream memoryStream = new MemoryStream(initData))
+            byte[] initData;
+            using (MemoryStream memoryStream = new MemoryStream())
             using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
             {
                 binaryWriter.Write((byte)1);
@@ -72,6 +74,8 @@ namespace ComputerysUltimateTABGServer.Packets.PacketTypes
                 binaryWriter.Write(player.m_GroupIndex);
                 binaryWriter.Write(playerNameUTF8.Length);
                 binaryWriter.Write(playerNameUTF8);
+
+                initData = memoryStream.ToArray();
             }
             PacketHandler.SendPacketToPlayer(EventCode.RoomInitRequestResponse, initData, player, room);
         }
