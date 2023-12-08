@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# It's a shame that I cannot share this stuff, sorry!
+TabgServerList/
