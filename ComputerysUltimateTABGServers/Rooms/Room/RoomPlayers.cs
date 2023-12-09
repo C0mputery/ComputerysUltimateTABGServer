@@ -27,6 +27,14 @@ namespace ComputerysUltimateTABGServer.Rooms
             }
             return false;
         }
+        public bool TryToGetPlayer(byte peerID, out Player? player)
+        {
+            if (m_Players.TryGetValue(peerID, out player))
+            {
+                return true;
+            }
+            return false;
+        }
 
         public byte FindOrCreateGroup(ulong loginKey, bool autoTeam)
         {
@@ -46,7 +54,6 @@ namespace ComputerysUltimateTABGServer.Rooms
             }
 
             byte groupIndex = m_Groups.Keys.Count == 0 ? (byte)0 : (byte)(m_Groups.Keys.Max() + 1);
-
             m_Groups.Add(groupIndex, new Group(autoTeam, loginKey, groupIndex));
             return groupIndex;
         }

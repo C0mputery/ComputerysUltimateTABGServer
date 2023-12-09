@@ -23,6 +23,7 @@ namespace ComputerysUltimateTABGServer.Rooms
                 {
                     UpdateRoom(room);
                 }
+                room.m_EnetEvent.Packet.Dispose();
             }
         }
 
@@ -55,7 +56,6 @@ namespace ComputerysUltimateTABGServer.Rooms
 
                     PacketHandler.Handle(eventCode, room.m_EnetEvent.Peer, packetData, room);
 
-                    room.m_EnetEvent.Packet.Dispose();
                     break;
             }
         }
