@@ -29,7 +29,7 @@ namespace ComputerysUltimateTABGServer.Packets.PacketTypes
                 binaryWriter.Write(player.m_Position.X);
                 binaryWriter.Write(player.m_Position.Y);
                 binaryWriter.Write(player.m_Position.Z);
-                binaryWriter.Write(player.m_Rotation);
+                binaryWriter.Write(player.m_Rotation.X);
                 binaryWriter.Write(player.m_IsDead);
                 binaryWriter.Write(player.m_IsDowned);
                 binaryWriter.Write(player.m_Health);
