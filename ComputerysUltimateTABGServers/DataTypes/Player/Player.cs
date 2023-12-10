@@ -6,6 +6,7 @@ namespace ComputerysUltimateTABGServer.DataTypes.Player
     public class Player(Peer peer, string name, byte groupID, int[] gearData, string playFabID, int color)
     {
         public Peer m_Peer = peer;
+        public byte m_PlayerID = (byte)peer.ID;
         public byte m_GroupIndex = groupID;
         public string m_Name = name;
         public int[] m_GearData = gearData;
@@ -24,7 +25,7 @@ namespace ComputerysUltimateTABGServer.DataTypes.Player
 
         public int m_CurrentlyHeldWeaponID = int.MaxValue; // TO BE ADDED
 
-        public int m_OccupiedCarId;
-        public int m_OccupiedSeatId;
+        public int m_OccupiedCarId = 0;
+        public int m_OccupiedSeatId = 0;
     }
 }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ComputerysUltimateTABGServer.DataTypes.Vehicles
 {
-    public struct Vehicle
+    public struct Vehicle()
     {
-        public int vehicleID;
-        public int vehicleIndex;
-        public List<Seat> seats;
-        public List<DamageableVehiclePart> damageableVehicleParts;
+        public int vehicleID = 0;
+        public int vehicleIndex = 0;
+        public List<Seat> seats = [];
+        public List<DamageableVehiclePart> damageableVehicleParts = [];
     }
 }

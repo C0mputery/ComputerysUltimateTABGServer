@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ComputerysUltimateTABGServer.DataTypes.Ring
 {
-    public struct RingLocations
+    public struct RingLocations(float ringSize, float ringSpeed)
     {
-        public float ringSize;
-        public float ringSpeed;
+        public float ringSize = ringSize;
+        public float ringSpeed = ringSpeed;
     }
 }

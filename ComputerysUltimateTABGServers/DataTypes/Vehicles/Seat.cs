@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ComputerysUltimateTABGServer.DataTypes.Vehicles
 {
-    public struct Seat
+    public struct Seat()
     {
-        public int SeatIndex;
+        public int SeatIndex = 0;
     }
 }

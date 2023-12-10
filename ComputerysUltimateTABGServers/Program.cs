@@ -1,4 +1,4 @@
-﻿//#define UsingTabgServerList
+﻿#define UsingTabgServerList
 
 using ComputerysUltimateTABGServer.Rooms;
 

@@ -42,22 +42,22 @@ namespace ComputerysUltimateTABGServer.Packets.PacketTypes
                 if (room.m_GameMode == GameMode.Deception) {
                     //binaryWriter.Write(player.overrideColor) ReadInt32 // imma guess that this was used when somebody shared the same color as somebody else in amgus
                 }
-                binaryWriter.Write(room.m_Players.Count);
-                foreach (Player player1 in room.m_Players.Values)
+                binaryWriter.Write((byte)room.m_Players.Count);
+                foreach (Player playerFromRoom in room.m_Players.Values)
                 {
-                    binaryWriter.Write(player.m_Peer.ID);
-                    binaryWriter.Write(player.m_GroupIndex);
-                    byte[] remotePlayerNameUTF8 = Encoding.UTF8.GetBytes(player.m_Name);
+                    binaryWriter.Write(playerFromRoom.m_PlayerID);
+                    binaryWriter.Write(playerFromRoom.m_GroupIndex);
+                    byte[] remotePlayerNameUTF8 = Encoding.UTF8.GetBytes(playerFromRoom.m_Name);
                     binaryWriter.Write(remotePlayerNameUTF8.Length);
                     binaryWriter.Write(remotePlayerNameUTF8);
-                    binaryWriter.Write(player.m_CurrentlyHeldWeaponID);
-                    binaryWriter.Write(player.m_GearData.Length);
-                    foreach (int gearID in player.m_GearData)
+                    binaryWriter.Write(playerFromRoom.m_CurrentlyHeldWeaponID);
+                    binaryWriter.Write(playerFromRoom.m_GearData.Length);
+                    foreach (int gearID in playerFromRoom.m_GearData)
                     {
                         binaryWriter.Write(gearID);
                     }
-                    binaryWriter.Write(player.m_IsDev);
-                    binaryWriter.Write(player.m_Color);
+                    binaryWriter.Write(playerFromRoom.m_IsDev);
+                    binaryWriter.Write(playerFromRoom.m_Color);
                 }
                 foreach (Item item in room.m_Items)
                 {
@@ -86,7 +86,9 @@ namespace ComputerysUltimateTABGServer.Packets.PacketTypes
                     }
                 }
                 binaryWriter.Write(room.TimeOfDay);
-                binaryWriter.Write(room.ringLocations.Count);
+                binaryWriter.Write(room.timeBeforeFirstRing);
+                binaryWriter.Write(room.baseRingTime);
+                binaryWriter.Write((byte)room.ringLocations.Count);
                 foreach (RingLocations ringLocations in room.ringLocations)
                 {
                     binaryWriter.Write(ringLocations.ringSize);
@@ -114,7 +116,6 @@ namespace ComputerysUltimateTABGServer.Packets.PacketTypes
                 }
                 loginData = memoryStream.ToArray();
             }
-
             PacketHandler.SendPacketToPlayer(EventCode.Login, loginData, player, room);
         }
     }

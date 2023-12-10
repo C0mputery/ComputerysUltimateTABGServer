@@ -14,13 +14,13 @@ namespace ComputerysUltimateTABGServer.Rooms
 
         public void AddPlayer(Player player)
         {
-            m_Players[(byte)player.m_Peer.ID] = player;
-            m_Groups[player.m_GroupIndex].m_PlayerIDs.Add((byte)player.m_Peer.ID);
+            m_Players[player.m_PlayerID] = player;
+            m_Groups[player.m_GroupIndex].m_PlayerIDs.Add(player.m_PlayerID);
         }
 
         public void RemovePlayer(Player player)
         {
-            m_Players.Remove((byte)player.m_Peer.ID);
+            m_Players.Remove(player.m_PlayerID);
         }
 
         public bool TryToGetPlayer(Peer peer, out Player? player)

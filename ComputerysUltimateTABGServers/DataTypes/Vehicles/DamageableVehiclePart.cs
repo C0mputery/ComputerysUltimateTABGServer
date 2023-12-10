@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ComputerysUltimateTABGServer.DataTypes.Vehicles
 {
-    public class DamageableVehiclePart
+    public struct DamageableVehiclePart()
     {
-        public byte partIndex;
-        public float partHealth;
+        public byte partIndex = 0;
+        public float partHealth = 100;
         public string partName = "";
     }
 }

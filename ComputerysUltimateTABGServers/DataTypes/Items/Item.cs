@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace ComputerysUltimateTABGServer.DataTypes.Items
 {
-    public struct Item
+    public struct Item()
     {
-        public int WeaponIndex;
-        public int UniqueIdentifier;
-        public int Quantity;
-        public Vector3 Position;
+        public int WeaponIndex = int.MaxValue;
+        public int UniqueIdentifier = 0;
+        public int Quantity = 0;
+        public Vector3 Position = new(0,0,0);
     }
 }

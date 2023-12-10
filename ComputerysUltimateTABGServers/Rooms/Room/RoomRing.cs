@@ -11,6 +11,6 @@ namespace ComputerysUltimateTABGServer.Rooms
     {
         public float timeBeforeFirstRing;
         public float baseRingTime;
-        public List<RingLocations> ringLocations = new();
+        public List<RingLocations> ringLocations = [new RingLocations(0,0)];
     }
 }
