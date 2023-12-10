@@ -1,8 +1,8 @@
 ﻿using ENet;
 using System.Text;
 using ComputerysUltimateTABGServer.Rooms;
-using ComputerysUltimateTABGServer.MiscDataTypes;
 using System;
+using ComputerysUltimateTABGServer.DataTypes.Player;
 
 namespace ComputerysUltimateTABGServer.Packets.PacketTypes
 {
@@ -68,8 +68,8 @@ namespace ComputerysUltimateTABGServer.Packets.PacketTypes
             using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
             {
                 binaryWriter.Write((byte)1);
-                binaryWriter.Write((byte)GameMode.BattleRoyale); // Room gamemode handling needs to be added
-                binaryWriter.Write((byte)MatchMode.SQUAD); // Room gamemode handling needs to be added
+                binaryWriter.Write((byte)room.m_GameMode);
+                binaryWriter.Write((byte)room.m_MatchMode);
                 binaryWriter.Write(peer.ID);
                 binaryWriter.Write(player.m_GroupIndex);
                 binaryWriter.Write(playerNameUTF8.Length);

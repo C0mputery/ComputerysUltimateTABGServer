@@ -1,6 +1,6 @@
 ﻿using ENet;
-using ComputerysUltimateTABGServer.MiscDataTypes;
 using ComputerysUltimateTABGServer.Rooms;
+using ComputerysUltimateTABGServer.DataTypes.Player;
 
 namespace ComputerysUltimateTABGServer.Packets
 {

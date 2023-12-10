@@ -1,4 +1,4 @@
-﻿using ComputerysUltimateTABGServer.MiscDataTypes;
+﻿using ComputerysUltimateTABGServer.DataTypes.Player;
 using ENet;
 using System.Text;
 
@@ -8,6 +8,9 @@ namespace ComputerysUltimateTABGServer.Rooms
     {
         public Dictionary<byte, Player> m_Players { get; private set; } = [];
         public Dictionary<byte, Group> m_Groups { get; private set; } = [];
+
+        public int playerLives;
+        public ushort killsToWin;
 
         public void AddPlayer(Player player)
         {

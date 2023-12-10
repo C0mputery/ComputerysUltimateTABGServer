@@ -12,6 +12,8 @@ namespace ComputerysUltimateTABGServer.Rooms
         public readonly FrozenDictionary<EventCode, IPacket> m_PacketHandlers = new Dictionary<EventCode, IPacket>
         {
             { EventCode.RoomInit, new RoomInitPacket() },
+            { EventCode.RequestWorldState, new RequestWorldStatePacket() },
+
         }.ToFrozenDictionary();
 
         public string m_RoomName;
