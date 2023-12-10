@@ -1,15 +1,10 @@
-﻿using ENet;
+﻿using ComputerysUltimateTABGServer.DataTypes.Player;
 using ComputerysUltimateTABGServer.Rooms;
-using ComputerysUltimateTABGServer.DataTypes.Player;
+using ENet;
 
 namespace ComputerysUltimateTABGServer.Packets
 {
-    public interface IPacket
-    {
-        public void Handle(Peer peer, BinaryReader receivedPacketData, Room room);
-    }
-
-    public static class PacketHandler
+    public static partial class PacketHandler
     {
         public static void Handle(EventCode eventCode, Peer peer, byte[] packetData, Room room)
         {
@@ -21,9 +16,9 @@ namespace ComputerysUltimateTABGServer.Packets
             using (MemoryStream packetDataMemoryStream = new MemoryStream(packetData))
             using (BinaryReader packetDataBinaryReader = new BinaryReader(packetDataMemoryStream))
             {
-                if (room.m_PacketHandlers.TryGetValue(eventCode, out IPacket? packetHandler))
+                if (room.m_PacketHandlers.TryGetValue(eventCode, out PacketHandlerDelegate? packetHandler))
                 {
-                    packetHandler.Handle(peer, packetDataBinaryReader, room);
+                    packetHandler(peer, packetDataBinaryReader, room);
                 }
             }
         }
@@ -55,4 +50,6 @@ namespace ComputerysUltimateTABGServer.Packets
             SendPacketToPlayers(eventCode, packetData, room.m_Players.Values.ToArray(), room);
         }
     }
+
+    public delegate void PacketHandlerDelegate(Peer peer, BinaryReader packetDataBinaryReader, Room room);
 }

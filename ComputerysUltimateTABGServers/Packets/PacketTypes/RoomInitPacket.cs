@@ -1,14 +1,13 @@
-﻿using ENet;
-using System.Text;
+﻿using ComputerysUltimateTABGServer.DataTypes.Player;
 using ComputerysUltimateTABGServer.Rooms;
-using System;
-using ComputerysUltimateTABGServer.DataTypes.Player;
+using ENet;
+using System.Text;
 
-namespace ComputerysUltimateTABGServer.Packets.PacketTypes
+namespace ComputerysUltimateTABGServer.Packets
 {
-    public struct RoomInitPacket : IPacket
+    public static partial class PacketTypes
     {
-        public void Handle(Peer peer, BinaryReader receivedPacketData, Room room)
+        public static void RoomInitPacket(Peer peer, BinaryReader receivedPacketData, Room room)
         {
             string playerName = receivedPacketData.ReadString();
             playerName = string.IsNullOrEmpty(playerName) ? "Unnamed" : playerName;

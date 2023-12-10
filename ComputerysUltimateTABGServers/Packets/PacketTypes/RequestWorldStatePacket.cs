@@ -6,11 +6,11 @@ using ComputerysUltimateTABGServer.Rooms;
 using ENet;
 using System.Text;
 
-namespace ComputerysUltimateTABGServer.Packets.PacketTypes
+namespace ComputerysUltimateTABGServer.Packets
 {
-    public struct RequestWorldStatePacket : IPacket
+    public static partial class PacketTypes
     {
-        public void Handle(Peer peer, BinaryReader receivedPacketData, Room room)
+        public static void RequestWorldStatePacket(Peer peer, BinaryReader receivedPacketData, Room room)
         {
             byte receivedPlayerID = receivedPacketData.ReadByte();
 

@@ -1,19 +1,16 @@
 ﻿using ENet;
 using System.Collections.Frozen;
 using ComputerysUltimateTABGServer.Packets;
-using ComputerysUltimateTABGServer.Packets.PacketTypes;
 
 namespace ComputerysUltimateTABGServer.Rooms
 {
     public partial class Room
     {
-        public delegate void HandlePacketDelegate();
-
-        public readonly FrozenDictionary<EventCode, IPacket> m_PacketHandlers = new Dictionary<EventCode, IPacket>
+        public readonly FrozenDictionary<EventCode, PacketHandlerDelegate> m_PacketHandlers = new Dictionary<EventCode, PacketHandlerDelegate>
         {
-            { EventCode.RoomInit, new RoomInitPacket() },
-            { EventCode.RequestWorldState, new RequestWorldStatePacket() },
-
+            { EventCode.RoomInit, PacketTypes.RoomInitPacket },
+            { EventCode.RequestWorldState, PacketTypes.RequestWorldStatePacket },
+            { EventCode.PlayerUpdate, PacketTypes.PlayerUpdatePacket },
         }.ToFrozenDictionary();
 
         public string m_RoomName;
