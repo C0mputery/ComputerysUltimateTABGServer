@@ -29,7 +29,7 @@ namespace ComputerysUltimateTABGServer
 
             for (int i = 0; i < 1; i++)
             {
-                RoomManager.MakeRoom((ushort)(7777 + i), 50, $"CUTS TEST SERVER {i}");
+                RoomManager.MakeRoom((ushort)(7777 + i), 50, $"CUTS TEST SERVER {i + 1}");
             }
 
 #if UsingTabgServerList
