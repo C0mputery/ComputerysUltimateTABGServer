@@ -1,5 +1,6 @@
 ﻿#define UsingTabgServerList
 
+using ComputerysUltimateTABGServer.Interface;
 using ComputerysUltimateTABGServer.Rooms;
 
 namespace ComputerysUltimateTABGServer
@@ -9,25 +10,17 @@ namespace ComputerysUltimateTABGServer
         static void Main()
         {
             StartUp();
-            while (!Console.KeyAvailable) { MainLoop(); }
+            while (TerminalInterface.ApplicationRunning) { MainLoop(); }
             ShutDown();
         }
 
         static void StartUp()
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine(@"┌──────────────────┐ ┌─────────────────────────────────────────┐
-│  ____   _   _   _│ │_   ____      _        ___         ___   │
-│ / ___| | | | | |_   _| / ___|    / |      / _ \       / _ \  │
-│| |     | | | |   │ │   \___ \    | |     | | | |     | | | | │
-│| |___  | |_| |   │ │    ___) |   | |  _  | |_| |  _  | |_| | │
-│ \____|  \___/    │ │   |____/    |_| (_)  \___/  (_)  \___/  │
-└──────────────────┘ └─────────────────────────────────────────┘");
-            Console.ResetColor();
+            TerminalInterface.printLogo();
 
             ENet.Library.Initialize();
 
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 RoomManager.MakeRoom((ushort)(7777 + i), 50, $"CUTS TEST SERVER {i + 1}");
             }

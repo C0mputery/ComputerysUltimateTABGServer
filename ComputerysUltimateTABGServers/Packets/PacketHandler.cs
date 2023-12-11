@@ -1,4 +1,5 @@
 ﻿using ComputerysUltimateTABGServer.DataTypes.Player;
+using ComputerysUltimateTABGServer.Interface.Logging;
 using ComputerysUltimateTABGServer.Rooms;
 using ENet;
 
@@ -10,7 +11,7 @@ namespace ComputerysUltimateTABGServer.Packets
         {
             if ((eventCode != EventCode.TABGPing) && (eventCode != EventCode.PlayerUpdate))
             {
-                Console.WriteLine("Handling packet: " + eventCode.ToString());
+                CUTSLogger.Log("Handling packet: " + eventCode.ToString(), LogLevel.Info);
             }
 
             using (MemoryStream packetDataMemoryStream = new MemoryStream(packetData))
