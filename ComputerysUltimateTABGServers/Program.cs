@@ -20,7 +20,7 @@ namespace ComputerysUltimateTABGServer
 
             ENet.Library.Initialize();
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 1; i++)
             {
                 RoomManager.MakeRoom((ushort)(7777 + i), 50, $"CUTS TEST SERVER {i + 1}");
             }
