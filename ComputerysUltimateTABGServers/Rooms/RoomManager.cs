@@ -1,12 +1,13 @@
 ﻿using ComputerysUltimateTABGServer.Packets;
 using ENet;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace ComputerysUltimateTABGServer.Rooms
 {
     public static class RoomManager
     {
-        public static Dictionary<ushort, Room> Rooms { get; private set; } = new Dictionary<ushort, Room>();
+        public static ConcurrentDictionary<ushort, Room> Rooms { get; private set; } = new ConcurrentDictionary<ushort, Room>();
         public static void MakeRoom(ushort port, int maxPlayers, string roomName)
         {
             Room room = new Room(port, maxPlayers, roomName);
