@@ -18,6 +18,7 @@ namespace ComputerysUltimateTABGServer.Rooms
         public Address m_EnetAddress;
         public Event m_EnetEvent;
         public int m_MaxClients;
+        public bool shouldEndRoom = false;
 
         public Room(ushort Port, int maxClients, string roomName)
         {
