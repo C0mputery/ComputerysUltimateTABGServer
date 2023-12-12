@@ -6,7 +6,7 @@ namespace ComputerysUltimateTABGServer.Rooms
 {
     public static class RoomManager
     {
-        public static Dictionary<int,Room> Rooms { get; private set; } = new Dictionary<int, Room>();
+        public static Dictionary<ushort, Room> Rooms { get; private set; } = new Dictionary<ushort, Room>();
         public static void MakeRoom(ushort port, int maxPlayers, string roomName)
         {
             Room room = new Room(port, maxPlayers, roomName);
@@ -15,12 +15,12 @@ namespace ComputerysUltimateTABGServer.Rooms
 
         public static void EndAllRooms()
         {
-            foreach (int room in Rooms.Keys)
+            foreach (ushort room in Rooms.Keys)
             {
                 EndRoom(room);
             }
         }
-        public static void EndRoom(int roomPort)
+        public static void EndRoom(ushort roomPort)
         {
             Rooms.Remove(roomPort, out Room? room);
             if (room != null) { room.shouldEndRoom = true; }
