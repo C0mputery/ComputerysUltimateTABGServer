@@ -28,7 +28,7 @@ namespace ComputerysUltimateTABGServer.Rooms
         }
         public static void EndRoom(Room room)
         {
-            Rooms.Remove(Rooms.First(KeyValuePar => KeyValuePar.Value == room).Key);
+            Rooms.Remove(Rooms.First(KeyValuePar => KeyValuePar.Value == room).Key, out Room? _);
         }
 
         public static void StartAllRoomUpdateLoops()
