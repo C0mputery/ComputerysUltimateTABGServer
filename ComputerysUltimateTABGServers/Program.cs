@@ -1,4 +1,4 @@
-﻿//#define UsingTabgServerList
+﻿#//define UsingTabgServerList
 
 using ComputerysUltimateTABGServer.Interface;
 using ComputerysUltimateTABGServer.Rooms;
@@ -23,7 +23,7 @@ namespace ComputerysUltimateTABGServer
             for (int i = 0; i < 10; i++) { RoomManager.MakeRoom((ushort)(7777 + i), 50, $"CUTS TEST SERVER {i + 1}"); }
 
 #if UsingTabgServerList
-            TabgServerList.TabgServerListManager.StartServerListHeartbeat();
+            if (RoomManager.Rooms.Count <= 5) { TabgServerList.TabgServerListManager.StartServerListHeartbeat(); }
 #endif
             
             RoomManager.StartAllRoomUpdateLoops();
