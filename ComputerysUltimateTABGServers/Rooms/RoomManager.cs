@@ -70,6 +70,7 @@ namespace ComputerysUltimateTABGServer.Rooms
 
                 switch (room.m_EnetEvent.Type)
                 {
+                    //fortnite
                     case EventType.Receive:
                         byte[] enetPacket = new byte[room.m_EnetEvent.Packet.Length];
                         room.m_EnetEvent.Packet.CopyTo(enetPacket);
@@ -80,12 +81,14 @@ namespace ComputerysUltimateTABGServer.Rooms
 
                         PacketHandler.Handle(eventCode, room.m_EnetEvent.Peer, packetData, room);
 
-                        // Aparently it's unnecessary to dispose of packets that are not Receive, so I'm not going to do it.
+                        // Aparently it's unnecessary to dispose of packets that are not of the Receive type, so I'm not going to do it.
                         room.m_EnetEvent.Packet.Dispose();
 
                         break;
                 }
             }
+
+
         }
     }
 }

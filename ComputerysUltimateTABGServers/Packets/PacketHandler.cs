@@ -14,11 +14,11 @@ namespace ComputerysUltimateTABGServer.Packets
                 room.TryToGetPlayer(peer, out Player? player);
                 if (player == null)
                 {
-                    CUTSLogger.Log($"{room.m_RoomName} | Handling packet {eventCode} from a non-player, peer ID {peer.ID}, peer IP {peer.IP}", LogLevel.Info);
+                    CUTSLogger.Log($"{room.m_RoomName} | Handling packet: {eventCode}, from a non-player, peer ID: {peer.ID}, peer IP: {peer.IP}", LogLevel.Info);
                 }
                 else
                 {
-                    CUTSLogger.Log($"{room.m_RoomName} | Handling packet {eventCode} from {player.m_Name}", LogLevel.Info);
+                    CUTSLogger.Log($"{room.m_RoomName} | Handling packet: {eventCode}, from player: {player.m_Name}", LogLevel.Info);
                 }
             }
 
@@ -34,7 +34,7 @@ namespace ComputerysUltimateTABGServer.Packets
 
         public static void SendPacketToPlayer(EventCode eventCode, byte[] packetData, Player recipent, Room room)
         {
-            CUTSLogger.Log($"{room.m_RoomName} | Sending packet {eventCode} to {recipent.m_Name}", LogLevel.Info);
+            CUTSLogger.Log($"{room.m_RoomName} | Sending packet: {eventCode}, to: {recipent.m_Name}", LogLevel.Info);
             byte[] packetByteArray = new byte[packetData.Length + 1];
             packetByteArray[0] = (byte)eventCode;
             Array.Copy(packetData, 0, packetByteArray, 1, packetData.Length);
@@ -45,7 +45,7 @@ namespace ComputerysUltimateTABGServer.Packets
 
         public static void SendPacketToPlayers(EventCode eventCode, byte[] packetData, Player[] recipents, Room room)
         {
-            CUTSLogger.Log($"{room.m_RoomName} | Sending packet {eventCode} to {string.Join(", ", recipents.Select(player => player.m_Name))}", LogLevel.Info);
+            CUTSLogger.Log($"{room.m_RoomName} | Sending packet: {eventCode}, to: {string.Join(", ", recipents.Select(player => player.m_Name))}", LogLevel.Info);
             byte[] packetByteArray = new byte[packetData.Length + 1];
             packetByteArray[0] = (byte)eventCode;
             Array.Copy(packetData, 0, packetByteArray, 1, packetData.Length);

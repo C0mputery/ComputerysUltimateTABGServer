@@ -1,5 +1,7 @@
 ﻿// We just like hackers now hell yeah
 
+using ComputerysUltimateTABGServer.Interface.Logging;
+
 namespace ComputerysUltimateTABGServer.Interface
 {
     public static class TerminalInterface
@@ -16,7 +18,7 @@ namespace ComputerysUltimateTABGServer.Interface
         public static void printLogo()
         {
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine(CUTSLogo);
+            CUTSLogger.Log(CUTSLogo, LogLevel.Info);
             Console.ResetColor();
         }
     }
