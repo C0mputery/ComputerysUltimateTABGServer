@@ -1,7 +1,6 @@
 ﻿using ComputerysUltimateTABGServer.Packets;
 using ENet;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 
 namespace ComputerysUltimateTABGServer.Rooms
 {
@@ -30,7 +29,7 @@ namespace ComputerysUltimateTABGServer.Rooms
         {
             Rooms.Remove(Rooms.First(KeyValuePar => KeyValuePar.Value == room).Key, out Room? _);
         }
-        
+
         /// <summary>
         /// This should only be called once before any other room update loops are started
         /// Is this technically because I wrote it wrong? Yes, but it works so I'm not changing it.
@@ -58,8 +57,17 @@ namespace ComputerysUltimateTABGServer.Rooms
         }
         private static void RoomUpdate(Room room)
         {
-            if (room.m_EnetServer.CheckEvents(out room.m_EnetEvent) >= 0 && room.m_EnetServer.Service(15, out room.m_EnetEvent) >= 0)
+            // This is diffrerent from the eNet example code, because the example code makes no god damn sense.
+            // If Check Events returns an int that's not above zero, it means that m_EnetEvent is goint to be a default value.
+            // Which means that it is redundant to check what type of event it is.
+            // So rather than running throught the loop again than breaking out of it, we just stop.
+            while (room.m_EnetServer.CheckEvents(out room.m_EnetEvent) >= 0)
             {
+                // This line is straight from the eNet example code, I don't know why they do it this way but I'm not going to change it.
+                // Idk if Service is checking a single packet or all packets in the queue, but I'm assuming it's all packets in the queue.
+                // Since within all the example code it ends while loop, used to check packets.
+                if (room.m_EnetServer.Service(15, out room.m_EnetEvent) <= 0) { break; }
+
                 switch (room.m_EnetEvent.Type)
                 {
                     case EventType.Receive:
@@ -72,10 +80,12 @@ namespace ComputerysUltimateTABGServer.Rooms
 
                         PacketHandler.Handle(eventCode, room.m_EnetEvent.Peer, packetData, room);
 
+                        // Aparently it's unnecessary to dispose of packets that are not Receive, so I'm not going to do it.
+                        room.m_EnetEvent.Packet.Dispose();
+
                         break;
                 }
             }
-            room.m_EnetEvent.Packet.Dispose();
         }
     }
 }
