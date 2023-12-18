@@ -2,36 +2,32 @@
 using ComputerysUltimateTABGServer.Packets;
 using ENet;
 using System.Collections.Concurrent;
-using System.Threading.Tasks;
 
 namespace ComputerysUltimateTABGServer.Rooms
 {
     public static class RoomManager
     {
-        public static ConcurrentDictionary<ushort, Room> Rooms { get; private set; } = new ConcurrentDictionary<ushort, Room>();
-
+        public static ConcurrentDictionary<ushort, Room> ActiveRooms { get; private set; } = new ConcurrentDictionary<ushort, Room>();
         public static void MakeRoom(ushort port, int maxPlayers, string roomName, int tickRate)
         {
-            Room room = new Room(port, maxPlayers, roomName, 1000/tickRate);
-            Rooms.TryAdd(port, room);
+            Room room = new Room(port, maxPlayers, roomName, 1000 / tickRate);
+            if (!ActiveRooms.TryAdd(port, room)) { CUTSLogger.Log($"Failed to make room: {roomName}, on port: {port}", LogLevel.Error); return; }
             Task.Run(() => RoomUpdateLoop(room));
+
         }
 
         public static void EndAllRooms()
         {
-            foreach (ushort room in Rooms.Keys)
-            {
-                EndRoom(room);
-            }
+            foreach (Room room in ActiveRooms.Values) { EndRoom(room); }
         }
         public static void EndRoom(ushort roomPort)
         {
-            Rooms.Remove(roomPort, out Room? room);
+            ActiveRooms.TryGetValue(roomPort, out Room? room);
             if (room != null) { room.m_ShouldEndRoom = true; }
         }
         public static void EndRoom(Room room)
         {
-            Rooms.Remove(Rooms.First(KeyValuePar => KeyValuePar.Value == room).Key, out Room? _);
+            room.m_ShouldEndRoom = true;
         }
 
         private static void RoomUpdateLoop(Room room)
@@ -41,6 +37,7 @@ namespace ComputerysUltimateTABGServer.Rooms
                 RoomUpdate(room);
             }
             room.m_EnetServer.Flush();
+            ActiveRooms.Remove(room.m_EnetAddress.Port, out _);
         }
         private static void RoomUpdate(Room room)
         {
@@ -57,7 +54,6 @@ namespace ComputerysUltimateTABGServer.Rooms
                 RoomTick(room);
             }
         }
-
         private static void UpdateRoomPackets(Room room)
         {
             // This is diffrerent from the eNet example code, because the example code makes no god damn sense.
