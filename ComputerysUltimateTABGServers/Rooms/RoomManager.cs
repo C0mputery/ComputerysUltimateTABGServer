@@ -64,7 +64,7 @@ namespace ComputerysUltimateTABGServer.Rooms
         {
             UpdateRoomPackets(room);
 
-            // Not a fan of this, but I cannot come up with a better one :P
+            // Not a fan of this, but I cannot come up with a better way of doing it.
             // I'm not going to use a timer because I don't want to have to deal with threading issues.
             // I'm not going to use a stopwatch because I don't want to have to deal with making a bunch more objects per room.
             // This needs to run when UpdateRoomPackets is not running.
