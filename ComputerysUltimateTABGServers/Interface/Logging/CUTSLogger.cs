@@ -8,18 +8,21 @@ namespace ComputerysUltimateTABGServer.Interface.Logging
 {
     public enum LogLevel
     {
-        Debug = 0,
-        Info = 1,
-        Warning = 2,
-        Error = 3,
-        Fatal = 4,
+        Debug = ConsoleColor.Gray,
+        Info = ConsoleColor.Green,
+        Warning = ConsoleColor.Yellow,
+        Error = ConsoleColor.Red,
+        Fatal = ConsoleColor.DarkRed,
+        Dope = ConsoleColor.Blue
     }
 
     public static partial class CUTSLogger
     {
         public static void Log(string message, LogLevel loggingLevel)
         {
+            Console.ForegroundColor = (ConsoleColor)loggingLevel;
             Console.WriteLine(message);
+            Console.ResetColor();
         }
     }
 }

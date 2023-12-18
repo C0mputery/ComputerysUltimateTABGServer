@@ -18,7 +18,7 @@ namespace ComputerysUltimateTABGServer.Interface
         public static void printLogo()
         {
             Console.ForegroundColor = ConsoleColor.Blue;
-            CUTSLogger.Log(CUTSLogo, LogLevel.Info);
+            CUTSLogger.Log(CUTSLogo, LogLevel.Dope);
             Console.ResetColor();
         }
     }

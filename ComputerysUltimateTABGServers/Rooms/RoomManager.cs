@@ -13,7 +13,7 @@ namespace ComputerysUltimateTABGServer.Rooms
             Room room = new Room(port, maxPlayers, roomName, 1000 / tickRate);
             if (!ActiveRooms.TryAdd(port, room)) { CUTSLogger.Log($"Failed to make room: {roomName}, on port: {port}", LogLevel.Error); return; }
             Task.Run(() => RoomUpdateLoop(room));
-
+            CUTSLogger.Log($"Made room: {roomName}, on port: {port}", LogLevel.Info);
         }
 
         public static void EndAllRooms()
