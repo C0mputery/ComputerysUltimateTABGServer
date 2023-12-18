@@ -1,12 +1,14 @@
 ﻿using ComputerysUltimateTABGServer.Packets;
 using ENet;
 using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 namespace ComputerysUltimateTABGServer.Rooms
 {
     public static class RoomManager
     {
         public static ConcurrentDictionary<ushort, Room> Rooms { get; private set; } = new ConcurrentDictionary<ushort, Room>();
+
         public static void MakeRoom(ushort port, int maxPlayers, string roomName)
         {
             Room room = new Room(port, maxPlayers, roomName);
@@ -42,6 +44,7 @@ namespace ComputerysUltimateTABGServer.Rooms
                 StartRoomUpdateLoop(room);
             }
         }
+
         public static void StartRoomUpdateLoop(Room room)
         {
             Task.Run(() => RoomUpdateLoop(room));
@@ -55,7 +58,20 @@ namespace ComputerysUltimateTABGServer.Rooms
             }
             room.m_EnetServer.Flush();
         }
+
+        private static DateTime lastTickTime = DateTime.Now;
         private static void RoomUpdate(Room room)
+        {
+            UpdateRoomPackets(room);
+
+            TimeSpan elapsedTime = DateTime.Now - lastTickTime;
+            if (elapsedTime.TotalMilliseconds >= 16)
+            {
+                lastTickTime = DateTime.Now;
+            }
+        }
+
+        private static void UpdateRoomPackets(Room room)
         {
             // This is diffrerent from the eNet example code, because the example code makes no god damn sense.
             // If Check Events returns an int that's not above zero, it means that m_EnetEvent is goint to be a default value.
@@ -87,8 +103,6 @@ namespace ComputerysUltimateTABGServer.Rooms
                         break;
                 }
             }
-
-
         }
     }
 }
