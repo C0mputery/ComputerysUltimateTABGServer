@@ -5,7 +5,7 @@ using ENet;
 
 namespace ComputerysUltimateTABGServer.Packets
 {
-    public static partial class PacketHandler
+    public static class PacketHandler
     {
         public static void Handle(EventCode eventCode, Peer peer, byte[] packetData, Room room)
         {
