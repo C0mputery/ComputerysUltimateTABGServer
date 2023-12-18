@@ -37,7 +37,11 @@ namespace ComputerysUltimateTABGServer.Rooms
                 RoomUpdate(room);
             }
             room.m_EnetServer.Flush();
-            ActiveRooms.Remove(room.m_EnetAddress.Port, out _);
+            if (!ActiveRooms.TryRemove(room.m_EnetAddress.Port, out _))
+            {
+                CUTSLogger.Log($"Failed to remove room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}, running failsafe room removal!", LogLevel.Error);
+                ActiveRooms.TryRemove(ActiveRooms.First(KeyValuePar => KeyValuePar.Value == room).Key, out Room? _);
+            }
         }
         private static void RoomUpdate(Room room)
         {
