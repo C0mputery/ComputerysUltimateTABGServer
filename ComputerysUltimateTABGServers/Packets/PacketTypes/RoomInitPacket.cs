@@ -60,7 +60,7 @@ namespace ComputerysUltimateTABGServer.Packets
 
                 loginData = memoryStream.ToArray();
             }
-            PacketHandler.SendPacketAllPlayers(EventCode.Login, loginData, room);
+            PacketHandler.SendPacketToAllPlayersExcept(EventCode.Login, loginData, player, room);
 
             byte[] initData;
             using (MemoryStream memoryStream = new MemoryStream())

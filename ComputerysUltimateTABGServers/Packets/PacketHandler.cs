@@ -45,10 +45,22 @@ namespace ComputerysUltimateTABGServer.Packets
             room.m_EnetServer.Broadcast(0, ref packet, peersArray);
         }
 
-        public static void SendPacketAllPlayers(EventCode eventCode, byte[] packetData, Room room)
+        public static void SendPacketToAllPlayers(EventCode eventCode, byte[] packetData, Room room)
         {
             // We do this rather than a normal broadcast so that if theres a peer thats not a player it will not get the packet (idk if this can happen just being safe)
             SendPacketToPlayers(eventCode, packetData, room.m_Players.Values.ToArray(), room);
+        }
+
+        public static void SendPacketToAllPlayersExcept(EventCode eventCode, byte[] packetData, Player except, Room room)
+        {
+            // We do this rather than a normal broadcast so that if theres a peer thats not a player it will not get the packet (idk if this can happen just being safe)
+            SendPacketToPlayers(eventCode, packetData, room.m_Players.Values.Where(player => player != except).ToArray(), room);
+        }
+
+        public static void SendPacketToAllPlayersExcept(EventCode eventCode, byte[] packetData, Player[] except, Room room)
+        {
+            // We do this rather than a normal broadcast so that if theres a peer thats not a player it will not get the packet (idk if this can happen just being safe)
+            SendPacketToPlayers(eventCode, packetData, room.m_Players.Values.Except(except).ToArray(), room);
         }
     }
 
