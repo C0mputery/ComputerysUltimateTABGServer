@@ -17,7 +17,7 @@ namespace ComputerysUltimateTABGServer.Packets
             using (MemoryStream packetDataMemoryStream = new MemoryStream(packetData))
             using (BinaryReader packetDataBinaryReader = new BinaryReader(packetDataMemoryStream))
             {
-                if (room.m_PacketHandlers.TryGetValue(eventCode, out PacketHandlerDelegate? packetHandler))
+                if (Room.PacketHandlers.TryGetValue(eventCode, out PacketHandlerDelegate? packetHandler))
                 {
                     packetHandler(peer, packetDataBinaryReader, room);
                 }

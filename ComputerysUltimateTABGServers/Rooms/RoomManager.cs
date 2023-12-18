@@ -30,8 +30,13 @@ namespace ComputerysUltimateTABGServer.Rooms
         {
             Rooms.Remove(Rooms.First(KeyValuePar => KeyValuePar.Value == room).Key, out Room? _);
         }
-
-        public static void StartAllRoomUpdateLoops()
+        
+        /// <summary>
+        /// This should only be called once before any other room update loops are started
+        /// Is this technically because I wrote it wrong? Yes, but it works so I'm not changing it.
+        /// If I wanted to fix it I would need to keep track of which rooms have update loops running and which don't feel like doing right now.
+        /// </summary>
+        internal static void StartAllRoomUpdateLoops()
         {
             foreach (Room room in Rooms.Values)
             {
@@ -51,7 +56,6 @@ namespace ComputerysUltimateTABGServer.Rooms
             }
             room.m_EnetServer.Flush();
         }
-
         private static void RoomUpdate(Room room)
         {
             if (room.m_EnetServer.CheckEvents(out room.m_EnetEvent) >= 0 && room.m_EnetServer.Service(15, out room.m_EnetEvent) >= 0)
