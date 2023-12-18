@@ -25,8 +25,6 @@ namespace ComputerysUltimateTABGServer
 #if UsingTabgServerList
             if (RoomManager.Rooms.Count <= 10) { TabgServerList.TabgServerListManager.StartServerListHeartbeat(); }
 #endif
-            
-            RoomManager.StartAllRoomUpdateLoops();
         }
 
         static void MainLoop()

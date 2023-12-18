@@ -14,6 +14,7 @@ namespace ComputerysUltimateTABGServer.Rooms
         {
             Room room = new Room(port, maxPlayers, roomName, 1000/tickRate);
             Rooms.TryAdd(port, room);
+            Task.Run(() => RoomUpdateLoop(room));
         }
 
         public static void EndAllRooms()
@@ -33,24 +34,6 @@ namespace ComputerysUltimateTABGServer.Rooms
             Rooms.Remove(Rooms.First(KeyValuePar => KeyValuePar.Value == room).Key, out Room? _);
         }
 
-        /// <summary>
-        /// This should only be called once before any other room update loops are started
-        /// Is this technically because I wrote it wrong? Yes, but it works so I'm not changing it.
-        /// If I wanted to fix it I would need to keep track of which rooms have update loops running and which don't feel like doing right now.
-        /// </summary>
-        internal static void StartAllRoomUpdateLoops()
-        {
-            foreach (Room room in Rooms.Values)
-            {
-                StartRoomUpdateLoop(room);
-            }
-        }
-
-        public static void StartRoomUpdateLoop(Room room)
-        {
-            Task.Run(() => RoomUpdateLoop(room));
-        }
-
         private static void RoomUpdateLoop(Room room)
         {
             while (!room.m_ShouldEndRoom)
@@ -59,7 +42,6 @@ namespace ComputerysUltimateTABGServer.Rooms
             }
             room.m_EnetServer.Flush();
         }
-
         private static void RoomUpdate(Room room)
         {
             UpdateRoomPackets(room);
@@ -109,7 +91,6 @@ namespace ComputerysUltimateTABGServer.Rooms
                 }
             }
         }
-
         private static void RoomTick(Room room)
         {
         }
