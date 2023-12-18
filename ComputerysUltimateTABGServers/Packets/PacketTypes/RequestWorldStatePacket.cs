@@ -86,17 +86,17 @@ namespace ComputerysUltimateTABGServer.Packets
                         binaryWriter.Write(damageableVehiclePart.partName);
                     }
                 }
-                binaryWriter.Write(room.TimeOfDay);
-                binaryWriter.Write(room.timeBeforeFirstRing);
-                binaryWriter.Write(room.baseRingTime);
-                binaryWriter.Write((byte)room.ringLocations.Count);
-                foreach (RingLocations ringLocations in room.ringLocations)
+                binaryWriter.Write(room.m_TimeOfDay);
+                binaryWriter.Write(room.m_TimeBeforeFirstRing);
+                binaryWriter.Write(room.m_BaseRingTime);
+                binaryWriter.Write((byte)room.m_RingLocations.Count);
+                foreach (RingLocations ringLocations in room.m_RingLocations)
                 {
                     binaryWriter.Write(ringLocations.ringSize);
                     binaryWriter.Write(ringLocations.ringSpeed);
                 }
-                binaryWriter.Write(room.playerLives);
-                binaryWriter.Write(room.killsToWin);
+                binaryWriter.Write(room.m_PlayerLives);
+                binaryWriter.Write(room.m_KillsToWin);
                 binaryWriter.Write((byte)room.m_GameState);
                 if (room.m_GameState == GameState.CountDown)
                 {
@@ -105,12 +105,12 @@ namespace ComputerysUltimateTABGServer.Packets
                 if (room.m_GameState == GameState.Flying && room.m_GameMode != GameMode.Test)
                 {
                     binaryWriter.Write(true); // Should be flying I don't know when this would be the case other than when the gamestate is flying? perhaps the players need a bool to say if theyve dropped or not.
-                    binaryWriter.Write(room.dropperStart.X);
-                    binaryWriter.Write(room.dropperStart.Y);
-                    binaryWriter.Write(room.dropperStart.Z);
-                    binaryWriter.Write(room.dropperEnd.X);
-                    binaryWriter.Write(room.dropperEnd.Y);
-                    binaryWriter.Write(room.dropperEnd.Z);
+                    binaryWriter.Write(room.m_DropperStart.X);
+                    binaryWriter.Write(room.m_DropperStart.Y);
+                    binaryWriter.Write(room.m_DropperStart.Z);
+                    binaryWriter.Write(room.m_DropperEnd.X);
+                    binaryWriter.Write(room.m_DropperEnd.Y);
+                    binaryWriter.Write(room.m_DropperEnd.Z);
                 }
                 loginData = memoryStream.ToArray();
             }

@@ -24,7 +24,7 @@ namespace ComputerysUltimateTABGServer.Rooms
         public static void EndRoom(ushort roomPort)
         {
             Rooms.Remove(roomPort, out Room? room);
-            if (room != null) { room.shouldEndRoom = true; }
+            if (room != null) { room.m_ShouldEndRoom = true; }
         }
         public static void EndRoom(Room room)
         {
@@ -45,7 +45,7 @@ namespace ComputerysUltimateTABGServer.Rooms
 
         private static void RoomUpdateLoop(Room room)
         {
-            while (!room.shouldEndRoom)
+            while (!room.m_ShouldEndRoom)
             {
                 RoomUpdate(room);
             }

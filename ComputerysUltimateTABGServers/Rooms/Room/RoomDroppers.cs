@@ -9,7 +9,7 @@ namespace ComputerysUltimateTABGServer.Rooms
 {
     public partial class Room
     {
-        public Vector3 dropperStart;
-        public Vector3 dropperEnd;
+        public Vector3 m_DropperStart;
+        public Vector3 m_DropperEnd;
     }
 }

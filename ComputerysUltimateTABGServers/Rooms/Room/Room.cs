@@ -6,7 +6,7 @@ namespace ComputerysUltimateTABGServer.Rooms
 {
     public partial class Room
     {
-        public readonly FrozenDictionary<EventCode, PacketHandlerDelegate> m_PacketHandlers = new Dictionary<EventCode, PacketHandlerDelegate>
+        public static readonly FrozenDictionary<EventCode, PacketHandlerDelegate> m_PacketHandlers = new Dictionary<EventCode, PacketHandlerDelegate>
         {
             { EventCode.RoomInit, PacketTypes.RoomInitPacket },
             { EventCode.RequestWorldState, PacketTypes.RequestWorldStatePacket },
@@ -18,7 +18,7 @@ namespace ComputerysUltimateTABGServer.Rooms
         public Address m_EnetAddress;
         public Event m_EnetEvent;
         public int m_MaxClients;
-        public bool shouldEndRoom = false;
+        public bool m_ShouldEndRoom = false;
 
         public Room(ushort Port, int maxClients, string roomName)
         {

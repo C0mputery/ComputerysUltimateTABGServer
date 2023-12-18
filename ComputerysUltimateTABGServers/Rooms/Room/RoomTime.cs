@@ -9,6 +9,6 @@ namespace ComputerysUltimateTABGServer.Rooms
 {
     public partial class Room
     {
-        public float TimeOfDay;
+        public float m_TimeOfDay;
     }
 }

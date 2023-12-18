@@ -9,15 +9,14 @@ namespace ComputerysUltimateTABGServer.Rooms
         public Dictionary<byte, Player> m_Players { get; private set; } = [];
         public Dictionary<byte, Group> m_Groups { get; private set; } = [];
 
-        public int playerLives;
-        public ushort killsToWin;
+        public int m_PlayerLives;
+        public ushort m_KillsToWin;
 
         public void AddPlayer(Player player)
         {
             m_Players[player.m_PlayerID] = player;
             m_Groups[player.m_GroupIndex].m_PlayerIDs.Add(player.m_PlayerID);
         }
-
         public void RemovePlayer(Player player)
         {
             m_Players.Remove(player.m_PlayerID);
