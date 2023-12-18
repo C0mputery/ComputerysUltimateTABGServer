@@ -19,15 +19,18 @@ namespace ComputerysUltimateTABGServer.Rooms
         public Event m_EnetEvent;
         public int m_MaxClients;
         public bool m_ShouldEndRoom = false;
+
+        public int m_DelayBetweenTicks = 60;
         public DateTime m_LastTickTime = DateTime.Now;
 
-        public Room(ushort Port, int maxClients, string roomName)
+        public Room(ushort Port, int maxClients, string roomName, int delayBetweenTicks)
         {
             m_RoomName = roomName ?? "Unnamed Room";
             m_EnetServer = new Host();
             m_EnetAddress = new Address() { Port = Port };
             m_EnetServer.Create(m_EnetAddress, maxClients);
             m_MaxClients = maxClients;
+            m_DelayBetweenTicks = delayBetweenTicks;
         }
     }
 }

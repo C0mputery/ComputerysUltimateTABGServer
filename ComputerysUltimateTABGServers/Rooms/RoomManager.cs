@@ -9,9 +9,9 @@ namespace ComputerysUltimateTABGServer.Rooms
     {
         public static ConcurrentDictionary<ushort, Room> Rooms { get; private set; } = new ConcurrentDictionary<ushort, Room>();
 
-        public static void MakeRoom(ushort port, int maxPlayers, string roomName)
+        public static void MakeRoom(ushort port, int maxPlayers, string roomName, int tickRate)
         {
-            Room room = new Room(port, maxPlayers, roomName);
+            Room room = new Room(port, maxPlayers, roomName, 1000/tickRate);
             Rooms.TryAdd(port, room);
         }
 
@@ -59,15 +59,15 @@ namespace ComputerysUltimateTABGServer.Rooms
             room.m_EnetServer.Flush();
         }
 
-        private static DateTime lastTickTime = DateTime.Now;
         private static void RoomUpdate(Room room)
         {
             UpdateRoomPackets(room);
 
-            TimeSpan elapsedTime = DateTime.Now - lastTickTime;
-            if (elapsedTime.TotalMilliseconds >= 16)
+            TimeSpan elapsedTime = DateTime.Now - room.m_LastTickTime;
+            if (elapsedTime.TotalMilliseconds >= room.m_DelayBetweenTicks)
             {
-                lastTickTime = DateTime.Now;
+                room.m_LastTickTime = DateTime.Now;
+                RoomTick(room);
             }
         }
 
@@ -103,6 +103,11 @@ namespace ComputerysUltimateTABGServer.Rooms
                         break;
                 }
             }
+        }
+
+        private static void RoomTick(Room room)
+        {
+
         }
     }
 }
