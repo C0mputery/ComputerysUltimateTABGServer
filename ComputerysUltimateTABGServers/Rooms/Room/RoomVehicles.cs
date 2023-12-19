@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ComputerysUltimateTABGServer.Rooms
 {
-    public partial class Room
+    public partial class Room : IDisposable
     {
         public List<Vehicle> m_Vehicles = new List<Vehicle>();
     }

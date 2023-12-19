@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ComputerysUltimateTABGServer.Rooms
 {
-    public partial class Room
+    public partial class Room : IDisposable
     {
         public Dictionary<byte, Player> m_Players { get; private set; } = [];
         public Dictionary<byte, Group> m_Groups { get; private set; } = [];
