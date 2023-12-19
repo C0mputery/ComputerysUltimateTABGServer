@@ -4,7 +4,7 @@ using ComputerysUltimateTABGServer.Packets;
 
 namespace ComputerysUltimateTABGServer.Rooms
 {
-    public partial class Room : IDisposable
+    public partial class Room
     {
         public static readonly FrozenDictionary<EventCode, PacketHandlerDelegate> PacketHandlers = new Dictionary<EventCode, PacketHandlerDelegate>
         {
@@ -18,9 +18,7 @@ namespace ComputerysUltimateTABGServer.Rooms
         public Address m_EnetAddress;
         public Event m_EnetEvent;
         public int m_MaxClients;
-
         public bool m_ShouldEndRoom = false;
-        public Task? Task = null;
 
         public double m_DelayBetweenTicks = 16;
         public DateTime m_LastTickTime = DateTime.Now;
@@ -34,13 +32,5 @@ namespace ComputerysUltimateTABGServer.Rooms
             m_MaxClients = maxClients;
             m_DelayBetweenTicks = delayBetweenTicks;
         }
-
-        // TODO: Make this actually dispose of the room.
-        // Do not disspose of the room task, the garbage collector will do that for us.
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-        }
-
     }
 }

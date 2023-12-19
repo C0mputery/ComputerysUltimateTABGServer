@@ -8,17 +8,11 @@ namespace ComputerysUltimateTABGServer.Rooms
     public static class RoomManager
     {
         public static ConcurrentDictionary<ushort, Room> ActiveRooms { get; private set; } = new ConcurrentDictionary<ushort, Room>();
-
         public static void MakeRoom(ushort port, int maxPlayers, string roomName, double tickRate)
         {
             Room room = new Room(port, maxPlayers, roomName, 1000 / tickRate);
-            if (!ActiveRooms.TryAdd(port, room))
-            {
-                CUTSLogger.Log($"Failed to make room: {roomName}, on port: {port}", LogLevel.Error);
-                room.Dispose();
-                return;
-            }
-            room.Task = Task.Run(() => RoomUpdateLoop(room));
+            if (!ActiveRooms.TryAdd(port, room)) { CUTSLogger.Log($"Failed to make room: {roomName}, on port: {port}", LogLevel.Error); return; }
+            Task.Run(() => RoomUpdateLoop(room));
             CUTSLogger.Log($"Made room: {roomName}, on port: {port}", LogLevel.Info);
         }
 
@@ -29,16 +23,11 @@ namespace ComputerysUltimateTABGServer.Rooms
         public static void EndRoom(ushort roomPort)
         {
             ActiveRooms.TryGetValue(roomPort, out Room? room);
-            if (room != null)
-            {
-                room.m_ShouldEndRoom = true;
-                room.Task?.Wait();
-            }
+            if (room != null) { room.m_ShouldEndRoom = true; }
         }
         public static void EndRoom(Room room)
         {
             room.m_ShouldEndRoom = true;
-            room.Task?.Wait();
         }
 
         private static void RoomUpdateLoop(Room room)
@@ -53,8 +42,6 @@ namespace ComputerysUltimateTABGServer.Rooms
                 CUTSLogger.Log($"Failed to remove room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}, running failsafe room removal!", LogLevel.Error);
                 ActiveRooms.TryRemove(ActiveRooms.First(KeyValuePar => KeyValuePar.Value == room).Key, out Room? _);
             }
-            room.Dispose();
-            CUTSLogger.Log($"Ended room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}", LogLevel.Info);
         }
         private static void RoomUpdate(Room room)
         {
@@ -62,7 +49,7 @@ namespace ComputerysUltimateTABGServer.Rooms
 
             // Not a fan of this, but I cannot come up with a better way of doing it.
             // I'm not going to use a timer because I don't want to have to deal with threading issues.
-            // I'm not going to use a stopwatch because I don't want to have to deal with making a bunch more objects per room, we also don't need *that* much precision.
+            // I'm not going to use a stopwatch because I don't want to have to deal with making a bunch more objects per room.
             // This needs to run when UpdateRoomPackets is not running.
             TimeSpan elapsedTime = DateTime.Now - room.m_LastTickTime;
             if (elapsedTime.TotalMilliseconds >= room.m_DelayBetweenTicks)
