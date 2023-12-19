@@ -1,12 +1,14 @@
 ﻿using ComputerysUltimateTABGServer.DataTypes.Player;
 using ENet;
+using System.Collections.Concurrent;
 using System.Text;
 
 namespace ComputerysUltimateTABGServer.Rooms
 {
     public partial class Room
     {
-        public Dictionary<byte, Player> m_Players { get; private set; } = [];
+        // This is a concurrent dictionary because it is read by multiple threads at once, if you think this is unnecessary, you can change it to a normal dictionary.
+        public ConcurrentDictionary<byte, Player> m_Players { get; private set; } = [];
         public Dictionary<byte, Group> m_Groups { get; private set; } = [];
 
         public int m_PlayerLives;
@@ -19,7 +21,7 @@ namespace ComputerysUltimateTABGServer.Rooms
         }
         public void RemovePlayer(Player player)
         {
-            m_Players.Remove(player.m_PlayerID);
+            m_Players.TryRemove(player.m_PlayerID, out _);
         }
 
         public bool TryToGetPlayer(Peer peer, out Player? player)
