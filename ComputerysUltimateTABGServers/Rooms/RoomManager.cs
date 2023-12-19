@@ -36,16 +36,7 @@ namespace ComputerysUltimateTABGServer.Rooms
             {
                 RoomUpdate(room);
             }
-            room.m_EnetServer.Flush();
-            if (!ActiveRooms.TryRemove(room.m_EnetAddress.Port, out _))
-            {
-                CUTSLogger.Log($"Failed to remove room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}, running failsafe room removal!", LogLevel.Error);
-                if (!ActiveRooms.TryRemove(ActiveRooms.First(KeyValuePar => KeyValuePar.Value == room).Key, out Room? _))
-                {
-                    CUTSLogger.Log($"Failed to remove room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}, even with failsafe room removal!", LogLevel.Error);
-                }
-            }
-            CUTSLogger.Log($"Ended room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}", LogLevel.Info);
+            RoomUpdateEnded(room);
         }
         private static void RoomUpdate(Room room)
         {
@@ -62,6 +53,20 @@ namespace ComputerysUltimateTABGServer.Rooms
                 RoomTick(room);
             }
         }
+        private static void RoomUpdateEnded(Room room)
+        {
+            room.m_EnetServer.Flush();
+            if (!ActiveRooms.TryRemove(room.m_EnetAddress.Port, out _))
+            {
+                CUTSLogger.Log($"Failed to remove room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}, running failsafe room removal!", LogLevel.Error);
+                if (!ActiveRooms.TryRemove(ActiveRooms.First(KeyValuePar => KeyValuePar.Value == room).Key, out Room? _))
+                {
+                    CUTSLogger.Log($"Failed to remove room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}, even with failsafe room removal!", LogLevel.Error);
+                }
+            }
+            CUTSLogger.Log($"Ended room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}", LogLevel.Info);
+        }
+
         private static void UpdateRoomPackets(Room room)
         {
             // This is diffrerent from the eNet example code, because the example code makes no god damn sense.
