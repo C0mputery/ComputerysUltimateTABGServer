@@ -34,6 +34,8 @@ namespace ComputerysUltimateTABGServer.Packets
             // I am not sure how I could handle the unityAuthPlayerID being null and also obtain the server password, this needs to be looked into.
             string unityAuthPlayerId = string.Empty;
             if (receivedPacketData.PeekChar() != -1) { unityAuthPlayerId = receivedPacketData.ReadString(); }
+
+            // Tecnically this is handled by the server list, so we should be able to just ignore this.
             string serverPassword = string.Empty;
             if (receivedPacketData.PeekChar() != -1) { serverPassword = receivedPacketData.ReadString(); }
 

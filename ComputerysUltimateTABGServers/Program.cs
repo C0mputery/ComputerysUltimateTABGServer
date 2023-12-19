@@ -1,4 +1,4 @@
-﻿#define UsingServerList
+﻿#define UsingServerList // Comment this out if you don't have access to the server list code. (I don't know a better way to do this if you do tell me!)
 
 using ComputerysUltimateTABGServer.Interface;
 using ComputerysUltimateTABGServer.Rooms;
