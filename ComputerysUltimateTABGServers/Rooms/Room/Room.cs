@@ -18,6 +18,8 @@ namespace ComputerysUltimateTABGServer.Rooms
         public Address m_EnetAddress;
         public Event m_EnetEvent;
         public int m_MaxClients;
+
+        public Task Task = null!;
         public bool m_ShouldEndRoom = false;
 
         public double m_DelayBetweenTicks = 16;

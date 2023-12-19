@@ -12,7 +12,7 @@ namespace ComputerysUltimateTABGServer.Rooms
         {
             Room room = new Room(port, maxPlayers, roomName, 1000 / tickRate);
             if (!ActiveRooms.TryAdd(port, room)) { CUTSLogger.Log($"Failed to make room: {roomName}, on port: {port}", LogLevel.Error); return; }
-            Task.Run(() => RoomUpdateLoop(room));
+            room.Task = Task.Run(() => RoomUpdateLoop(room));
             CUTSLogger.Log($"Made room: {roomName}, on port: {port}", LogLevel.Info);
         }
 
@@ -40,8 +40,12 @@ namespace ComputerysUltimateTABGServer.Rooms
             if (!ActiveRooms.TryRemove(room.m_EnetAddress.Port, out _))
             {
                 CUTSLogger.Log($"Failed to remove room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}, running failsafe room removal!", LogLevel.Error);
-                ActiveRooms.TryRemove(ActiveRooms.First(KeyValuePar => KeyValuePar.Value == room).Key, out Room? _);
+                if (!ActiveRooms.TryRemove(ActiveRooms.First(KeyValuePar => KeyValuePar.Value == room).Key, out Room? _))
+                {
+                    CUTSLogger.Log($"Failed to remove room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}, even with failsafe room removal!", LogLevel.Error);
+                }
             }
+            CUTSLogger.Log($"Ended room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}", LogLevel.Info);
         }
         private static void RoomUpdate(Room room)
         {
