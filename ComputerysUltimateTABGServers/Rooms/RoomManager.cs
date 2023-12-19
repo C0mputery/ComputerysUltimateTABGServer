@@ -8,7 +8,7 @@ namespace ComputerysUltimateTABGServer.Rooms
     public static class RoomManager
     {
         public static ConcurrentDictionary<ushort, Room> ActiveRooms { get; private set; } = new ConcurrentDictionary<ushort, Room>();
-        public static void MakeRoom(ushort port, int maxPlayers, string roomName, int tickRate)
+        public static void MakeRoom(ushort port, int maxPlayers, string roomName, double tickRate)
         {
             Room room = new Room(port, maxPlayers, roomName, 1000 / tickRate);
             if (!ActiveRooms.TryAdd(port, room)) { CUTSLogger.Log($"Failed to make room: {roomName}, on port: {port}", LogLevel.Error); return; }

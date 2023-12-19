@@ -20,10 +20,10 @@ namespace ComputerysUltimateTABGServer.Rooms
         public int m_MaxClients;
         public bool m_ShouldEndRoom = false;
 
-        public int m_DelayBetweenTicks = 60;
+        public double m_DelayBetweenTicks = 16;
         public DateTime m_LastTickTime = DateTime.Now;
 
-        public Room(ushort Port, int maxClients, string roomName, int delayBetweenTicks)
+        public Room(ushort Port, int maxClients, string roomName, double delayBetweenTicks)
         {
             m_RoomName = roomName ?? "Unnamed Room";
             m_EnetServer = new Host();
