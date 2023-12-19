@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ComputerysUltimateTABGServer.Rooms
 {
-    public partial class Room : IDisposable
+    public partial class Room
     {
         public float m_TimeOfDay;
     }
