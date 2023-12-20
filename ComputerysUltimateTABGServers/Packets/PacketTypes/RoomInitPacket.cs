@@ -48,7 +48,7 @@ namespace ComputerysUltimateTABGServer.Packets
             using (MemoryStream memoryStream = new MemoryStream())
             using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
             {
-                binaryWriter.Write(peer.ID);
+                binaryWriter.Write((byte)peer.ID);
                 binaryWriter.Write(groupIndex);
                 binaryWriter.Write(playerNameUTF8.Length);
                 binaryWriter.Write(playerNameUTF8);
@@ -68,7 +68,7 @@ namespace ComputerysUltimateTABGServer.Packets
             using (MemoryStream memoryStream = new MemoryStream())
             using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
             {
-                binaryWriter.Write((byte)1);
+                binaryWriter.Write((byte)ServerResponse.Accepted);
                 binaryWriter.Write((byte)room.m_GameMode);
                 binaryWriter.Write((byte)room.m_MatchMode);
                 binaryWriter.Write(peer.ID);
