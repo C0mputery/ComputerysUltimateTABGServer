@@ -14,7 +14,6 @@ namespace ComputerysUltimateTABGServer.Packets
             { EventCode.RequestWorldState, PacketTypes.RequestWorldStatePacket },
             { EventCode.PlayerUpdate, PacketTypes.PlayerUpdatePacket },
         }.ToFrozenDictionary();
-
         public static void Handle(EventCode eventCode, Peer peer, byte[] packetData, Room room)
         {
             if ((eventCode != EventCode.TABGPing) && (eventCode != EventCode.PlayerUpdate))

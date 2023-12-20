@@ -57,7 +57,7 @@ namespace ComputerysUltimateTABGServer.Packets
                 {
                     binaryWriter.Write(gearData[i]);
                 }
-                binaryWriter.Write(false);
+                binaryWriter.Write(player.m_IsDev);
                 binaryWriter.Write(color);
 
                 loginData = memoryStream.ToArray();
