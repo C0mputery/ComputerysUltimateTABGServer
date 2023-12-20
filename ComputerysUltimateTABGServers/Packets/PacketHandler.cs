@@ -2,11 +2,19 @@
 using ComputerysUltimateTABGServer.Interface.Logging;
 using ComputerysUltimateTABGServer.Rooms;
 using ENet;
+using System.Collections.Frozen;
 
 namespace ComputerysUltimateTABGServer.Packets
 {
     public static class PacketHandler
     {
+        public static readonly FrozenDictionary<EventCode, PacketHandlerDelegate> PacketHandlers = new Dictionary<EventCode, PacketHandlerDelegate>
+        {
+            { EventCode.RoomInit, PacketTypes.RoomInitPacket },
+            { EventCode.RequestWorldState, PacketTypes.RequestWorldStatePacket },
+            { EventCode.PlayerUpdate, PacketTypes.PlayerUpdatePacket },
+        }.ToFrozenDictionary();
+
         public static void Handle(EventCode eventCode, Peer peer, byte[] packetData, Room room)
         {
             if ((eventCode != EventCode.TABGPing) && (eventCode != EventCode.PlayerUpdate))
@@ -25,7 +33,7 @@ namespace ComputerysUltimateTABGServer.Packets
             using (MemoryStream packetDataMemoryStream = new MemoryStream(packetData))
             using (BinaryReader packetDataBinaryReader = new BinaryReader(packetDataMemoryStream))
             {
-                if (Room.PacketHandlers.TryGetValue(eventCode, out PacketHandlerDelegate? packetHandler))
+                if (PacketHandlers.TryGetValue(eventCode, out PacketHandlerDelegate? packetHandler))
                 {
                     packetHandler(peer, packetDataBinaryReader, room);
                 }

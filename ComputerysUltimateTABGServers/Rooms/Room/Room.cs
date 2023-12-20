@@ -6,13 +6,6 @@ namespace ComputerysUltimateTABGServer.Rooms
 {
     public partial class Room
     {
-        public static readonly FrozenDictionary<EventCode, PacketHandlerDelegate> PacketHandlers = new Dictionary<EventCode, PacketHandlerDelegate>
-        {
-            { EventCode.RoomInit, PacketTypes.RoomInitPacket },
-            { EventCode.RequestWorldState, PacketTypes.RequestWorldStatePacket },
-            { EventCode.PlayerUpdate, PacketTypes.PlayerUpdatePacket },
-        }.ToFrozenDictionary();
-
         public string m_RoomName;
         public Host m_EnetServer;
         public Address m_EnetAddress;
