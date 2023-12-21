@@ -12,10 +12,7 @@ namespace ComputerysUltimateTABGServer.Ticks
         }.ToFrozenSet();
         public static void Handle(Room room)
         {
-            foreach (TickHandlerDelegate tickHandler in TickHandlers)
-            {
-                tickHandler(room);
-            }
+            foreach (TickHandlerDelegate tickHandler in TickHandlers) { tickHandler(room); }
         }
     }
 

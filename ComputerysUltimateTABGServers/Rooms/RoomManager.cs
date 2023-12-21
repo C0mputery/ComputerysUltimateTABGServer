@@ -99,8 +99,8 @@ namespace ComputerysUltimateTABGServer.Rooms
             // I'm not going to use a timer because I don't want to have to deal with threading issues.
             // I'm not going to use a stopwatch because I don't want to have to deal with making a bunch more objects per room.
             // This needs to run when UpdateRoomPackets is not running.
-            TimeSpan elapsedTime = DateTime.Now - room.m_LastTickTime;
-            if (elapsedTime.TotalMilliseconds >= room.m_DelayBetweenTicks)
+            room.m_ElapsedTime = DateTime.Now - room.m_LastTickTime;
+            if (room.m_ElapsedTime.TotalMilliseconds >= room.m_DelayBetweenTicks)
             {
                 room.m_LastTickTime = DateTime.Now;
                 TickHandler.Handle(room);
