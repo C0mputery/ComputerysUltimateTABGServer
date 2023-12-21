@@ -18,12 +18,16 @@ namespace ComputerysUltimateTABGServer.Interface.Logging
 
     public static partial class CUTSLogger
     {
-        // log colors in there current state are not thread safe, and sometimes will be printed in the wrong color. If you can fix this, please do!
+        private static readonly object lockObject = new object();
+
         public static void Log(string message, LogLevel loggingLevel)
         {
-            Console.ForegroundColor = (ConsoleColor)loggingLevel;
-            Console.WriteLine(message);
-            Console.ResetColor();
+            lock (lockObject)
+            {
+                Console.ForegroundColor = (ConsoleColor)loggingLevel;
+                Console.WriteLine(message);
+                Console.ResetColor();
+            }
         }
     }
 }
