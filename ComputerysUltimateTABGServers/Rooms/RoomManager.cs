@@ -1,5 +1,6 @@
 ﻿using ComputerysUltimateTABGServer.Interface.Logging;
 using ComputerysUltimateTABGServer.Packets;
+using ComputerysUltimateTABGServer.Ticks;
 using ENet;
 using System.Collections.Concurrent;
 
@@ -40,18 +41,8 @@ namespace ComputerysUltimateTABGServer.Rooms
         }
         private static void RoomUpdate(Room room)
         {
-            UpdateRoomPackets(room);
-
-            // Not a fan of this, but I cannot come up with a better way of doing it.
-            // I'm not going to use a timer because I don't want to have to deal with threading issues.
-            // I'm not going to use a stopwatch because I don't want to have to deal with making a bunch more objects per room.
-            // This needs to run when UpdateRoomPackets is not running.
-            TimeSpan elapsedTime = DateTime.Now - room.m_LastTickTime;
-            if (elapsedTime.TotalMilliseconds >= room.m_DelayBetweenTicks)
-            {
-                room.m_LastTickTime = DateTime.Now;
-                RoomTick(room);
-            }
+            RoomPackets(room);
+            RoomTick(room);
         }
         private static void RoomUpdateEnded(Room room)
         {
@@ -69,7 +60,7 @@ namespace ComputerysUltimateTABGServer.Rooms
             CUTSLogger.Log($"Ended room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}", LogLevel.Info);
         }
 
-        private static void UpdateRoomPackets(Room room)
+        private static void RoomPackets(Room room)
         {
             // This is diffrerent from the eNet example code, because the example code makes no god damn sense.
             // If Check Events returns an int that's not above zero, it means that m_EnetEvent is goint to be a default value.
@@ -104,6 +95,16 @@ namespace ComputerysUltimateTABGServer.Rooms
         }
         private static void RoomTick(Room room)
         {
+            // Not a fan of this, but I cannot come up with a better way of doing it.
+            // I'm not going to use a timer because I don't want to have to deal with threading issues.
+            // I'm not going to use a stopwatch because I don't want to have to deal with making a bunch more objects per room.
+            // This needs to run when UpdateRoomPackets is not running.
+            TimeSpan elapsedTime = DateTime.Now - room.m_LastTickTime;
+            if (elapsedTime.TotalMilliseconds >= room.m_DelayBetweenTicks)
+            {
+                room.m_LastTickTime = DateTime.Now;
+                TickHandler.Handle(room);
+            }
         }
     }
 }
