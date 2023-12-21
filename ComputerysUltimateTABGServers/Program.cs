@@ -1,4 +1,4 @@
-﻿//#define UsingServerList // Comment this out if you don't have access to the server list code. (I don't know a better way to do this if you do tell me!)
+﻿#define UsingServerList // Comment this out if you don't have access to the server list code. (I don't know a better way to do this if you do tell me!)
 
 using ComputerysUltimateTABGServer.Interface;
 using ComputerysUltimateTABGServer.Rooms;
@@ -20,7 +20,7 @@ namespace ComputerysUltimateTABGServer
 
             ENet.Library.Initialize();
 
-            for (int i = 0; i < 5; i++) { RoomManager.MakeRoom((ushort)(7777 + i), 50, $"CUTS TEST SERVER {i + 1}", 120); }
+            for (int i = 0; i < 10; i++) { RoomManager.MakeRoom((ushort)(7777 + i), 50, $"CUTS TEST SERVER {i + 1}", 120); }
 
 #if UsingServerList
             if (RoomManager.ActiveRooms.Count <= 10) { TabgServerList.ServerListManager.StartServerListHeartbeat(); }
@@ -34,6 +34,7 @@ namespace ComputerysUltimateTABGServer
         static void ShutDown()
         {
             RoomManager.EndAllRooms();
+            ENet.Library.Deinitialize();
         }
     }
 }
