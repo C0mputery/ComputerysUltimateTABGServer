@@ -9,7 +9,7 @@ namespace ComputerysUltimateTABGServer.Ticks
 {
     public static partial class TickTypes
     {
-        public static void CarTick(Room room)
+        public static void VehiclesTick(Room room)
         {
         }
     }
