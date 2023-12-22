@@ -1,5 +1,7 @@
 ﻿using ComputerysUltimateTABGServer.DataTypes.Player;
 using ComputerysUltimateTABGServer.DataTypes.Vehicles;
+using ComputerysUltimateTABGServer.Interface.Logging;
+using ComputerysUltimateTABGServer.Packets;
 using ComputerysUltimateTABGServer.Rooms;
 using ComputerysUltimateTABGServer.TABGCode;
 using System.Numerics;
@@ -12,28 +14,30 @@ namespace ComputerysUltimateTABGServer.Ticks
         {
             foreach (Player player in room.m_Players.Values)
             {
-                // The client will leave players were they were when they were last updated!
-                // We need a way to handle this, so sometimes we will need to update all players regardless of distance.
-                // perhaps we could tell the clients that they are in the air, or something like that.
-                // rn this is okay, but we will need to fix this later.
-                Player[] playersInRange = FindPlayersInRangeOfUpdate(player, room);
-                Vehicle[] VehiclesInRange = FindCarsInRangeOfUpdate(player, room);
                 using (MemoryStream memoryStream = new MemoryStream())
                 using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
                 {
-                    binaryWriter.Write((byte)playersInRange.Length - 1);
-                    foreach (Player playerInRange in playersInRange)
-                    {
-                        WritePlayerUpdate(playerInRange, room, binaryWriter);
-                    }
-                    binaryWriter.Write((byte)VehiclesInRange.Length - 1);
-                    foreach (Vehicle VehicleInRange in VehiclesInRange)
-                    {
-                        WriteCarUpdate(VehicleInRange, room, binaryWriter);
-                    }
+                    binaryWriter.Write(0f); // This is handled on the timeStamp on the client, we have it as zero for now.
+
+                    // The client will leave players were they were when they were last updated!
+                    // We need a way to handle this, so sometimes we will need to update all players regardless of distance.
+                    // perhaps we could tell the clients that they are in the air, or something like that.
+                    // rn this is okay, but we will need to fix this later.
+                    Player[] playersInRange = FindPlayersInRangeOfUpdate(player, room);
+                    Vehicle[] VehiclesInRange = FindCarsInRangeOfUpdate(player, room);
+
+                    binaryWriter.Write((byte)playersInRange.Length);
+                    foreach (Player playerInRange in playersInRange) { WritePlayerUpdate(playerInRange, room, binaryWriter); }
+
+                    binaryWriter.Write((byte)VehiclesInRange.Length);
+                    foreach (Vehicle VehicleInRange in VehiclesInRange) { WriteCarUpdate(VehicleInRange, room, binaryWriter); }
+
+                    binaryWriter.Write((byte)0); // idk what this is for, but it is discarded by the client.
+                    PacketHandler.SendPacketToPlayer(EventCode.PlayerUpdate, memoryStream.ToArray(), player, room);
                 }
             }
 
+            // Make these max out at 255, and then send multiple packets if needed.
             static Player[] FindPlayersInRangeOfUpdate(Player player, Room room)
             {
                 return room.m_Players.Values.Where(playerToCheckDistance => player != playerToCheckDistance && Vector3.Distance(playerToCheckDistance.m_Position, player.m_Position) <= room.m_TickUpdateRange).ToArray();

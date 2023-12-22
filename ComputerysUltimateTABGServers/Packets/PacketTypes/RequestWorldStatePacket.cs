@@ -16,7 +16,6 @@ namespace ComputerysUltimateTABGServer.Packets
 
             if (!room.TryToGetPlayer(receivedPlayerID, out Player? player) || player == null) { return; }
 
-            byte[] loginData;
             using (MemoryStream memoryStream = new MemoryStream())
             using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
             {
@@ -60,6 +59,7 @@ namespace ComputerysUltimateTABGServer.Packets
                     binaryWriter.Write(playerFromRoom.m_IsDev);
                     binaryWriter.Write(playerFromRoom.m_Color);
                 }
+                binaryWriter.Write(room.m_Items.Count);
                 foreach (Item item in room.m_Items)
                 {
                     binaryWriter.Write(item.WeaponIndex);
@@ -69,6 +69,7 @@ namespace ComputerysUltimateTABGServer.Packets
                     binaryWriter.Write(item.Position.Y);
                     binaryWriter.Write(item.Position.Z);
                 }
+                binaryWriter.Write(room.m_Vehicles.Count);
                 foreach (Vehicle vehicle in room.m_Vehicles.Values)
                 {
                     binaryWriter.Write(vehicle.vehicleID);
@@ -112,9 +113,8 @@ namespace ComputerysUltimateTABGServer.Packets
                     binaryWriter.Write(room.m_DropperEnd.Y);
                     binaryWriter.Write(room.m_DropperEnd.Z);
                 }
-                loginData = memoryStream.ToArray();
+                PacketHandler.SendPacketToPlayer(EventCode.Login, memoryStream.ToArray(), player, room);
             }
-            PacketHandler.SendPacketToPlayer(EventCode.Login, loginData, player, room);
         }
     }
 }

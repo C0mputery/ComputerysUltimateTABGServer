@@ -60,11 +60,9 @@ namespace ComputerysUltimateTABGServer.Packets
                 binaryWriter.Write(player.m_IsDev);
                 binaryWriter.Write(color);
 
-                loginData = memoryStream.ToArray();
+                PacketHandler.SendPacketToAllPlayers(EventCode.Login, memoryStream.ToArray(), room);
             }
-            PacketHandler.SendPacketToAllPlayers(EventCode.Login, loginData, room);
 
-            byte[] initData;
             using (MemoryStream memoryStream = new MemoryStream())
             using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
             {
@@ -76,9 +74,8 @@ namespace ComputerysUltimateTABGServer.Packets
                 binaryWriter.Write(playerNameUTF8.Length);
                 binaryWriter.Write(playerNameUTF8);
 
-                initData = memoryStream.ToArray();
+                PacketHandler.SendPacketToPlayer(EventCode.RoomInitRequestResponse, memoryStream.ToArray(), player, room);
             }
-            PacketHandler.SendPacketToPlayer(EventCode.RoomInitRequestResponse, initData, player, room);
         }
     }
 }
