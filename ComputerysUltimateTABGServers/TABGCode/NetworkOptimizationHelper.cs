@@ -4,7 +4,7 @@
 
 using System.Numerics;
 
-namespace ComputerysUltimateTABGServer.TABGCode
+namespace Landfall.Network
 {
     public static class NetworkOptimizationHelper
     {

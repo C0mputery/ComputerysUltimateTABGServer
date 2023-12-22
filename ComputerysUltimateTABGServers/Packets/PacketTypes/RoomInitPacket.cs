@@ -44,7 +44,6 @@ namespace ComputerysUltimateTABGServer.Packets
             room.AddPlayer(player);
 
             byte[] playerNameUTF8 = Encoding.UTF8.GetBytes(playerName);
-            byte[] loginData;
             using (MemoryStream memoryStream = new MemoryStream())
             using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
             {
