@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,5 +13,6 @@ namespace ComputerysUltimateTABGServer.DataTypes.Vehicles
         public int vehicleIndex = 0;
         public List<Seat> seats = [];
         public List<DamageableVehiclePart> damageableVehicleParts = [];
+        public Vector3 position = new Vector3(0, 0, 0);
     }
 }

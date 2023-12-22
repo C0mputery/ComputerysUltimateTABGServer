@@ -69,7 +69,7 @@ namespace ComputerysUltimateTABGServer.Packets
                     binaryWriter.Write(item.Position.Y);
                     binaryWriter.Write(item.Position.Z);
                 }
-                foreach (Vehicle vehicle in room.m_Vehicles)
+                foreach (Vehicle vehicle in room.m_Vehicles.Values)
                 {
                     binaryWriter.Write(vehicle.vehicleID);
                     binaryWriter.Write(vehicle.vehicleIndex);

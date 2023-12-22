@@ -9,6 +9,6 @@ namespace ComputerysUltimateTABGServer.Rooms
 {
     public partial class Room
     {
-        public List<Vehicle> m_Vehicles = new List<Vehicle>();
+        public Dictionary<int, Vehicle> m_Vehicles = new Dictionary<int, Vehicle>();
     }
 }

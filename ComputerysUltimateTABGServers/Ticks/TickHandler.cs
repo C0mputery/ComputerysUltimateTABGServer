@@ -7,9 +7,9 @@ namespace ComputerysUltimateTABGServer.Ticks
     {
         public static readonly FrozenSet<TickHandlerDelegate> TickHandlers = new HashSet<TickHandlerDelegate>
         {
-            TickTypes.PlayerTick,
-            TickTypes.VehiclesTick,
+            TickTypes.TabgTick,
         }.ToFrozenSet();
+
         public static void Handle(Room room)
         {
             foreach (TickHandlerDelegate tickHandler in TickHandlers) { tickHandler(room); }

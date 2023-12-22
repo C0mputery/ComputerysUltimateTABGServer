@@ -21,12 +21,12 @@ namespace ComputerysUltimateTABGServer.DataTypes.Player
         public bool m_IsDowned = false;
         public float m_Health = 100;
 
-        public bool m_IsInCar = false;
-
         public int m_CurrentlyHeldWeaponID = int.MaxValue;
 
+        public bool m_IsInCar = false;
         public int m_OccupiedCarId = 0;
         public int m_OccupiedSeatId = 0;
+        public DrivingState m_DrivingState = DrivingState.None;
 
         public bool m_AimingDownSights = false;
 

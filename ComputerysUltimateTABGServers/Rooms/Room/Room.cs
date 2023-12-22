@@ -18,7 +18,7 @@ namespace ComputerysUltimateTABGServer.Rooms
         public double m_DelayBetweenTicks = 16;
         public TimeSpan m_ElapsedTime = TimeSpan.Zero;
         public DateTime m_LastTickTime = DateTime.Now;
-        public float m_PlayerUpdateRange = 500;
+        public float m_TickUpdateRange = 500;
 
         public Room(ushort Port, int maxClients, string roomName, double delayBetweenTicks)
         {
