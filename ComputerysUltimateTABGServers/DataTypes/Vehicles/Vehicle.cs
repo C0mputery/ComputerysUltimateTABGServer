@@ -14,5 +14,7 @@ namespace ComputerysUltimateTABGServer.DataTypes.Vehicles
         public List<Seat> seats = [];
         public List<DamageableVehiclePart> damageableVehicleParts = [];
         public Vector3 position = new Vector3(0, 0, 0);
+        public Vector3 carInput = new Vector3(0, 0, 0);
+        public Quaternion rotation = new Quaternion(0, 0, 0, 0);
     }
 }

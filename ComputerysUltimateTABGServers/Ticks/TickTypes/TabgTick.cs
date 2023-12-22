@@ -1,6 +1,7 @@
 ﻿using ComputerysUltimateTABGServer.DataTypes.Player;
 using ComputerysUltimateTABGServer.DataTypes.Vehicles;
 using ComputerysUltimateTABGServer.Rooms;
+using ComputerysUltimateTABGServer.TABGCode;
 using System.Numerics;
 
 namespace ComputerysUltimateTABGServer.Ticks
@@ -53,12 +54,13 @@ namespace ComputerysUltimateTABGServer.Ticks
                     binaryWriter.Write(vehicle.position.X);
                     binaryWriter.Write(vehicle.position.Y);
                     binaryWriter.Write(vehicle.position.Z);
-                    // OptimizedCarRotationQuaternion
-                    // OptimizedCarDirection
+                    binaryWriter.Write(NetworkOptimizationHelper.OptimizeQuaternion(vehicle.rotation)); // I am guessing these can be removed once we have real car stuff since the clients send it I think 
+                    binaryWriter.Write(NetworkOptimizationHelper.OptimizeDirection(vehicle.carInput)); // I am guessing these can be removed once we have real car stuff since the clients send it I think 
                     binaryWriter.Write(player.m_Rotation.X);
                     binaryWriter.Write(player.m_Rotation.Y);
                     binaryWriter.Write((byte)player.m_DrivingState);
-                } else
+                }
+                else
                 {
                     binaryWriter.Write(player.m_Position.X);
                     binaryWriter.Write(player.m_Position.Y);
@@ -76,8 +78,7 @@ namespace ComputerysUltimateTABGServer.Ticks
                 binaryWriter.Write(vehicle.position.X);
                 binaryWriter.Write(vehicle.position.Y);
                 binaryWriter.Write(vehicle.position.Z);
-                binaryWriter.Write((byte)0); // maxIndex??
-                // The next 6 bytes are the for the ConstructQuaternion 
+                binaryWriter.Write(NetworkOptimizationHelper.OptimizeQuaternion(vehicle.rotation)); // I am guessing these can be removed once we have real car stuff since the clients send it I think 
             }
         }
     }
