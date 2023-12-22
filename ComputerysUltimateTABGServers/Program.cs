@@ -20,7 +20,7 @@ namespace ComputerysUltimateTABGServer
 
             ENet.Library.Initialize();
 
-            for (int i = 0; i < 10; i++) { RoomManager.MakeRoom((ushort)(7777 + i), 50, $"CUTS TEST SERVER {i + 1}", 120); }
+            for (int i = 0; i < 1; i++) { RoomManager.MakeRoom((ushort)(7777 + i), 50, $"CUTS TEST SERVER {i + 1}", 120); }
 
 #if UsingServerList
             if (RoomManager.ActiveRooms.Count <= 10) { TabgServerList.ServerListManager.StartServerListHeartbeat(); }
