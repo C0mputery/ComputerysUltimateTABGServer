@@ -22,14 +22,14 @@ namespace ComputerysUltimateTABGServer.Ticks
                     // We need a way to handle this, so sometimes we will need to update all players regardless of distance.
                     // perhaps we could tell the clients that they are in the air, or something like that.
                     // rn this is okay, but we will need to fix this later.
-                    IEnumerable<Player> playersInRange = FindPlayersInRangeOfUpdate(player, room);
-                    IEnumerable<Vehicle> VehiclesInRange = FindCarsInRangeOfUpdate(player, room);
+                    //IEnumerable<Player> playersInRange = FindPlayersInRangeOfUpdate(player, room);
+                    //IEnumerable<Vehicle> VehiclesInRange = FindCarsInRangeOfUpdate(player, room);
 
-                    binaryWriter.Write((byte)playersInRange.Count());
-                    foreach (Player playerInRange in playersInRange) { WritePlayerUpdate(playerInRange, room, binaryWriter); }
+                    binaryWriter.Write((byte)room.m_Players.Values.Count);
+                    foreach (Player playerInRange in room.m_Players.Values) { WritePlayerUpdate(playerInRange, room, binaryWriter); }
 
-                    binaryWriter.Write((byte)VehiclesInRange.Count());
-                    foreach (Vehicle VehicleInRange in VehiclesInRange) { WriteCarUpdate(VehicleInRange, room, binaryWriter); }
+                    binaryWriter.Write((byte)room.m_Vehicles.Values.Count);
+                    foreach (Vehicle VehicleInRange in room.m_Vehicles.Values) { WriteCarUpdate(VehicleInRange, room, binaryWriter); }
 
                     binaryWriter.Write((byte)0); // idk what this is for, but it is a byte discarded by the client.
                     PacketHandler.SendPacketToPlayer(EventCode.PlayerUpdate, memoryStream.ToArray(), player, room);
@@ -37,14 +37,14 @@ namespace ComputerysUltimateTABGServer.Ticks
             }
 
             // Make these max out at 255, and then send multiple packets if needed.
-            static IEnumerable<Player> FindPlayersInRangeOfUpdate(Player player, Room room)
+            /*static IEnumerable<Player> FindPlayersInRangeOfUpdate(Player player, Room room)
             {
                 return room.m_Players.Values.Where(playerToCheckDistance => player != playerToCheckDistance && Vector3.Distance(playerToCheckDistance.m_Position, player.m_Position) <= room.m_TickUpdateRange);
             }
             static IEnumerable<Vehicle> FindCarsInRangeOfUpdate(Player player, Room room)
             {
                 return room.m_Vehicles.Values.Where(carToCheckDistance => Vector3.Distance(carToCheckDistance.position, player.m_Position) <= room.m_TickUpdateRange);
-            }
+            }*/
 
             static void WritePlayerUpdate(Player player, Room room, BinaryWriter binaryWriter)
             {

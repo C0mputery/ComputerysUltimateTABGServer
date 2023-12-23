@@ -3,7 +3,6 @@ using ComputerysUltimateTABGServer.Interface.Logging;
 using ComputerysUltimateTABGServer.Rooms;
 using ENet;
 using System.Collections.Frozen;
-using System.Linq;
 
 namespace ComputerysUltimateTABGServer.Packets
 {
@@ -15,7 +14,8 @@ namespace ComputerysUltimateTABGServer.Packets
             { EventCode.RequestWorldState, PacketTypes.RequestWorldStatePacket },
             { EventCode.PlayerUpdate, PacketTypes.PlayerUpdatePacket },
             { EventCode.GearChange, PacketTypes.GearChangePacket },
-            { EventCode.TABGPing, PacketTypes.TabgPingPacket }
+            { EventCode.TABGPing, PacketTypes.TabgPingPacket },
+            { EventCode.ChatMessage, PacketTypes.ChatMessagePacket },
         }.ToFrozenDictionary();
         public static void Handle(EventCode eventCode, Peer peer, byte[] packetData, Room room)
         {
@@ -32,14 +32,9 @@ namespace ComputerysUltimateTABGServer.Packets
                 }
             }
 
-            // Contemplating if we should handle TABGPing packets separately from other packets just so we don't make a binary reader for no reason.
-            using (MemoryStream packetDataMemoryStream = new MemoryStream(packetData))
-            using (BinaryReader packetDataBinaryReader = new BinaryReader(packetDataMemoryStream))
+            if (PacketHandlers.TryGetValue(eventCode, out PacketHandlerDelegate? packetHandler))
             {
-                if (PacketHandlers.TryGetValue(eventCode, out PacketHandlerDelegate? packetHandler))
-                {
-                    packetHandler(peer, packetData, packetDataBinaryReader, room);
-                }
+                packetHandler(peer, packetData, room);
             }
         }
 
@@ -101,5 +96,5 @@ namespace ComputerysUltimateTABGServer.Packets
         }
     }
 
-    public delegate void PacketHandlerDelegate(Peer peer, byte[] packetDataRaw, BinaryReader packetDataBinaryReader, Room room);
+    public delegate void PacketHandlerDelegate(Peer peer, byte[] packetDataRaw, Room room);
 }
