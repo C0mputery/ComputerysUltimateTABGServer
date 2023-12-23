@@ -9,7 +9,7 @@ namespace ComputerysUltimateTABGServer.Ticks
 {
     public static partial class TickTypes
     {
-        public static void TabgTick(Room room)
+        public static void UpdateTick(Room room)
         {
             foreach (Player player in room.m_Players.Values)
             {

@@ -8,6 +8,7 @@ namespace ComputerysUltimateTABGServer.Packets
         public static void TabgPingPacket(Peer peer, byte[] receivedPacketRaw, BinaryReader receivedPacketBinaryReader, Room room)
         {
             // wow that's it?
+            receivedPacketBinaryReader.Dispose();
             PacketHandler.SendPacketToPeer(EventCode.TABGPing, receivedPacketRaw, peer, room);
         }
     }

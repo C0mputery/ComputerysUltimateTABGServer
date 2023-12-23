@@ -32,6 +32,7 @@ namespace ComputerysUltimateTABGServer.Packets
                 }
             }
 
+            // Contemplating if we should handle TABGPing packets separately from other packets just so we don't make a binary reader for no reason.
             using (MemoryStream packetDataMemoryStream = new MemoryStream(packetData))
             using (BinaryReader packetDataBinaryReader = new BinaryReader(packetDataMemoryStream))
             {
