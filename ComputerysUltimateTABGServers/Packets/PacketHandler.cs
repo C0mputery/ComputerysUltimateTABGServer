@@ -19,7 +19,7 @@ namespace ComputerysUltimateTABGServer.Packets
         }.ToFrozenDictionary();
         public static void Handle(EventCode eventCode, Peer peer, byte[] packetData, Room room)
         {
-            if ((eventCode != EventCode.TABGPing) && (eventCode != EventCode.PlayerUpdate))
+            if (eventCode is not (EventCode.PlayerUpdate or EventCode.TABGPing))
             {
                 room.TryToGetPlayer(peer, out Player? player);
                 if (player == null)
