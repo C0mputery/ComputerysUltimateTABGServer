@@ -10,16 +10,14 @@ namespace ComputerysUltimateTABGServer.Packets
 {
     public static partial class PacketTypes
     {
-        public static void RequestWorldStatePacket(Peer peer, BinaryReader receivedPacketData, Room room)
+        public static void RequestWorldStatePacket(Peer peer, byte[] receivedPacketRaw, BinaryReader receivedPacketBinaryReader, Room room)
         {
-            byte receivedPlayerID = receivedPacketData.ReadByte();
-
-            if (!room.TryToGetPlayer(receivedPlayerID, out Player? player) || player == null) { return; }
+            if (!room.TryToGetPlayer(receivedPacketBinaryReader.ReadByte(), out Player? player) || player == null) { return; }
 
             using (MemoryStream memoryStream = new MemoryStream())
             using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
             {
-                binaryWriter.Write(receivedPlayerID);
+                binaryWriter.Write((byte)player.m_Peer.ID);
                 binaryWriter.Write(player.m_GroupIndex);
                 byte[] playerNameUTF8 = Encoding.UTF8.GetBytes(player.m_Name);
                 binaryWriter.Write(playerNameUTF8.Length);

@@ -7,37 +7,37 @@ namespace ComputerysUltimateTABGServer.Packets
 {
     public static partial class PacketTypes
     {
-        public static void RoomInitPacket(Peer peer, BinaryReader receivedPacketData, Room room)
+        public static void RoomInitPacket(Peer peer, byte[] receivedPacketRaw, BinaryReader receivedPacketBinaryReader, Room room)
         {
-            string playerName = receivedPacketData.ReadString();
+            string playerName = receivedPacketBinaryReader.ReadString();
             playerName = string.IsNullOrEmpty(playerName) ? "Unnamed" : playerName;
-            string gravestoneText = receivedPacketData.ReadString();
+            string gravestoneText = receivedPacketBinaryReader.ReadString();
             gravestoneText = string.IsNullOrEmpty(gravestoneText) ? "No Gravestone Text" : gravestoneText;
 
-            ulong loginKey = receivedPacketData.ReadUInt64();
-            bool isSquadHost = receivedPacketData.ReadBoolean();
-            byte numberOfSquadMembers = receivedPacketData.ReadByte();
+            ulong loginKey = receivedPacketBinaryReader.ReadUInt64();
+            bool isSquadHost = receivedPacketBinaryReader.ReadBoolean();
+            byte numberOfSquadMembers = receivedPacketBinaryReader.ReadByte();
 
-            int[] gearData = new int[receivedPacketData.ReadInt32()];
-            for (int i = 0; i < gearData.Length; i++) { gearData[i] = receivedPacketData.ReadInt32(); }
+            int[] gearData = new int[receivedPacketBinaryReader.ReadInt32()];
+            for (int i = 0; i < gearData.Length; i++) { gearData[i] = receivedPacketBinaryReader.ReadInt32(); }
 
-            string steamTicket = receivedPacketData.ReadString();
-            receivedPacketData.ReadBoolean(); // This is always false? Could possibly be for rejoining.
-            string playfabID = receivedPacketData.ReadString();
-            int jsonWebTokenLength = receivedPacketData.ReadInt32();
-            receivedPacketData.ReadBytes(jsonWebTokenLength); // this would be a jsonWebToken, this is part of epic EOSSDK so we don't need it.
-            int productidLength = receivedPacketData.ReadInt32();
-            receivedPacketData.ReadBytes(productidLength); // this would be a productid, this is part of epic EOSSDK so we don't need it.
-            int color = receivedPacketData.ReadInt32();
-            bool shouldAutoFillSquad = receivedPacketData.ReadBoolean();
+            string steamTicket = receivedPacketBinaryReader.ReadString();
+            receivedPacketBinaryReader.ReadBoolean(); // This is always false? Could possibly be for rejoining.
+            string playfabID = receivedPacketBinaryReader.ReadString();
+            int jsonWebTokenLength = receivedPacketBinaryReader.ReadInt32();
+            receivedPacketBinaryReader.ReadBytes(jsonWebTokenLength); // this would be a jsonWebToken, this is part of epic EOSSDK so we don't need it.
+            int productidLength = receivedPacketBinaryReader.ReadInt32();
+            receivedPacketBinaryReader.ReadBytes(productidLength); // this would be a productid, this is part of epic EOSSDK so we don't need it.
+            int color = receivedPacketBinaryReader.ReadInt32();
+            bool shouldAutoFillSquad = receivedPacketBinaryReader.ReadBoolean();
 
             // I am not sure how I could handle the unityAuthPlayerID being null and also obtain the server password, this needs to be looked into.
             string unityAuthPlayerId = string.Empty;
-            if (receivedPacketData.PeekChar() != -1) { unityAuthPlayerId = receivedPacketData.ReadString(); }
+            if (receivedPacketBinaryReader.PeekChar() != -1) { unityAuthPlayerId = receivedPacketBinaryReader.ReadString(); }
 
             // Tecnically this is handled by the server list, so we should be able to just ignore this.
             string serverPassword = string.Empty;
-            if (receivedPacketData.PeekChar() != -1) { serverPassword = receivedPacketData.ReadString(); }
+            if (receivedPacketBinaryReader.PeekChar() != -1) { serverPassword = receivedPacketBinaryReader.ReadString(); }
 
             byte groupIndex = room.FindOrCreateGroup(loginKey, shouldAutoFillSquad);
             Player player = new Player(peer, playerName, groupIndex, gearData, playfabID, color);

@@ -34,7 +34,7 @@ namespace ComputerysUltimateTABGServer.Packets
             {
                 if (PacketHandlers.TryGetValue(eventCode, out PacketHandlerDelegate? packetHandler))
                 {
-                    packetHandler(peer, packetDataBinaryReader, room);
+                    packetHandler(peer, packetData, packetDataBinaryReader, room);
                 }
             }
         }
@@ -77,5 +77,5 @@ namespace ComputerysUltimateTABGServer.Packets
         }
     }
 
-    public delegate void PacketHandlerDelegate(Peer peer, BinaryReader packetDataBinaryReader, Room room);
+    public delegate void PacketHandlerDelegate(Peer peer, byte[] packetDataRaw, BinaryReader packetDataBinaryReader, Room room);
 }

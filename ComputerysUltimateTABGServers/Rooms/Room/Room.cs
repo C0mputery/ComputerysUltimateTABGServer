@@ -15,7 +15,7 @@ namespace ComputerysUltimateTABGServer.Rooms
         public Task Task = null!;
         public bool m_ShouldEndRoom = false;
 
-        public double m_DelayBetweenTicks = 16;
+        public double m_DelayBetweenTicks = 16;          
         public TimeSpan m_ElapsedTime = TimeSpan.Zero;
         public DateTime m_LastTickTime = DateTime.Now;
         public float m_TickUpdateRange = 500;

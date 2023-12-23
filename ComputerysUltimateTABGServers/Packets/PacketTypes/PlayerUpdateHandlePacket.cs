@@ -6,18 +6,17 @@ namespace ComputerysUltimateTABGServer.Packets
 {
     public static partial class PacketTypes
     {
-        public static void PlayerUpdatePacket(Peer peer, BinaryReader receivedPacketData, Room room)
+        public static void PlayerUpdatePacket(Peer peer, byte[] receivedPacketRaw, BinaryReader receivedPacketBinaryReader, Room room)
         {
-            room.TryToGetPlayer(receivedPacketData.ReadByte(), out Player? player);
-            if (player == null) { return; }
-            player.m_Position.X = receivedPacketData.ReadSingle();
-            player.m_Position.Y = receivedPacketData.ReadSingle();
-            player.m_Position.Z = receivedPacketData.ReadSingle();
-            player.m_Rotation.X = receivedPacketData.ReadSingle();
-            player.m_Rotation.Y = receivedPacketData.ReadSingle();
-            player.m_AimingDownSights = receivedPacketData.ReadBoolean();
-            player.m_MovmentDirction = receivedPacketData.ReadBytes(3);
-            player.m_MovementFlags = receivedPacketData.ReadByte();
+            if (!room.TryToGetPlayer(receivedPacketBinaryReader.ReadByte(), out Player? player) || player == null) { return; }
+            player.m_Position.X = receivedPacketBinaryReader.ReadSingle();
+            player.m_Position.Y = receivedPacketBinaryReader.ReadSingle();
+            player.m_Position.Z = receivedPacketBinaryReader.ReadSingle();
+            player.m_Rotation.X = receivedPacketBinaryReader.ReadSingle();
+            player.m_Rotation.Y = receivedPacketBinaryReader.ReadSingle();
+            player.m_AimingDownSights = receivedPacketBinaryReader.ReadBoolean();
+            player.m_MovmentDirction = receivedPacketBinaryReader.ReadBytes(3);
+            player.m_MovementFlags = receivedPacketBinaryReader.ReadByte();
         }
     }
 }
