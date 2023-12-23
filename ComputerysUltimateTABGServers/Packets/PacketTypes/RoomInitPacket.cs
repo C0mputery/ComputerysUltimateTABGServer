@@ -68,7 +68,7 @@ namespace ComputerysUltimateTABGServer.Packets
                 binaryWriter.Write((byte)ServerResponse.Accepted);
                 binaryWriter.Write((byte)room.m_GameMode);
                 binaryWriter.Write((byte)room.m_MatchMode);
-                binaryWriter.Write(peer.ID);
+                binaryWriter.Write((byte)peer.ID);
                 binaryWriter.Write(player.m_GroupIndex);
                 binaryWriter.Write(playerNameUTF8.Length);
                 binaryWriter.Write(playerNameUTF8);
