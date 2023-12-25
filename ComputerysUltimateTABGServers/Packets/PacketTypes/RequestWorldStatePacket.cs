@@ -16,11 +16,12 @@ namespace ComputerysUltimateTABGServer.Packets
             using (BinaryReader receivedPacketBinaryReader = new BinaryReader(receivedPacketMemoryStream))
             {
                 if (!room.TryToGetPlayer(receivedPacketBinaryReader.ReadByte(), out Player? player) || player == null) { return; }
+                if (player.m_PlayerID != peer.ID) { return; }
 
                 using (MemoryStream memoryStream = new MemoryStream())
                 using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
                 {
-                    binaryWriter.Write((byte)player.m_Peer.ID);
+                    binaryWriter.Write((byte)player.m_PlayerID);
                     binaryWriter.Write(player.m_GroupIndex);
                     byte[] playerNameUTF8 = Encoding.UTF8.GetBytes(player.m_Name);
                     binaryWriter.Write(playerNameUTF8.Length);

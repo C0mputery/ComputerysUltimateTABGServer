@@ -12,6 +12,7 @@ namespace ComputerysUltimateTABGServer.Packets
             using (BinaryReader receivedPacketBinaryReader = new BinaryReader(receivedPacketMemoryStream))
             {
                 if (!room.TryToGetPlayer(receivedPacketBinaryReader.ReadByte(), out Player? player) || player == null) { return; }
+                if (player.m_PlayerID != peer.ID) { return; }
                 player.m_Position.X = receivedPacketBinaryReader.ReadSingle();
                 player.m_Position.Y = receivedPacketBinaryReader.ReadSingle();
                 player.m_Position.Z = receivedPacketBinaryReader.ReadSingle();

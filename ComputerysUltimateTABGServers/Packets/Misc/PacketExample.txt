@@ -5,7 +5,7 @@ namespace ComputerysUltimateTABGServer.Packets
 {
     public static partial class PacketTypes
     {
-        public static void ExamplePacket(Peer peer, byte[] receivedPacketRaw, BinaryReader receivedPacketBinaryReader, Room room)
+        public static void ExamplePacket(Peer peer, byte[] receivedPacketRaw, Room room)
         {
 
         }

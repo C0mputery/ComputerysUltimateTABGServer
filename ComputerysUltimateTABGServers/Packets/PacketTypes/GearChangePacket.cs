@@ -8,10 +8,13 @@ namespace ComputerysUltimateTABGServer.Packets
     {
         public static void GearChangePacket(Peer peer, byte[] receivedPacketRaw, Room room)
         {
+
             using (MemoryStream receivedPacketMemoryStream = new MemoryStream(receivedPacketRaw))
             using (BinaryReader receivedPacketBinaryReader = new BinaryReader(receivedPacketMemoryStream))
             {
                 if (!room.TryToGetPlayer(receivedPacketBinaryReader.ReadByte(), out Player? player) || player == null) { return; }
+                if (player.m_PlayerID != peer.ID) { return; }
+
                 int gearLenght = receivedPacketBinaryReader.ReadInt32();
                 for (int i = 0; i < gearLenght; i++)
                 {

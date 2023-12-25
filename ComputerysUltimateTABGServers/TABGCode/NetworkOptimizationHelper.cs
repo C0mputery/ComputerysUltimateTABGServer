@@ -1,6 +1,5 @@
 ﻿// NetworkOptimizationHelper gotten from the TABG Client, on 21/12/2023, using ILspy
-// If landfall ever has an issue with this, I will take it down!
-// Guessing this can be removed once we have real car stuff since the clients send it I think
+// If Landfall ever has an issue with this, I will take it down!
 
 using System.Numerics;
 

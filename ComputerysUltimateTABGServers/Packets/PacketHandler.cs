@@ -16,6 +16,7 @@ namespace ComputerysUltimateTABGServer.Packets
             { EventCode.GearChange, PacketTypes.GearChangePacket },
             { EventCode.TABGPing, PacketTypes.TabgPingPacket },
             { EventCode.ChatMessage, PacketTypes.ChatMessagePacket },
+            { EventCode.PlayerDead, PacketTypes.PlayerDeathPacket }
         }.ToFrozenDictionary();
         public static void Handle(EventCode eventCode, Peer peer, byte[] packetData, Room room)
         {
