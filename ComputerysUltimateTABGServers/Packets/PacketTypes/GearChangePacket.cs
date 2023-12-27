@@ -20,7 +20,7 @@ namespace ComputerysUltimateTABGServer.Packets
                 {
                     player.m_GearData[i] = receivedPacketBinaryReader.ReadInt32(); // This may cause an error if we have more gear than the player array size, but this should never happen.
                 }
-                PacketHandler.SendPacketToAllPlayersExcept(EventCode.GearChange, receivedPacketRaw, player, room);
+                PacketManager.SendPacketToAllPlayersExcept(EventCode.GearChange, receivedPacketRaw, player, room);
             }
         }
     }

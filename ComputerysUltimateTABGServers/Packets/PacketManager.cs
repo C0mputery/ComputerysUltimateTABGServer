@@ -6,19 +6,20 @@ using System.Collections.Frozen;
 
 namespace ComputerysUltimateTABGServer.Packets
 {
-    public static class PacketHandler
+    public static class PacketManager
     {
-        public static readonly FrozenDictionary<EventCode, PacketHandlerDelegate> PacketHandlers = new Dictionary<EventCode, PacketHandlerDelegate>
+        public static readonly FrozenDictionary<EventCode, PacketHandlerDelegate[]> PacketHandlers = new Dictionary<EventCode, PacketHandlerDelegate[]>
         {
-            { EventCode.RoomInit, PacketTypes.RoomInitPacket },
-            { EventCode.RequestWorldState, PacketTypes.RequestWorldStatePacket },
-            { EventCode.PlayerUpdate, PacketTypes.PlayerUpdatePacket },
-            { EventCode.GearChange, PacketTypes.GearChangePacket },
-            { EventCode.TABGPing, PacketTypes.TabgPingPacket },
-            { EventCode.ChatMessage, PacketTypes.ChatMessagePacket },
-            { EventCode.PlayerDead, PacketTypes.PlayerDeathPacket }
+            { EventCode.RoomInit, new PacketHandlerDelegate[] { PacketTypes.RoomInitPacket } },
+            { EventCode.RequestWorldState, new PacketHandlerDelegate[] { PacketTypes.RequestWorldStatePacket } },
+            { EventCode.PlayerUpdate, new PacketHandlerDelegate[] { PacketTypes.PlayerUpdatePacket } },
+            { EventCode.GearChange,  new PacketHandlerDelegate[]  { PacketTypes.GearChangePacket } },
+            { EventCode.TABGPing, new PacketHandlerDelegate[] {  PacketTypes.TabgPingPacket } },
+            { EventCode.ChatMessage,  new PacketHandlerDelegate[] { PacketTypes.ChatMessagePacket, AdminCommands.AdminCommandManager.HandleAdminCommand} },
+            { EventCode.PlayerDead,  new PacketHandlerDelegate[] { PacketTypes.PlayerDeathPacket } }
         }.ToFrozenDictionary();
-        public static void Handle(EventCode eventCode, Peer peer, byte[] packetData, Room room)
+
+        public static void PacketHandler(EventCode eventCode, Peer peer, byte[] packetData, Room room)
         {
             if (eventCode is not (EventCode.PlayerUpdate or EventCode.TABGPing))
             {
@@ -33,9 +34,12 @@ namespace ComputerysUltimateTABGServer.Packets
                 }
             }
 
-            if (PacketHandlers.TryGetValue(eventCode, out PacketHandlerDelegate? packetHandler))
+            if (PacketHandlers.TryGetValue(eventCode, out PacketHandlerDelegate[]? packetHandlers))
             {
-                packetHandler(peer, packetData, room);
+                foreach (PacketHandlerDelegate packetHandler in packetHandlers)
+                {
+                    packetHandler(peer, packetData, room);
+                }
             }
         }
 

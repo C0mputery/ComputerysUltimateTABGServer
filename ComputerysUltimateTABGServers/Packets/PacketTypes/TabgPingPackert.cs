@@ -7,7 +7,7 @@ namespace ComputerysUltimateTABGServer.Packets
     {
         public static void TabgPingPacket(Peer peer, byte[] receivedPacketRaw, Room room)
         {
-            PacketHandler.SendPacketToPeer(EventCode.TABGPing, receivedPacketRaw, peer, room);
+            PacketManager.SendPacketToPeer(EventCode.TABGPing, receivedPacketRaw, peer, room);
         }
     }
 }

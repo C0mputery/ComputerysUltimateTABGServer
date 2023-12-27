@@ -32,7 +32,7 @@ namespace ComputerysUltimateTABGServer.Ticks
                     foreach (Vehicle VehicleInRange in room.m_Vehicles.Values) { WriteCarUpdate(VehicleInRange, room, binaryWriter); }
 
                     binaryWriter.Write((byte)0); // idk what this is for, but it is a byte discarded by the client.
-                    PacketHandler.SendPacketToPlayer(EventCode.PlayerUpdate, memoryStream.ToArray(), player, room);
+                    PacketManager.SendPacketToPlayer(EventCode.PlayerUpdate, memoryStream.ToArray(), player, room);
                 }
             }
 

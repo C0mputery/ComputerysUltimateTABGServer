@@ -43,8 +43,8 @@ namespace ComputerysUltimateTABGServer.Packets
                     binaryWriter.Write(victimPlayer.m_Health);
                 }
 
-                if (dontReturnToSender) { PacketHandler.SendPacketToAllPlayersExcept(EventCode.PlayerDamaged, receivedPacketRaw, AttackingPlayer, room); }
-                else { PacketHandler.SendPacketToAllPlayers(EventCode.PlayerDamaged, receivedPacketRaw, room); }
+                if (dontReturnToSender) { PacketManager.SendPacketToAllPlayersExcept(EventCode.PlayerDamaged, receivedPacketRaw, AttackingPlayer, room); }
+                else { PacketManager.SendPacketToAllPlayers(EventCode.PlayerDamaged, receivedPacketRaw, room); }
             }
         }
     }

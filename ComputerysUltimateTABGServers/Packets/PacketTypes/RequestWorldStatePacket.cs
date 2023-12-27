@@ -115,7 +115,7 @@ namespace ComputerysUltimateTABGServer.Packets
                         binaryWriter.Write(room.m_DropperEnd.Y);
                         binaryWriter.Write(room.m_DropperEnd.Z);
                     }
-                    PacketHandler.SendPacketToPlayer(EventCode.Login, memoryStream.ToArray(), player, room);
+                    PacketManager.SendPacketToPlayer(EventCode.Login, memoryStream.ToArray(), player, room);
                 }
             }
         }

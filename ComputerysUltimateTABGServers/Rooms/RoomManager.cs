@@ -84,7 +84,7 @@ namespace ComputerysUltimateTABGServer.Rooms
                         byte[] packetData = new byte[enetPacket.Length - 1];
                         Array.Copy(enetPacket, 1, packetData, 0, packetData.Length);
 
-                        PacketHandler.Handle(eventCode, room.m_EnetEvent.Peer, packetData, room);
+                        PacketManager.PacketHandler(eventCode, room.m_EnetEvent.Peer, packetData, room);
 
                         // Aparently it's unnecessary to dispose of packets that are not of the Receive type, so I'm not going to do it.
                         room.m_EnetEvent.Packet.Dispose();
