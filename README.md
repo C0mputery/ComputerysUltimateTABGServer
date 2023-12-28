@@ -2,7 +2,7 @@
 
 # Computerys Ultimate TABG Server
 
-Welcome to Computerys Ultimate TABG Server! This is an extremely efficient server software for Totally Accurate Battlegrounds, entirety rewritten from [JIBSIL's](https://github.com/JIBSIL/TABGCommunityServer) servers with a focus on cleanliness and expandability.
+This is an extremely efficient server software for Totally Accurate Battlegrounds, entirety rewritten from [JIBSIL's](https://github.com/JIBSIL/TABGCommunityServer) servers with a focus on cleanliness and expandability.
 
 ## Features
 - Efficient server performance
