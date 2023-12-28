@@ -19,7 +19,7 @@ Using the PacketHandlerDelegate delegate.
 - Make a new file in the [Packet Types](PacketTypes) folder with the name of the packet type (try and follow the existing naming scheme).
 - Copy the example packet code into the new file, and change the name of the function to the name of the file.
 - Next you need to open up tabg in any c# decomplier (I use [dnSpyEx](https://github.com/dnSpyEx)), and locate the class that sends the packet you want to implement.
-- After this point it's effectively guess work, you need to figure out what packet the servers send AND what the server does with the packet.
+- After this point it's effectively guess work (unless you've got landfalls servers), you need to figure out what packet the servers send AND what the server does with the packet.
 - Once you figure that out you need to add the function to the PacketHandlers dictonary in the [PacketManager.cs](PacketManager.cs) file, and update the todo list.
 
 ## Packet Example
