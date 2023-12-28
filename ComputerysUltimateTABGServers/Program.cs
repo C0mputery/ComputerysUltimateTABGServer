@@ -5,7 +5,7 @@ using ComputerysUltimateTABGServer.Rooms;
 
 namespace ComputerysUltimateTABGServer
 {
-    class TABGCommunityServer
+    class ComputerysUltimateTABGServer
     {
         static void Main()
         {

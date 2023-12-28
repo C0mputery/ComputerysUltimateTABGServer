@@ -1,4 +1,5 @@
-﻿using ComputerysUltimateTABGServer.DataTypes.Player;
+﻿using ComputerysUltimateTABGServer.AdminCommands;
+using ComputerysUltimateTABGServer.DataTypes.Player;
 using ComputerysUltimateTABGServer.Interface.Logging;
 using ComputerysUltimateTABGServer.Rooms;
 using ENet;
@@ -15,7 +16,7 @@ namespace ComputerysUltimateTABGServer.Packets
             { EventCode.PlayerUpdate, new PacketHandlerDelegate[] { PacketTypes.PlayerUpdatePacket } },
             { EventCode.GearChange,  new PacketHandlerDelegate[]  { PacketTypes.GearChangePacket } },
             { EventCode.TABGPing, new PacketHandlerDelegate[] {  PacketTypes.TabgPingPacket } },
-            { EventCode.ChatMessage,  new PacketHandlerDelegate[] { PacketTypes.ChatMessagePacket, AdminCommands.AdminCommandManager.HandleAdminCommand} },
+            { EventCode.ChatMessage,  new PacketHandlerDelegate[] { PacketTypes.ChatMessagePacket, AdminCommandManager.HandleAdminCommand} },
             { EventCode.PlayerDead,  new PacketHandlerDelegate[] { PacketTypes.PlayerDeathPacket } }
         }.ToFrozenDictionary();
 
@@ -42,7 +43,7 @@ namespace ComputerysUltimateTABGServer.Packets
                 }
             }
         }
-
+        
         public static void SendPacketToPlayer(EventCode eventCode, byte[] packetData, Player recipent, Room room)
         {
             SendPacketToPeer(eventCode, packetData, recipent.m_Peer, room);

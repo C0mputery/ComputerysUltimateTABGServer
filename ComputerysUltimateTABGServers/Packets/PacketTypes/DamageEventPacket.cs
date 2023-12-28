@@ -11,10 +11,10 @@ namespace ComputerysUltimateTABGServer.Packets
             using (MemoryStream receivedPacketMemoryStream = new MemoryStream(receivedPacketRaw))
             using (BinaryReader receivedPacketBinaryReader = new BinaryReader(receivedPacketMemoryStream))
             {
-                if (!room.TryToGetPlayer(receivedPacketBinaryReader.ReadByte(), out Player? AttackingPlayer) || AttackingPlayer == null) { return; }
+                if (!room.TryToGetPlayer(receivedPacketBinaryReader.ReadByte(), out Player? AttackingPlayer)) { return; }
                 if (AttackingPlayer.m_PlayerID != peer.ID) { return; }
 
-                if (!room.TryToGetPlayer(receivedPacketBinaryReader.ReadByte(), out Player? victimPlayer) || victimPlayer == null) { return; }
+                if (!room.TryToGetPlayer(receivedPacketBinaryReader.ReadByte(), out Player? victimPlayer)) { return; }
 
                 float heathToSetToo = receivedPacketBinaryReader.ReadSingle();
                 float directionX = receivedPacketBinaryReader.ReadSingle();

@@ -1,4 +1,5 @@
-﻿using ENet;
+﻿using ComputerysUltimateTABGServer.AdminCommands;
+using ENet;
 using System.Numerics;
 
 namespace ComputerysUltimateTABGServer.DataTypes.Player
@@ -31,5 +32,6 @@ namespace ComputerysUltimateTABGServer.DataTypes.Player
         public bool m_AimingDownSights = false;
         public int m_CurrentlyHeldWeaponID = int.MaxValue;
 
+        public PermissionLevel m_PermissionLevel;
     }
 }

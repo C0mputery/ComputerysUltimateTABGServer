@@ -1,6 +1,7 @@
 ﻿using ComputerysUltimateTABGServer.DataTypes.Player;
 using ENet;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace ComputerysUltimateTABGServer.Rooms
@@ -24,16 +25,16 @@ namespace ComputerysUltimateTABGServer.Rooms
             m_Players.TryRemove(player.m_PlayerID, out _);
         }
 
-        public bool TryToGetPlayer(Peer peer, out Player? player)
+        public bool TryToGetPlayer(Peer peer, [MaybeNullWhen(false)] out Player player)
         {
-            if (m_Players.TryGetValue((byte)peer.ID, out player)) {
+            if (m_Players.TryGetValue((byte)peer.ID, out player) && player != null) {
                 return true;
             }
             return false;
         }
-        public bool TryToGetPlayer(byte peerID, out Player? player)
+        public bool TryToGetPlayer(byte peerID, [MaybeNullWhen(false)] out Player player)
         {
-            if (m_Players.TryGetValue(peerID, out player))
+            if (m_Players.TryGetValue(peerID, out player) && player != null)
             {
                 return true;
             }
