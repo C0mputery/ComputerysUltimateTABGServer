@@ -1,8 +1,9 @@
-These are every instance the tabg client sends a packet to the server. 
+# These are every instance the tabg client sends a packet to the server. 
 
-SendCode | Class Name | Status
+## SendCode | Class Name | Status
 
-In Progress:
+### In Progress:
+```
 SendMessageToServer(EventCode.DamageEvent, array, reliable: true); | DamageEntity | Not Implemented
 
 SendMessageToServer(EventCode.PlayerDead, array, reliable: true); | KillLocalPlayer | Not Implemented
@@ -20,8 +21,9 @@ SendMessageToServer(EventCode.PlayerFire, array, reliable: true); | SendPlayerFi
 SendMessageToServer(EventCode.RequestItemDrop, array, reliable: true); | ClientRequestDrop | Not Implemented
 SendMessageToServer(EventCode.RequestWeaponPickUp, array, reliable: true); | ClientRequestPickUp | Not Implemented
 SendMessageToServer(EventCode.RequestItemThrow, array, reliable: true); | ClientRequestThrow | Not Implemented
-
-To Do:
+```
+### To Do:
+```
 SendMessageToServer(EventCode.ACRequestedData, data, reliable: true); | ClientSendACDataChannelRequest | Not Implemented
 SendMessageToServer(EventCode.NetworkPlayerTransmittedPackage, array, reliable: true); | SendNetworkPlayerTransmittedPackage | Not Implemented
 SendMessageToServer(EventCode.BossFightResult, array, reliable: true); | SendBossResultToServer | Not Implemented
@@ -53,10 +55,12 @@ SendMessageToServer(EventCode.RequestDefuseBomb, new byte[0], reliable: true); |
 SendMessageToServer(EventCode.RequestPlantBomb, array, reliable: true); | RequestPlantBomb | Not Implemented
 SendMessageToServer(EventCode.RequestStopDefuse, new byte[0], reliable: true); | RequestStopDefuse | Not Implemented
 SendMessageToServer(EventCode.RequestPurchaseGun, data, reliable: true); | RequestBuyWeapon | Not Implemented
-
-Done:
+```
+### Done:
+```
 SendMessageToServer(EventCode.RequestWorldState, data, reliable: true); | RequestInit | Implemented
 SendMessageToServer(EventCode.ChatMessage, array, reliable: true); | SendChatMessage | Implemented
 SendMessageToServer(EventCode.GearChange, array, reliable: true); | ClientChangeGear | Implemented
 SendMessageToServer(EventCode.TABGPing, bytes, reliable: true); | PingUnityServer | Implemented
 SendMessageToServer(EventCode.PlayerUpdate, array2, reliable: false); | SendPlayerUpdate | Implemented
+```
