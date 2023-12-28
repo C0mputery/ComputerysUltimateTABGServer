@@ -52,9 +52,10 @@ namespace ComputerysUltimateTABGServer.Rooms
                 CUTSLogger.Log($"Failed to remove room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}, running failsafe room removal!", LogLevel.Error);
                 if (!ActiveRooms.TryRemove(ActiveRooms.First(KeyValuePar => KeyValuePar.Value == room).Key, out Room? _))
                 {
-                    CUTSLogger.Log($"Failed to remove room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}, even with failsafe room removal!", LogLevel.Error);
+                    CUTSLogger.Log($"Failed to remove room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}, even with failsafe room removal!", LogLevel.Fatal);
                     return;
                 }
+                CUTSLogger.Log($"Ended room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}", LogLevel.Info);
                 return;
             }
             CUTSLogger.Log($"Ended room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}", LogLevel.Info);

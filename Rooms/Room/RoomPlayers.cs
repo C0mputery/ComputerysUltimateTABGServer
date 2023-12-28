@@ -27,14 +27,15 @@ namespace ComputerysUltimateTABGServer.Rooms
 
         public bool TryToGetPlayer(Peer peer, [MaybeNullWhen(false)] out Player player)
         {
+            // This may need to be reworked as I don't know if we will be able to keep the peer ID the same as the player ID.
             if (m_Players.TryGetValue((byte)peer.ID, out player) && player != null) {
                 return true;
             }
             return false;
         }
-        public bool TryToGetPlayer(byte peerID, [MaybeNullWhen(false)] out Player player)
+        public bool TryToGetPlayer(byte playerID, [MaybeNullWhen(false)] out Player player)
         {
-            if (m_Players.TryGetValue(peerID, out player) && player != null)
+            if (m_Players.TryGetValue(playerID, out player) && player != null)
             {
                 return true;
             }

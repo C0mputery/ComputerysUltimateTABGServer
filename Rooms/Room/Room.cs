@@ -20,6 +20,7 @@ namespace ComputerysUltimateTABGServer.Rooms
         public DateTime m_LastTickTime = DateTime.Now;
         public float m_TickUpdateRange = 500;
 
+        // This constuctor should probably updated
         public Room(ushort Port, int maxClients, string roomName, double delayBetweenTicks)
         {
             m_RoomName = roomName ?? "Unnamed Room";

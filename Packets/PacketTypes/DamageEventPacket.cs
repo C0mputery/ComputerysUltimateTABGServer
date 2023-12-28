@@ -21,7 +21,7 @@ namespace ComputerysUltimateTABGServer.Packets
                 float directionY = receivedPacketBinaryReader.ReadSingle();
                 float directionZ = receivedPacketBinaryReader.ReadSingle();
                 bool rigIndexIsNotMaxValue = receivedPacketBinaryReader.ReadBoolean();
-                bool dontReturnToSender = false; // This should happen on self damage.
+                bool dontReturnToSender = false; // This will be set to true if self damage is being dealt.
                 if (rigIndexIsNotMaxValue)
                 {
                     float forceDirectionX = receivedPacketBinaryReader.ReadSingle();
@@ -41,6 +41,7 @@ namespace ComputerysUltimateTABGServer.Packets
                     binaryWriter.Write(victimPlayer.m_PlayerID);
                     binaryWriter.Write(AttackingPlayer.m_PlayerID);
                     binaryWriter.Write(victimPlayer.m_Health);
+                    // TODO: Add the rest of the data to the packet.
                 }
 
                 if (dontReturnToSender) { PacketManager.SendPacketToAllPlayersExcept(EventCode.PlayerDamaged, receivedPacketRaw, AttackingPlayer, room); }
