@@ -1,6 +1,6 @@
 # CUTS IS NOT A FINISHED PRODUCT AND IS NOT READY FOR USE! IT DOES NOT WORK RIGHT NOW! USE AT YOUR OWN RISK!
 
-#[Discord](https://discord.gg/VA9dgs85hT)
+# [Discord](https://discord.gg/VA9dgs85hT)
 
 # Computerys Ultimate TABG Server
 
