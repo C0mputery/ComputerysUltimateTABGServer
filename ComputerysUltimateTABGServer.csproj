@@ -12,7 +12,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Packets\Misc\PacketExample.txt" />
+    <None Remove="Packets\packetsDocumentation.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Packets\packetsDocumentation.md" />
   </ItemGroup>
 
   <ItemGroup>

@@ -41,7 +41,7 @@ namespace ComputerysUltimateTABGServer.Packets
                     binaryWriter.Write(victimPlayer.m_PlayerID);
                     binaryWriter.Write(AttackingPlayer.m_PlayerID);
                     binaryWriter.Write(victimPlayer.m_Health);
-                    // TODO: Add the rest of the data to the packet.
+                
                 }
 
                 if (dontReturnToSender) { PacketManager.SendPacketToAllPlayersExcept(EventCode.PlayerDamaged, receivedPacketRaw, AttackingPlayer, room); }
