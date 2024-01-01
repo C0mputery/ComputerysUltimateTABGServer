@@ -1,4 +1,5 @@
 ﻿using ComputerysUltimateTABGServer.DataTypes.Player;
+using ComputerysUltimateTABGServer.Interface.Logging;
 using ComputerysUltimateTABGServer.Rooms;
 using ENet;
 using System.Collections.Frozen;
@@ -19,6 +20,8 @@ namespace ComputerysUltimateTABGServer.AdminCommands
         }.ToFrozenDictionary();
         public static readonly FrozenDictionary<string, AdminCommandDelegate> AdminCommands = new Dictionary<string, AdminCommandDelegate>
         {
+            { "give", AdminCommandTypes.AdminCommandGive },
+            { "tp", AdminCommandTypes.AdminCommandTP }
         }.ToFrozenDictionary();
         public static readonly FrozenDictionary<string, AdminCommandDelegate> OwnerCommands = new Dictionary<string, AdminCommandDelegate>
         {
@@ -29,7 +32,7 @@ namespace ComputerysUltimateTABGServer.AdminCommands
         {
             byte PlayerID = receivedPacketRaw[0];
             byte MessageLength = receivedPacketRaw[1];
-            string Message = System.Text.Encoding.UTF8.GetString(receivedPacketRaw, 2, MessageLength);
+            string Message = System.Text.Encoding.Unicode.GetString(receivedPacketRaw, 2, MessageLength);
             if (Message[0] != '/') { return; }
 
             Message = Message[1..];
@@ -38,7 +41,7 @@ namespace ComputerysUltimateTABGServer.AdminCommands
             CommandParts = CommandParts[1..];
             CommandParts = CommandParts.Select(item => item.ToLower()).ToArray();
 
-            if (!room.m_Players.TryGetValue(PlayerID, out Player? commandSender)) { return; }
+            if (!room.TryToGetPlayer(PlayerID, out Player? commandSender)) { return; }
 
             commandSender.m_PermissionLevel = PermissionLevel.Admin; // TODO: Remove this
 

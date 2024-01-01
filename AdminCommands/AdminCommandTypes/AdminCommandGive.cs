@@ -1,5 +1,6 @@
 ﻿using ComputerysUltimateTABGServer.DataTypes.Items;
 using ComputerysUltimateTABGServer.DataTypes.Player;
+using ComputerysUltimateTABGServer.Interface.Logging;
 using ComputerysUltimateTABGServer.Rooms;
 using ENet;
 using System;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ComputerysUltimateTABGServer.AdminCommands.AdminCommandTypes
+namespace ComputerysUltimateTABGServer.AdminCommands
 {
     public static partial class AdminCommandTypes
     {
@@ -21,7 +22,7 @@ namespace ComputerysUltimateTABGServer.AdminCommands.AdminCommandTypes
                 {
                     return;
                 }
-                room.GivePlayerLoot(new Item() { WeaponIndex = 1, Quantity = 1}, player);
+                room.GivePlayerLoot(new Item() { WeaponIndex = weaponIndex, Quantity = weaponIndex }, player);
             }
         }
     }
