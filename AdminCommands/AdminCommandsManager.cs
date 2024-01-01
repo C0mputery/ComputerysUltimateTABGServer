@@ -66,7 +66,7 @@ namespace ComputerysUltimateTABGServer.AdminCommands
             if (UserCommands.TryGetValue(Command, out AdminCommandDelegate? UserCommandHandler)) { UserCommandHandler(peer, CommandParts, room); }
         }
 
-        public delegate bool AdminCommandDelegate(Peer peer, string[] CommandParts, Room room);
+        public delegate void AdminCommandDelegate(Peer peer, string[] CommandParts, Room room);
     }
 
     public enum PermissionLevel

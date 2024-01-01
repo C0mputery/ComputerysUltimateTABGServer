@@ -12,14 +12,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Packets\packetsDocumentation.md" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Packets\packetsDocumentation.md" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="ENet-CSharp" Version="2.4.8" />
   </ItemGroup>
 

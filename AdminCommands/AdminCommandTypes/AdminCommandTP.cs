@@ -11,11 +11,11 @@ namespace ComputerysUltimateTABGServer.AdminCommands.AdminCommandTypes
 {
     public static partial class AdminCommandTypes
     {
-        public static bool AdminCommandTP(Peer peer, string[] CommandParts, Room room)
+        public static void AdminCommandTP(Peer peer, string[] CommandParts, Room room)
         {
             if (CommandParts.Length == 1)
             {
-                if (!room.TryToGetPlayer(peer, out Player? Player)) { return false; }
+                if (!room.TryToGetPlayer(peer, out Player? Player)) { return; }
                 string playerNameOrID = CommandParts[0];
                 if (byte.TryParse(playerNameOrID, out byte playerID))
                 {
@@ -25,7 +25,7 @@ namespace ComputerysUltimateTABGServer.AdminCommands.AdminCommandTypes
                     }
                 }
             }
-            return false;
+            return;
         }
     }
 }

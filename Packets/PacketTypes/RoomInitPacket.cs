@@ -50,7 +50,7 @@ namespace ComputerysUltimateTABGServer.Packets
                 using (MemoryStream memoryStream = new MemoryStream())
                 using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
                 {
-                    binaryWriter.Write((byte)peer.ID);
+                    binaryWriter.Write((byte)peer.ID); // This may need to be changed as I am not sure if we are able to keep the playerID the same as the peerID.
                     binaryWriter.Write(groupIndex);
                     binaryWriter.Write(playerNameUTF8.Length);
                     binaryWriter.Write(playerNameUTF8);
@@ -71,7 +71,7 @@ namespace ComputerysUltimateTABGServer.Packets
                     binaryWriter.Write((byte)ServerResponse.Accepted);
                     binaryWriter.Write((byte)room.m_GameMode);
                     binaryWriter.Write((byte)room.m_MatchMode);
-                    binaryWriter.Write(peer.ID);
+                    binaryWriter.Write(peer.ID); // This may need to be changed as I am not sure if we are able to keep the playerID the same as the peerID.
                     binaryWriter.Write(player.m_GroupIndex);
                     binaryWriter.Write(playerNameUTF8.Length);
                     binaryWriter.Write(playerNameUTF8);
