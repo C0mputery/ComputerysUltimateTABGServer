@@ -3,7 +3,7 @@ using System.Collections.Frozen;
 
 namespace ComputerysUltimateTABGServer.Ticks
 {
-    static public class TickHandler
+    static public class TickManager
     {
         public static readonly FrozenSet<TickHandlerDelegate> TickHandlers = new HashSet<TickHandlerDelegate>
         {

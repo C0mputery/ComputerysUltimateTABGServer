@@ -104,7 +104,7 @@ namespace ComputerysUltimateTABGServer.Rooms
             if (room.m_ElapsedTime.TotalMilliseconds >= room.m_DelayBetweenTicks)
             {
                 room.m_LastTickTime = DateTime.Now;
-                TickHandler.Handle(room);
+                TickManager.Handle(room);
             }
         }
     }
