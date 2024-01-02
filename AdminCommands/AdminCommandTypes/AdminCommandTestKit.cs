@@ -11,6 +11,8 @@ namespace ComputerysUltimateTABGServer.AdminCommands
         {
 
             if (!room.TryToGetPlayer(peer, out Player? player)) { return; }
+
+            // This is a test kit for the game, it gives the player a bunch of items that are useful for testing sync.
             Item[] items =
             {
                 new Item() { WeaponIndex = 0, Quantity = 10000 },

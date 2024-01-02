@@ -17,7 +17,8 @@ namespace ComputerysUltimateTABGServer.Packets
             { EventCode.GearChange,  new PacketHandlerDelegate[]  { PacketTypes.GearChangePacket } },
             { EventCode.TABGPing, new PacketHandlerDelegate[] {  PacketTypes.TabgPingPacket } },
             { EventCode.ChatMessage,  new PacketHandlerDelegate[] { PacketTypes.ChatMessagePacket, AdminCommandManager.HandleAdminCommand} },
-            { EventCode.PlayerDead,  new PacketHandlerDelegate[] { PacketTypes.PlayerDeathPacket } }
+            { EventCode.PlayerDead,  new PacketHandlerDelegate[] { PacketTypes.PlayerDeathPacket } },
+            { EventCode.SendCatchPhrase, new PacketHandlerDelegate[] { PacketTypes.SendCatchPhrasePacket } }
         }.ToFrozenDictionary();
 
         public static void PacketHandler(EventCode eventCode, Peer peer, byte[] packetData, Room room)
@@ -31,7 +32,7 @@ namespace ComputerysUltimateTABGServer.Packets
                 }
                 else
                 {
-                    CUTSLogger.Log($"{room.m_RoomName} | Handling packet: {eventCode}, from player: {player.m_Name}", LogLevel.Info);
+                    CUTSLogger.Log($"{room.m_RoomName} | Handling packet: {eventCode}, from player: {player.m_Name}, peer ID: {peer.ID}, peer IP: {peer.IP}", LogLevel.Info);
                 }
             }
 

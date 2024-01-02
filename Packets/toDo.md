@@ -4,14 +4,7 @@
 
 ### In Progress:
 ```
-SendMessageToServer(EventCode.DamageEvent, array, reliable: true); | DamageEntity | Not Implemented
-
-SendMessageToServer(EventCode.PlayerDead, array, reliable: true); | KillLocalPlayer | Not Implemented
-SendMessageToServer(EventCode.RingDeath, data, reliable: true); | OnRingDeath | Not Implemented
-
-SendMessageToServer(EventCode.SendCatchPhrase, new byte[0], reliable: true); | SendCatchPhrase | Not Implemented
 SendMessageToServer(EventCode.ThrowChatMessage, array, reliable: true); | ClientRequestTalkingRockThrow | Not Implemented
-
 SendMessageToServer(EventCode.PlayerMarkerAdded, array, reliable: true); | ClientAddMarker | Not Implemented
 SendMessageToServer(EventCode.PlayerMarkerAdded, array, reliable: true); | ClientRemoveMarker | Not Implemented
 
@@ -21,6 +14,9 @@ SendMessageToServer(EventCode.PlayerFire, array, reliable: true); | SendPlayerFi
 SendMessageToServer(EventCode.RequestItemDrop, array, reliable: true); | ClientRequestDrop | Not Implemented
 SendMessageToServer(EventCode.RequestWeaponPickUp, array, reliable: true); | ClientRequestPickUp | Not Implemented
 SendMessageToServer(EventCode.RequestItemThrow, array, reliable: true); | ClientRequestThrow | Not Implemented
+
+SendMessageToServer(EventCode.PlayerDead, array, reliable: true); | KillLocalPlayer | Not Implemented
+SendMessageToServer(EventCode.RingDeath, data, reliable: true); | OnRingDeath | Not Implemented
 ```
 ### To Do:
 ```
@@ -44,7 +40,7 @@ SendMessageToServer(EventCode.ReviveState, array, reliable: true); | StartRevivi
 SendMessageToServer(EventCode.ReviveState, array, reliable: true); | StopReviving | Not Implemented
 SendMessageToServer(EventCode.ReviveState, array, reliable: true); | FinishedReviving | Not Implemented
 SendMessageToServer(EventCode.CarDamage, array, reliable: true); | ClientDamageCar | Not Implemented
-SendMessageToServer(EventCode.CarTemporaryUpdate, array2, reliable: false); | SendCarTempUpdate | Not Implemented
+SendMessageToServer(EventCode.CarTemporaryUpdate, array2, reliable: false); | SendCarTempUpdate | Not Implemented // erm wtf is a temp update???
 SendMessageToServer(EventCode.CarUpdate, array3, reliable: false); | SendCarUpdate | Not Implemented
 SendMessageToServer(EventCode.RequestHealing, array, reliable: true); | ClientRequestHeal | Not Implemented
 SendMessageToServer(EventCode.RequestAirplaneDrop, array, reliable: true); | ClientRequestPlaneDrop | Not Implemented
@@ -58,6 +54,8 @@ SendMessageToServer(EventCode.RequestPurchaseGun, data, reliable: true); | Reque
 ```
 ### Done:
 ```
+SendMessageToServer(EventCode.SendCatchPhrase, new byte[0], reliable: true); | SendCatchPhrase | Implemented
+SendMessageToServer(EventCode.DamageEvent, array, reliable: true); | DamageEntity | Implemented
 SendMessageToServer(EventCode.RequestWorldState, data, reliable: true); | RequestInit | Implemented
 SendMessageToServer(EventCode.ChatMessage, array, reliable: true); | SendChatMessage | Implemented
 SendMessageToServer(EventCode.GearChange, array, reliable: true); | ClientChangeGear | Implemented
