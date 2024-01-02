@@ -21,7 +21,8 @@ namespace ComputerysUltimateTABGServer.AdminCommands
         public static readonly FrozenDictionary<string, AdminCommandDelegate> AdminCommands = new Dictionary<string, AdminCommandDelegate>
         {
             { "give", AdminCommandTypes.AdminCommandGive },
-            { "tp", AdminCommandTypes.AdminCommandTP }
+            { "tp", AdminCommandTypes.AdminCommandTP },
+            { "testkit", AdminCommandTypes.AdminCommandTestKit }
         }.ToFrozenDictionary();
         public static readonly FrozenDictionary<string, AdminCommandDelegate> OwnerCommands = new Dictionary<string, AdminCommandDelegate>
         {

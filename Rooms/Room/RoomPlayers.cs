@@ -72,7 +72,7 @@ namespace ComputerysUltimateTABGServer.Rooms
             using (MemoryStream memoryStream = new MemoryStream())
             using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
             {
-                binaryWriter.Write((ushort)1);
+                binaryWriter.Write((ushort)1); // How many items we are giving.
                 binaryWriter.Write(item.WeaponIndex);
                 binaryWriter.Write(item.Quantity);
                 binaryWriter.Write(0); // Not sure what this is as it is discarded by the client.
@@ -80,7 +80,6 @@ namespace ComputerysUltimateTABGServer.Rooms
 
             }
         }
-
         public void GivePlayerLoot(Item[] items, Player player)
         {
             using (MemoryStream memoryStream = new MemoryStream())
