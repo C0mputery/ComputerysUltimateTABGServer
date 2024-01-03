@@ -3,7 +3,9 @@ using ComputerysUltimateTABGServer.DataTypes.Player;
 using ComputerysUltimateTABGServer.Interface.Logging;
 using ComputerysUltimateTABGServer.Rooms;
 using ENet;
+using System.Collections;
 using System.Collections.Frozen;
+using System.Collections.Generic;
 
 namespace ComputerysUltimateTABGServer.Packets
 {
@@ -19,7 +21,8 @@ namespace ComputerysUltimateTABGServer.Packets
             { EventCode.ChatMessage,  new PacketHandlerDelegate[] { PacketTypes.ChatMessagePacket, AdminCommandManager.HandleAdminCommand} },
             { EventCode.PlayerDead,  new PacketHandlerDelegate[] { PacketTypes.PlayerDeathPacket } },
             { EventCode.SendCatchPhrase, new PacketHandlerDelegate[] { PacketTypes.SendCatchPhrasePacket } },
-            { EventCode.ThrowChatMessage, new PacketHandlerDelegate[] { PacketTypes.ThrowChatMessagePacket } }
+            { EventCode.ThrowChatMessage, new PacketHandlerDelegate[] { PacketTypes.ThrowChatMessagePacket } },
+            { EventCode.PlayerMarkerAdded, new PacketHandlerDelegate[] { PacketTypes.PlayerMarkerAddedPacket } }
         }.ToFrozenDictionary();
 
         public static void PacketHandler(EventCode eventCode, Peer peer, byte[] packetData, Room room)
@@ -46,28 +49,50 @@ namespace ComputerysUltimateTABGServer.Packets
             }
         }
         
+        // This is getting ugly, I don't know of a better way to do this though
+        public static void SendPacketToAllPlayers(EventCode eventCode, byte[] packetData, Room room)
+        {
+            // We do this rather than a normal broadcast so that if theres a peer thats not a player it will not get the packet (idk if this can happen just being safe)
+            SendPacketToPlayers(eventCode, packetData, room.m_Players.Values.ToArray(), room);
+        }
         public static void SendPacketToPlayer(EventCode eventCode, byte[] packetData, Player recipent, Room room)
         {
             SendPacketToPeer(eventCode, packetData, recipent.m_Peer, room);
+        }
+        public static void SendPacketToPlayer(EventCode eventCode, byte[] packetData, byte recipent, Room room)
+        {
+            if (room.m_Players.TryGetValue(recipent, out Player? player))
+            {
+                SendPacketToPeer(eventCode, packetData, player.m_Peer, room);
+            }
         }
         public static void SendPacketToPlayers(EventCode eventCode, byte[] packetData, Player[] recipents, Room room)
         {
             SendPacketToPeers(eventCode, packetData, recipents.Select(player => player.m_Peer).ToArray(), room);
         }
-        public static void SendPacketToAllPlayers(EventCode eventCode, byte[] packetData, Room room)
+        public static void SendPacketToPlayers(EventCode eventCode, byte[] packetData, byte[] recipents, Room room)
         {
-            // We do this rather than a normal broadcast so that if theres a peer thats not a player it will not get the packet (idk if this can happen just being safe)
-            SendPacketToPlayers(eventCode, packetData, room.m_Players.Values.ToArray(), room);
+            SendPacketToPeers(eventCode, packetData, recipents.Where(room.m_Players.ContainsKey).Select(x => room.m_Players[x].m_Peer).ToArray(), room);
         }
         public static void SendPacketToAllPlayersExcept(EventCode eventCode, byte[] packetData, Player except, Room room)
         {
             // We do this rather than a normal broadcast so that if theres a peer thats not a player it will not get the packet (idk if this can happen just being safe)
             SendPacketToPlayers(eventCode, packetData, room.m_Players.Values.Where(player => player != except).ToArray(), room);
         }
+        public static void SendPacketToAllPlayersExcept(EventCode eventCode, byte[] packetData, byte except, Room room)
+        {
+            // We do this rather than a normal broadcast so that if theres a peer thats not a player it will not get the packet (idk if this can happen just being safe)
+            SendPacketToPlayers(eventCode, packetData, room.m_Players.Where(keyValue => keyValue.Key != except).Select(keyValue => keyValue.Value).ToArray(), room);
+        }
         public static void SendPacketToAllPlayersExcept(EventCode eventCode, byte[] packetData, Player[] except, Room room)
         {
             // We do this rather than a normal broadcast so that if theres a peer thats not a player it will not get the packet (idk if this can happen just being safe)
             SendPacketToPlayers(eventCode, packetData, room.m_Players.Values.Except(except).ToArray(), room);
+        }
+        public static void SendPacketToAllPlayersExcept(EventCode eventCode, byte[] packetData, byte[] except, Room room)
+        {
+            // We do this rather than a normal broadcast so that if theres a peer thats not a player it will not get the packet (idk if this can happen just being safe)
+            SendPacketToPlayers(eventCode, packetData, room.m_Players.Where(keyValue => !except.Contains(keyValue.Key)).Select(keyValue => keyValue.Value).ToArray(), room);
         }
 
         public static void SendPacketToPeer(EventCode eventCode, byte[] packetData, Peer recipent, Room room)
