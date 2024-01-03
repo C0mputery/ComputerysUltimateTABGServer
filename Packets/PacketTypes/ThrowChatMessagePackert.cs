@@ -8,7 +8,7 @@ namespace ComputerysUltimateTABGServer.Packets
     {
         public static void ThrowChatMessagePacket(Peer peer, byte[] receivedPacketRaw, Room room)
         {  
-            if (!room.TryToGetPlayer(receivedPacketRaw[0], out Player? player)) { return; }
+            if (!room.TryToGetPlayer(peer, receivedPacketRaw[0], out Player? player)) { return; }
             byte[] TextBytesAndLength = receivedPacketRaw[1..];
             //string chatText = Encoding.Unicode.GetString(TextBytesAndLength[1..]);
 

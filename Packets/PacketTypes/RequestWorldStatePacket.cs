@@ -15,8 +15,7 @@ namespace ComputerysUltimateTABGServer.Packets
             using (MemoryStream receivedPacketMemoryStream = new MemoryStream(receivedPacketRaw))
             using (BinaryReader receivedPacketBinaryReader = new BinaryReader(receivedPacketMemoryStream))
             {
-                if (!room.TryToGetPlayer(receivedPacketBinaryReader.ReadByte(), out Player? player)) { return; }
-                if (player.m_PlayerID != peer.ID) { return; } // This may need to be changed as I am not sure if we are able to keep the playerID the same as the peerID.
+                if (!room.TryToGetPlayer(peer, receivedPacketBinaryReader.ReadByte(), out Player? player)) { return; }
 
                 using (MemoryStream memoryStream = new MemoryStream())
                 using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))

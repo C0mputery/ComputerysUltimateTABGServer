@@ -4,8 +4,6 @@ using ComputerysUltimateTABGServer.Packets;
 using ENet;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Text;
 
 namespace ComputerysUltimateTABGServer.Rooms
 {
@@ -30,8 +28,10 @@ namespace ComputerysUltimateTABGServer.Rooms
 
         public bool TryToGetPlayer(Peer peer, [MaybeNullWhen(false)] out Player player)
         {
-            // This may need to be reworked as I don't know if we will be able to keep the peer ID the same as the player ID.
-            if (m_Players.TryGetValue((byte)peer.ID, out player) && player != null) {
+            // This is gross.
+            player = m_Players.Values.FirstOrDefault(p => p.m_Peer.Equals(peer));
+            if (player != null && default(Player) != player)
+            {
                 return true;
             }
             return false;
@@ -39,6 +39,14 @@ namespace ComputerysUltimateTABGServer.Rooms
         public bool TryToGetPlayer(byte playerID, [MaybeNullWhen(false)] out Player player)
         {
             if (m_Players.TryGetValue(playerID, out player) && player != null)
+            {
+                return true;
+            }
+            return false;
+        }
+        public bool TryToGetPlayer(Peer peer, byte playerID, [MaybeNullWhen(false)] out Player player)
+        {
+            if (m_Players.TryGetValue(playerID, out player) && player != null && player.m_Peer.Equals(peer))
             {
                 return true;
             }
