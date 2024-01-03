@@ -53,6 +53,15 @@ namespace ComputerysUltimateTABGServer.Rooms
             return false;
         }
 
+        public bool CheckPeerAndPlayerID(Peer peer, byte playerID)
+        {
+            if (m_Players.TryGetValue(playerID, out Player? player) && player != null && player.m_Peer.Equals(peer))
+            {
+                return true;
+            }
+            return false;
+        }
+
         public byte FindOrCreateGroup(ulong loginKey, bool autoTeam)
         {
             Group? groupWithLoginKey = m_Groups.Values.FirstOrDefault(g => g.m_GroupLoginKey == loginKey);

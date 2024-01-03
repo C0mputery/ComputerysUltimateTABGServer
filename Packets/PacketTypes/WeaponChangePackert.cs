@@ -5,10 +5,10 @@ namespace ComputerysUltimateTABGServer.Packets
 {
     public static partial class PacketTypes
     {
-        public static void ChatMessagePacket(Peer peer, byte[] receivedPacketRaw, Room room)
+        public static void WeaponChangePackert(Peer peer, byte[] receivedPacketRaw, Room room)
         {
             if (room.CheckPeerAndPlayerID(peer, receivedPacketRaw[0]) {
-                PacketManager.SendPacketToAllPlayers(EventCode.ChatMessage, receivedPacketRaw, room);
+                PacketManager.SendPacketToAllPlayers(EventCode.WeaponChanged, receivedPacketRaw, room);
             }
         }
     }

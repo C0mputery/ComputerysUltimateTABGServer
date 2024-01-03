@@ -3,9 +3,7 @@ using ComputerysUltimateTABGServer.DataTypes.Player;
 using ComputerysUltimateTABGServer.Interface.Logging;
 using ComputerysUltimateTABGServer.Rooms;
 using ENet;
-using System.Collections;
 using System.Collections.Frozen;
-using System.Collections.Generic;
 
 namespace ComputerysUltimateTABGServer.Packets
 {
@@ -22,7 +20,9 @@ namespace ComputerysUltimateTABGServer.Packets
             { EventCode.PlayerDead,  new PacketHandlerDelegate[] { PacketTypes.PlayerDeathPacket } },
             { EventCode.SendCatchPhrase, new PacketHandlerDelegate[] { PacketTypes.SendCatchPhrasePacket } },
             { EventCode.ThrowChatMessage, new PacketHandlerDelegate[] { PacketTypes.ThrowChatMessagePacket } },
-            { EventCode.PlayerMarkerAdded, new PacketHandlerDelegate[] { PacketTypes.PlayerMarkerAddedPacket } }
+            { EventCode.PlayerMarkerAdded, new PacketHandlerDelegate[] { PacketTypes.PlayerMarkerAddedPacket } },
+            { EventCode.WeaponChange, new PacketHandlerDelegate[] { PacketTypes.WeaponChangePackert } },
+
         }.ToFrozenDictionary();
 
         public static void PacketHandler(EventCode eventCode, Peer peer, byte[] packetData, Room room)
@@ -48,7 +48,7 @@ namespace ComputerysUltimateTABGServer.Packets
                 }
             }
         }
-        
+
         // This is getting ugly, I don't know of a better way to do this though
         public static void SendPacketToAllPlayers(EventCode eventCode, byte[] packetData, Room room)
         {

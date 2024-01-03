@@ -14,7 +14,6 @@ namespace ComputerysUltimateTABGServer.Packets
             using (BinaryReader receivedPacketBinaryReader = new BinaryReader(receivedPacketMemoryStream))
             {
                 if (!room.TryToGetPlayer(peer, receivedPacketBinaryReader.ReadByte(), out Player? AttackingPlayer)) { return; }
-
                 if (!room.TryToGetPlayer(receivedPacketBinaryReader.ReadByte(), out Player? victimPlayer)) { return; }
 
                 float heathToSetToo = receivedPacketBinaryReader.ReadSingle();
