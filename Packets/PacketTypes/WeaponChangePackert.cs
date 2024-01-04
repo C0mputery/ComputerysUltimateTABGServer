@@ -7,7 +7,7 @@ namespace ComputerysUltimateTABGServer.Packets
     {
         public static void WeaponChangePackert(Peer peer, byte[] receivedPacketRaw, Room room)
         {
-            if (room.CheckPeerAndPlayerID(peer, receivedPacketRaw[0]) {
+            if (room.CheckPeerAndPlayerID(peer, receivedPacketRaw[0])) {
                 PacketManager.SendPacketToAllPlayers(EventCode.WeaponChanged, receivedPacketRaw, room);
             }
         }
