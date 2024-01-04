@@ -4,7 +4,6 @@
 
 ### In Progress:
 ```
-SendMessageToServer(EventCode.WeaponChange, array, reliable: true); | ClientChangedWeapon | Not Implemented
 SendMessageToServer(EventCode.PlayerFire, array, reliable: true); | SendPlayerFireUpdate | Not Implemented
 
 SendMessageToServer(EventCode.RequestItemDrop, array, reliable: true); | ClientRequestDrop | Not Implemented
@@ -50,6 +49,7 @@ SendMessageToServer(EventCode.RequestPurchaseGun, data, reliable: true); | Reque
 ```
 ### Done:
 ```
+SendMessageToServer(EventCode.WeaponChange, array, reliable: true); | ClientChangedWeapon | Implemented
 SendMessageToServer(EventCode.PlayerMarkerAdded, array, reliable: true); | ClientAddMarker | Implemented
 SendMessageToServer(EventCode.PlayerMarkerAdded, array, reliable: true); | ClientRemoveMarker | Implemented
 SendMessageToServer(EventCode.ThrowChatMessage, array, reliable: true); | ClientRequestTalkingRockThrow | Implemented
