@@ -22,6 +22,7 @@ namespace ComputerysUltimateTABGServer.Packets
             { EventCode.ThrowChatMessage, new PacketHandlerDelegate[] { PacketTypes.ThrowChatMessagePacket } },
             { EventCode.PlayerMarkerAdded, new PacketHandlerDelegate[] { PacketTypes.PlayerMarkerAddedPacket } },
             { EventCode.WeaponChange, new PacketHandlerDelegate[] { PacketTypes.WeaponChangePackert } },
+            { EventCode.PlayerFire, new PacketHandlerDelegate[] { PacketTypes.PlayerFirePacket } },
 
         }.ToFrozenDictionary();
 

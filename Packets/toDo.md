@@ -5,6 +5,7 @@
 ### In Progress:
 ```
 SendMessageToServer(EventCode.PlayerFire, array, reliable: true); | SendPlayerFireUpdate | Not Implemented
+SendMessageToServer(EventCode.RequestSyncProjectileEvent, array2, reliable: true); | ClientRequestProjectileSyncEvent | Not Implemented
 
 SendMessageToServer(EventCode.RequestItemDrop, array, reliable: true); | ClientRequestDrop | Not Implemented
 SendMessageToServer(EventCode.RequestWeaponPickUp, array, reliable: true); | ClientRequestPickUp | Not Implemented
@@ -18,7 +19,6 @@ SendMessageToServer(EventCode.RingDeath, data, reliable: true); | OnRingDeath | 
 SendMessageToServer(EventCode.ACRequestedData, data, reliable: true); | ClientSendACDataChannelRequest | Not Implemented
 SendMessageToServer(EventCode.NetworkPlayerTransmittedPackage, array, reliable: true); | SendNetworkPlayerTransmittedPackage | Not Implemented
 SendMessageToServer(EventCode.BossFightResult, array, reliable: true); | SendBossResultToServer | Not Implemented
-SendMessageToServer(EventCode.RequestSyncProjectileEvent, array2, reliable: true); | ClientRequestProjectileSyncEvent | Not Implemented
 SendMessageToServer(EventCode.RequestCurseCleanse, data, reliable: true); | ClientRequestCleanseCurse | Not Implemented
 SendMessageToServer(EventCode.RequestBlessing, array, reliable: true); | ClientRequestChangeBlessings | Not Implemented
 SendMessageToServer(EventCode.RequestBlessing, data, reliable: true); | ClientRequestSummonBlessing | Not Implemented
