@@ -46,7 +46,7 @@ namespace ComputerysUltimateTABGServer.Rooms
         }
         private static void RoomUpdateEnded(Room room)
         {
-            room.m_EnetServer.Flush();
+            room.m_EnetServer.Dispose();
             if (!ActiveRooms.TryRemove(room.m_EnetAddress.Port, out _))
             {
                 CUTSLogger.Log($"Failed to remove room: {room.m_RoomName}, on port: {room.m_EnetAddress.Port}, running failsafe room removal!", LogLevel.Error);
@@ -63,37 +63,43 @@ namespace ComputerysUltimateTABGServer.Rooms
 
         private static void RoomPackets(Room room)
         {
+
             // This is diffrerent from the eNet example code, because the example code makes no god damn sense.
-            // If Check Events returns an int that's not above zero, it means that m_EnetEvent is goint to be a default value.
-            // Which means that it is redundant to check what type of event it is.
-            // So rather than running throught the loop again than breaking out of it, we just stop.
-            while (room.m_EnetServer.CheckEvents(out room.m_EnetEvent) >= 0)
+            while (room.m_EnetServer.CheckEvents(out room.m_EnetEvent) > 0) { RoomPacketsSwitch(room); }
+            if (room.m_EnetServer.Service(15, out room.m_EnetEvent) > 0) { RoomPacketsSwitch(room); }
+        }
+        private static void RoomPacketsSwitch(Room room)
+        {
+            switch (room.m_EnetEvent.Type)
             {
-                // This line is straight from the eNet example code, I don't know why they do it this way but I'm not going to change it.
-                // Idk if Service is checking a single packet or all packets in the queue, but I'm assuming it's all packets in the queue.
-                // Since within all the example code it ends while loop, used to check packets.
-                if (room.m_EnetServer.Service(15, out room.m_EnetEvent) <= 0) { break; }
+                case EventType.None:
+                    break;
 
-                switch (room.m_EnetEvent.Type)
-                {
-                    //fortnite
-                    case EventType.Receive:
-                        byte[] enetPacket = new byte[room.m_EnetEvent.Packet.Length];
-                        room.m_EnetEvent.Packet.CopyTo(enetPacket);
+                case EventType.Connect:
+                    break;
 
-                        EventCode eventCode = (EventCode)enetPacket[0];
-                        byte[] packetData = new byte[enetPacket.Length - 1];
-                        Array.Copy(enetPacket, 1, packetData, 0, packetData.Length);
+                case EventType.Disconnect:
+                    break;
 
-                        PacketManager.PacketHandler(eventCode, room.m_EnetEvent.Peer, packetData, room);
+                case EventType.Timeout:
+                    break;
 
-                        // Aparently it's unnecessary to dispose of packets that are not of the Receive type, so I'm not going to do it.
-                        room.m_EnetEvent.Packet.Dispose();
+                case EventType.Receive:
+                    byte[] enetPacket = new byte[room.m_EnetEvent.Packet.Length];
+                    room.m_EnetEvent.Packet.CopyTo(enetPacket);
 
-                        break;
-                }
+                    EventCode eventCode = (EventCode)enetPacket[0];
+                    byte[] packetData = new byte[enetPacket.Length - 1];
+                    Array.Copy(enetPacket, 1, packetData, 0, packetData.Length);
+
+                    PacketManager.PacketHandler(eventCode, room.m_EnetEvent.Peer, packetData, room);
+
+                    // Aparently it's unnecessary to dispose of packets that are not of the Receive type, so I'm not going to do it.
+                    room.m_EnetEvent.Packet.Dispose();
+                    break;
             }
         }
+
         private static void RoomTick(Room room)
         {
             // Not a fan of this, but I cannot come up with a better way of doing it.
