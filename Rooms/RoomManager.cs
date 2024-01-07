@@ -63,41 +63,41 @@ namespace ComputerysUltimateTABGServer.Rooms
 
         private static void RoomPackets(Room room)
         {
+            static void RoomPacketsSwitch(Room room)
+            {
+                switch (room.m_EnetEvent.Type)
+                {
+                    case EventType.None:
+                        break;
+
+                    case EventType.Connect:
+                        break;
+
+                    case EventType.Disconnect:
+                        break;
+
+                    case EventType.Timeout:
+                        break;
+
+                    case EventType.Receive:
+                        byte[] enetPacket = new byte[room.m_EnetEvent.Packet.Length];
+                        room.m_EnetEvent.Packet.CopyTo(enetPacket);
+
+                        EventCode eventCode = (EventCode)enetPacket[0];
+                        byte[] packetData = new byte[enetPacket.Length - 1];
+                        Array.Copy(enetPacket, 1, packetData, 0, packetData.Length);
+
+                        PacketManager.PacketHandler(eventCode, room.m_EnetEvent.Peer, packetData, room);
+
+                        // Aparently it's unnecessary to dispose of packets that are not of the Receive type, so I'm not going to do it.
+                        room.m_EnetEvent.Packet.Dispose();
+                        break;
+                }
+            }
 
             // This is diffrerent from the eNet example code, because the example code makes no god damn sense.
             while (room.m_EnetServer.CheckEvents(out room.m_EnetEvent) > 0) { RoomPacketsSwitch(room); }
             if (room.m_EnetServer.Service(15, out room.m_EnetEvent) > 0) { RoomPacketsSwitch(room); }
-        }
-        private static void RoomPacketsSwitch(Room room)
-        {
-            switch (room.m_EnetEvent.Type)
-            {
-                case EventType.None:
-                    break;
-
-                case EventType.Connect:
-                    break;
-
-                case EventType.Disconnect:
-                    break;
-
-                case EventType.Timeout:
-                    break;
-
-                case EventType.Receive:
-                    byte[] enetPacket = new byte[room.m_EnetEvent.Packet.Length];
-                    room.m_EnetEvent.Packet.CopyTo(enetPacket);
-
-                    EventCode eventCode = (EventCode)enetPacket[0];
-                    byte[] packetData = new byte[enetPacket.Length - 1];
-                    Array.Copy(enetPacket, 1, packetData, 0, packetData.Length);
-
-                    PacketManager.PacketHandler(eventCode, room.m_EnetEvent.Peer, packetData, room);
-
-                    // Aparently it's unnecessary to dispose of packets that are not of the Receive type, so I'm not going to do it.
-                    room.m_EnetEvent.Packet.Dispose();
-                    break;
-            }
         }
 
         private static void RoomTick(Room room)
