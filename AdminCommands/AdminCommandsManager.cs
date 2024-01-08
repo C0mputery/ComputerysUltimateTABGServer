@@ -6,10 +6,11 @@ using System.Collections.Frozen;
 
 namespace ComputerysUltimateTABGServer.AdminCommands
 {
-    // This entire thing feels like a hack
+    // This entire thing feels like a hack, even every command feels like a hack! yippee!
+    // Right now this is for testing purposes only, but I have no clue how to do this better so it's staying like this for probably a while.
     public static partial class AdminCommandManager
     {
-        // I'm not sure if i like this, but it works for now
+        // I'm not sure if i like this, but it works for now, I ALSO DON'T KNOW HOW TO DO THIS BETTER!
         public static readonly FrozenDictionary<string, AdminCommandDelegate> UserCommands = new Dictionary<string, AdminCommandDelegate>
         {
 
@@ -22,7 +23,10 @@ namespace ComputerysUltimateTABGServer.AdminCommands
         {
             { "give", AdminCommandTypes.AdminCommandGive },
             { "tp", AdminCommandTypes.AdminCommandTP },
-            { "testkit", AdminCommandTypes.AdminCommandTestKit }
+            { "testkit", AdminCommandTypes.AdminCommandTestKit },
+            { "start", AdminCommandTypes.AdminCommandStartGame },
+            { "setgamestate", AdminCommandTypes.AdminCommandSetGameState }
+
         }.ToFrozenDictionary();
         public static readonly FrozenDictionary<string, AdminCommandDelegate> OwnerCommands = new Dictionary<string, AdminCommandDelegate>
         {
