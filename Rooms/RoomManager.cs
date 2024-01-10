@@ -68,7 +68,7 @@ namespace ComputerysUltimateTABGServer.Rooms
 
                             case EventType.Timeout:
                                 break;
-
+                            //fortnite
                             case EventType.Receive:
                                 byte[] enetPacket = new byte[room.m_EnetEvent.Packet.Length];
                                 room.m_EnetEvent.Packet.CopyTo(enetPacket);
