@@ -20,7 +20,7 @@ namespace ComputerysUltimateTABGServer.Rooms
             setGameState(packetData);
         }
 
-        // These can be moved to another place and can become static.
+        // These could be moved to another place and can become static.
         public void setGameState(GameState gameState)
         {
             byte[] packetData = new byte[] { (byte)gameState };
