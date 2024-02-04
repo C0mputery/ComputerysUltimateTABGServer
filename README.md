@@ -1,7 +1,5 @@
 # CUTS IS NOT A FINISHED PRODUCT AND IS NOT READY FOR USE! IT DOES NOT WORK RIGHT NOW! USE AT YOUR OWN RISK!
 
-# [Discord](https://discord.gg/VA9dgs85hT)
-
 # Computerys Ultimate TABG Server
 
 This is an extremely efficient server software for Totally Accurate Battlegrounds, entirety rewritten from [JIBSIL's](https://github.com/JIBSIL/TABGCommunityServer) servers with a focus on cleanliness and expandability.
