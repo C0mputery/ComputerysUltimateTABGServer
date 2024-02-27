@@ -1,4 +1,4 @@
-# https://steamdb.info/app/2311970/info/
+# Landfalls Servers: https://steamdb.info/app/2311970/info/
 
 # CUTS IS NOT A FINISHED PRODUCT AND IS NOT READY FOR USE! IT DOES NOT WORK RIGHT NOW! USE AT YOUR OWN RISK!
 
