@@ -1,6 +1,4 @@
-# CUTS IS ON HOLD TILL LANDFALL MAKES THERE SERVER SOFTWARE PUBLIC
-## This is due to both lazyness and also my want to make it have feature parity with the base servers.
-## I will still be merging pull requests if any are made. 
+# https://steamdb.info/app/2311970/info/
 
 # CUTS IS NOT A FINISHED PRODUCT AND IS NOT READY FOR USE! IT DOES NOT WORK RIGHT NOW! USE AT YOUR OWN RISK!
 
