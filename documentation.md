@@ -12,8 +12,8 @@ Each room runs on it's own thread, and is responsible for handling all of the ga
 - [Rooms](Rooms/roomDocumentation.md)
 - [Packets](Packets/packetsDocumentation.md)
 - [Ticks](Ticks/ticksDocumentation.md)
-- [Admin Commands](AdminCommands/adminCommandsDocumentation.md)
+- [Admin Commands](AdminCommands/adminCommandsDocumentation.md) This is likely to be removed in the future and turned into a plugin.
 - [Interface](Interface/interfaceDocumentation.md)
 - [Data Types](DataTypes/dataTypesDocumentation.md)
-- [Server List](ServerList/serverListDocumentation.md) ! NOT PUBLIC !
+- [Server List](ServerList/serverListDocumentation.md)
 - [TABG Code](TABGCode/TABGCodeDocumentation.md)
