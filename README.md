@@ -39,6 +39,3 @@ For detailed documentation and usage instructions, please refer to the [document
 
 ## Contributing
 Contributions are welcome! If you would like to contribute, please follow the guidelines outlined in the [contribution guide](CONTRIBUTING.md).
-
-## License
-This project is licensed under [GPLv3](LICENSE)
