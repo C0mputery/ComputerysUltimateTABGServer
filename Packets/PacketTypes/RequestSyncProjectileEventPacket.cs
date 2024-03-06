@@ -17,7 +17,7 @@ namespace ComputerysUltimateTABGServer.Packets
                 bool includeSelf = receivedPacketBinaryReader.ReadBoolean();
                 bool isStatic = receivedPacketBinaryReader.ReadBoolean();
 
-                if (everyone) // so eventually we will have a chunk system
+                if (everyone) // so eventually we will have a chunk system 
                 {
                     if (includeSelf)
                     {
@@ -39,6 +39,7 @@ namespace ComputerysUltimateTABGServer.Packets
                         PacketManager.SendPacketToAllPeersExcept(EventCode.SyncProjectileEvent, receivedPacketRaw, peer, room);
                     }
                 }
+
             }
         }
     }
