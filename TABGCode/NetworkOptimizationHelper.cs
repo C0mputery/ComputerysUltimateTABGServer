@@ -5,6 +5,7 @@ using System.Numerics;
 
 namespace Landfall.Network
 {
+    // If somebody ever wants to comprhend this so that we can remove it, here is the original code:
     public static class NetworkOptimizationHelper
     {
         private static readonly float QUATERNION_PRECISION_MULT = 10000f;

@@ -1,6 +1,4 @@
-﻿using ComputerysUltimateTABGServer.DataTypes.Items;
-using ComputerysUltimateTABGServer.DataTypes.Player;
-using ComputerysUltimateTABGServer.Packets;
+﻿using ComputerysUltimateTABGServer.DataTypes.Player;
 using ENet;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
@@ -28,38 +26,24 @@ namespace ComputerysUltimateTABGServer.Rooms
 
         public bool TryToGetPlayer(Peer peer, [MaybeNullWhen(false)] out Player player)
         {
-            // This is gross.
             player = m_Players.Values.FirstOrDefault(p => p.m_Peer.Equals(peer));
-            if (player != null && default(Player) != player)
-            {
-                return true;
-            }
-            return false;
+            return player != null;
         }
         public bool TryToGetPlayer(byte playerID, [MaybeNullWhen(false)] out Player player)
         {
-            if (m_Players.TryGetValue(playerID, out player) && player != null)
-            {
-                return true;
-            }
-            return false;
+            m_Players.TryGetValue(playerID, out player);
+            return player != null;
         }
         public bool TryToGetPlayer(Peer peer, byte playerID, [MaybeNullWhen(false)] out Player player)
         {
-            if (m_Players.TryGetValue(playerID, out player) && player != null && player.m_Peer.Equals(peer))
-            {
-                return true;
-            }
-            return false;
+            m_Players.TryGetValue(playerID, out player))
+            return player != null && player.m_Peer.Equals(peer);
         }
 
         public bool CheckPeerAndPlayerID(Peer peer, byte playerID)
         {
-            if (m_Players.TryGetValue(playerID, out Player? player) && player != null && player.m_Peer.Equals(peer))
-            {
-                return true;
-            }
-            return false;
+            m_Players.TryGetValue(playerID, out Player? player);
+            return player != null && player.m_Peer.Equals(peer);
         }
 
         public byte FindOrCreateGroup(ulong loginKey, bool autoTeam)
