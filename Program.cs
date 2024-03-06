@@ -19,9 +19,11 @@ namespace ComputerysUltimateTABGServer
 
         static void StartUp()
         {
-            TerminalInterface.printLogo(); // Prints cool ascii art.
+            // StartUp calls for plugins and other things that need to be initialized will go here.
 
             ENet.Library.Initialize(); // We need to initialize ENet before we can use it, duh.
+
+            TerminalInterface.printLogo(); // Prints cool ascii art when the init is done.
 
             // This loop is temporary, it will be replaced with a loop that reads from a config file.
             // This is creating rooms for testing purposes.
@@ -37,6 +39,7 @@ namespace ComputerysUltimateTABGServer
         static void MainLoop()
         {
             // This will have the terminal interface logic sometime in the future.
+            // ui running on the main thread, and the servers running on a different threads.
         }
 
         static void ShutDown()
