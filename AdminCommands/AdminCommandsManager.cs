@@ -1,5 +1,4 @@
 ﻿using ComputerysUltimateTABGServer.DataTypes.Player;
-using ComputerysUltimateTABGServer.Interface.Logging;
 using ComputerysUltimateTABGServer.Rooms;
 using ENet;
 using System.Collections.Frozen;
@@ -41,40 +40,32 @@ namespace ComputerysUltimateTABGServer.AdminCommands
             if (Message[0] != '/') { return; }
 
             Message = Message[1..];
-            string[] CommandParts = Message.Split(' ');
-            string Command = CommandParts[0];
-            CommandParts = CommandParts[1..];
-            CommandParts = CommandParts.Select(item => item.ToLower()).ToArray();
+            string[] CommandArguments = Message.Split(' ');
+            string Command = CommandArguments[0];
+            CommandArguments = CommandArguments[1..];
+            CommandArguments = CommandArguments.Select(item => item.ToLower()).ToArray();
 
             if (!room.TryToGetPlayer(PlayerID, out Player? commandSender)) { return; }
 
             commandSender.m_PermissionLevel = PermissionLevel.Admin; // TODO: Remove this
 
-            if (commandSender.m_PermissionLevel >= PermissionLevel.Owner)
+            AdminCommandDelegate? CommandHandler;
+            if (commandSender.m_PermissionLevel >= PermissionLevel.Owner && OwnerCommands.TryGetValue(Command, out CommandHandler))
             {
-                if (OwnerCommands.TryGetValue(Command, out AdminCommandDelegate? CommandHandler))
-                {
-                    CommandHandler(peer, CommandParts, room); return;
-                }
+                CommandHandler(peer, CommandArguments, room); return;
             }
-            if (commandSender.m_PermissionLevel >= PermissionLevel.Admin)
+            if (commandSender.m_PermissionLevel >= PermissionLevel.Admin && AdminCommands.TryGetValue(Command, out CommandHandler))
             {
-                if (AdminCommands.TryGetValue(Command, out AdminCommandDelegate? CommandHandler))
-                {
-                    CommandHandler(peer, CommandParts, room); return;
-                }
+                CommandHandler(peer, CommandArguments, room); return;
             }
-            if (commandSender.m_PermissionLevel >= PermissionLevel.Moderator)
+            if (commandSender.m_PermissionLevel >= PermissionLevel.Moderator && ModeratorCommands.TryGetValue(Command, out CommandHandler))
             {
-                if (ModeratorCommands.TryGetValue(Command, out AdminCommandDelegate? CommandHandler))
-                {
-                    CommandHandler(peer, CommandParts, room); return;
-                }
+                CommandHandler(peer, CommandArguments, room); return;
             }
-            if (UserCommands.TryGetValue(Command, out AdminCommandDelegate? UserCommandHandler)) { UserCommandHandler(peer, CommandParts, room); }
+            if (UserCommands.TryGetValue(Command, out CommandHandler)) { CommandHandler(peer, CommandArguments, room); }
         }
 
-        public delegate void AdminCommandDelegate(Peer peer, string[] CommandParts, Room room);
+        public delegate void AdminCommandDelegate(Peer peer, string[] CommandArguments, Room room);
     }
 
     public enum PermissionLevel

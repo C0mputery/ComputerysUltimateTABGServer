@@ -36,7 +36,7 @@ namespace ComputerysUltimateTABGServer.Rooms
         }
         public bool TryToGetPlayer(Peer peer, byte playerID, [MaybeNullWhen(false)] out Player player)
         {
-            m_Players.TryGetValue(playerID, out player))
+            m_Players.TryGetValue(playerID, out player);
             return player != null && player.m_Peer.Equals(peer);
         }
 
@@ -66,6 +66,8 @@ namespace ComputerysUltimateTABGServer.Rooms
             byte groupIndex = m_Groups.Keys.Count == 0 ? (byte)0 : (byte)(m_Groups.Keys.Max() + 1);
             m_Groups.Add(groupIndex, new Group(autoTeam, loginKey, groupIndex));
             return groupIndex;
+
+
         }
     }
 }

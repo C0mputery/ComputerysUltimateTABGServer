@@ -9,6 +9,8 @@ namespace ComputerysUltimateTABGServer.Packets
 {
     public static class PacketManager
     {
+        // We utilize a dictionary to store the packet handlers for each event code so that we can easily add and remove them at runtime, this is for plugins.
+        // It's not the most efficient way to do this but it's the most flexible. A tradeoff I'm willing to make.
         public static readonly FrozenDictionary<EventCode, PacketHandlerDelegate[]> PacketHandlers = new Dictionary<EventCode, PacketHandlerDelegate[]>
         {
             { EventCode.RoomInit, new PacketHandlerDelegate[] { PacketTypes.RoomInitPacket } },
@@ -31,14 +33,7 @@ namespace ComputerysUltimateTABGServer.Packets
             if (eventCode is not (EventCode.PlayerUpdate or EventCode.TABGPing))
             {
                 room.TryToGetPlayer(peer, out Player? player);
-                if (player == null)
-                {
-                    CUTSLogger.Log($"{room.m_RoomName} | Handling packet: {eventCode}, from a non-player, peer ID: {peer.ID}, peer IP: {peer.IP}", LogLevel.Info);
-                }
-                else
-                {
-                    CUTSLogger.Log($"{room.m_RoomName} | Handling packet: {eventCode}, from player: {player.m_Name}, peer ID: {peer.ID}, peer IP: {peer.IP}", LogLevel.Info);
-                }
+                CUTSLogger.Log($"{room.m_RoomName} | Handling packet: {eventCode}, from player: {player?.m_Name ?? "Unknown Player"}, peer ID: {peer.ID}, peer IP: {peer.IP}", LogLevel.Info);
             }
 
             if (PacketHandlers.TryGetValue(eventCode, out PacketHandlerDelegate[]? packetHandlers))
@@ -51,6 +46,7 @@ namespace ComputerysUltimateTABGServer.Packets
         }
 
         // This is getting ugly, I don't know of a better way to do this though
+        // Perhaps I need to make all the linq operations onto multiple lines :P
         public static void SendPacketToAllPlayers(EventCode eventCode, byte[] packetData, Room room)
         {
             // We do this rather than a normal broadcast so that if theres a peer thats not a player it will not get the packet (idk if this can happen just being safe)

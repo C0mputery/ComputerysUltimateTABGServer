@@ -7,7 +7,7 @@ namespace ComputerysUltimateTABGServer.AdminCommands
 {
     public static partial class AdminCommandTypes
     {
-        public static void AdminCommandTestKit(Peer peer, string[] CommandParts, Room room)
+        public static void AdminCommandTestKit(Peer peer, string[] CommandArguments, Room room)
         {
 
             if (!room.TryToGetPlayer(peer, out Player? player)) { return; }

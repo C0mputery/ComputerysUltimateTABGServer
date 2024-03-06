@@ -5,6 +5,7 @@ namespace ComputerysUltimateTABGServer.Ticks
 {
     static public class TickManager
     {
+        // This apllies the same principle as the other delegates in the project. It's like this so it can be easily expanded upon at runtime.
         public static readonly FrozenSet<TickHandlerDelegate> TickHandlers = new HashSet<TickHandlerDelegate>
         {
             TickTypes.UpdateTick,

@@ -13,11 +13,11 @@ namespace ComputerysUltimateTABGServer.AdminCommands
 {
     public static partial class AdminCommandTypes
     {
-        public static void AdminCommandSetGameState(Peer peer, string[] CommandParts, Room room)
+        public static void AdminCommandSetGameState(Peer peer, string[] CommandArguments, Room room)
         {
-            if (CommandParts.Length == 1)
+            if (CommandArguments.Length == 1)
             {
-                GameState gameState = (GameState)Enum.Parse(typeof(GameState), CommandParts[0], true);
+                GameState gameState = (GameState)Enum.Parse(typeof(GameState), CommandArguments[0], true);
                 room.setGameState(gameState, new byte[0]);
             }
         }

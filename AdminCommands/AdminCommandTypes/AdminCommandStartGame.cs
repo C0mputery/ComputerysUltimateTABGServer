@@ -13,11 +13,11 @@ namespace ComputerysUltimateTABGServer.AdminCommands
 {
     public static partial class AdminCommandTypes
     {
-        public static void AdminCommandStartGame(Peer peer, string[] CommandParts, Room room)
+        public static void AdminCommandStartGame(Peer peer, string[] CommandArguments, Room room)
         {
-            if (CommandParts.Length == 1)
+            if (CommandArguments.Length == 1)
             {
-                if (float.TryParse(CommandParts[0], out float time))
+                if (float.TryParse(CommandArguments[0], out float time))
                 {
                     room.startCountDownTimer(time);
                 }

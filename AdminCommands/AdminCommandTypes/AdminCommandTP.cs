@@ -11,12 +11,12 @@ namespace ComputerysUltimateTABGServer.AdminCommands
 {
     public static partial class AdminCommandTypes
     {
-        public static void AdminCommandTP(Peer peer, string[] CommandParts, Room room)
+        public static void AdminCommandTP(Peer peer, string[] CommandArguments, Room room)
         {
-            if (CommandParts.Length == 1)
+            if (CommandArguments.Length == 1)
             {
                 if (!room.TryToGetPlayer(peer, out Player? Player)) { return; }
-                string playerNameOrID = CommandParts[0];
+                string playerNameOrID = CommandArguments[0];
                 if (byte.TryParse(playerNameOrID, out byte playerID))
                 {
                     if (room.m_Players.TryGetValue(playerID, out Player? playerToTPtoo))
