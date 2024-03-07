@@ -27,7 +27,7 @@ namespace ComputerysUltimateTABGServer
 
             // This loop is temporary, it will be replaced with a loop that reads from a config file.
             // This is creating rooms for testing purposes.
-            for (int i = 0; i < 1; i++) { RoomManager.MakeRoom((ushort)(7777 + i), 50, "testing", 120); }
+            for (int i = 0; i < 10; i++) { RoomManager.MakeRoom((ushort)(7777 + i), 50, "aaaaaa testing", 120); }
 
 #if UsingServerList
             // This is the server list code, it should be commented out if you don't have access to it.
@@ -49,5 +49,3 @@ namespace ComputerysUltimateTABGServer
         }
     }
 }
-
-    

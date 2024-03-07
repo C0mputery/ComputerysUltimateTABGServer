@@ -23,23 +23,24 @@ namespace ComputerysUltimateTABGServer.TabgServerList
             // Ideally we should be allowed to start a room later on not just at the start of the program.
             string allowedWordsPage = httpClient.GetStringAsync("https://raw.githubusercontent.com/landfallgames/tabg-word-list/main/all_words.txt").Result;
             string[] allowedWordsArray = allowedWordsPage.Split("\n");
+            HashSet<string> allowedWordsHashset = new HashSet<string>(allowedWordsArray);
             foreach (Room room in RoomManager.ActiveRooms.Values)
             {
                 // Find a more performant way of doing this, as it will be needed to be done every time a room is made and on every string.
                 // Description, gameMode, squadmode, not just the name.
-                string name = room.m_RoomName;
-                foreach (string word in allowedWordsArray)
+                foreach (string word in allowedWordsHashset)
                 {
-                    if (name.Contains(word))
+                    if (room.m_RoomName.Contains(word))
                     {
-                        List<string> randomWords = new List<string>();
+                        StringBuilder randomWords = new();
                         for (int i = 0; i < 3; i++)
                         {
                             int randomIndex = Misc.RandomNumber.Next(0, allowedWordsArray.Length);
-                            randomWords.Add(allowedWordsArray[randomIndex]);
+                            randomWords.AppendJoin(" ", allowedWordsArray[randomIndex]);
+
                         }
-                        string combinedWords = string.Join(" ", randomWords);
-                        CUTSLogger.Log($"Room name: {name} contains disallowed word, Renaming too: {combinedWords}", LogLevel.Error);
+                        string combinedWords = randomWords.ToString();
+                        CUTSLogger.Log($"Room name: {room.m_RoomName} contains disallowed word, Renaming too: {combinedWords}", LogLevel.Error);
                         room.m_RoomName = combinedWords;
                         break;
                     }
