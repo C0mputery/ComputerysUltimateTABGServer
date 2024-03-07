@@ -13,6 +13,7 @@ namespace ComputerysUltimateTABGServer.Rooms
         {
             Room room = new Room(port, maxPlayers, roomName, 1000 / tickRate);
             room.Task = Task.Run(() => RoomUpdateLoop(room));
+
             if (!ActiveRooms.TryAdd(port, room)) { CUTSLogger.Log($"Failed to make room: {roomName}, on port: {port}", LogLevel.Error); room.m_ShouldEndRoom = true; return; }
             CUTSLogger.Log($"Made room: {roomName}, on port: {port}", LogLevel.Info);
         }
@@ -46,7 +47,7 @@ namespace ComputerysUltimateTABGServer.Rooms
             // Not a fan of this, but I cannot come up with a better way of doing it.
             // I'm not going to use a timer because I don't want to have to deal with threading issues.
             // I'm not going to use a stopwatch because I don't want to have to deal with making a bunch more objects per room.
-            // This needs to run when UpdateRoomPackets is not running.
+            // This needs to run when only UpdateRoomPackets is not running.
             room.m_ElapsedTime = DateTime.Now - room.m_LastTickTime;
             if (room.m_ElapsedTime.TotalMilliseconds >= room.m_DelayBetweenTicks)
             {
