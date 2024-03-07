@@ -1,4 +1,6 @@
-﻿using ComputerysUltimateTABGServer.Rooms;
+﻿using ComputerysUltimateTABGServer.Interface.Logging;
+using ComputerysUltimateTABGServer.Rooms;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
@@ -9,11 +11,41 @@ namespace ComputerysUltimateTABGServer.TabgServerList
         public static readonly HttpClient httpClient = new HttpClient();
 
         private static string? m_ExternalIP;
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "It's a timer and it's used until the end of the program.")]
         private static Timer? heartbeatTimer;
 
         public static void StartServerListHeartbeat()
         {
             m_ExternalIP = GetExternalIpAddress().Result;
+
+            // Perhaps move this out into the room manager, so it can be called when a room is made.
+            // Ideally we should be allowed to start a room later on not just at the start of the program.
+            string allowedWordsPage = httpClient.GetStringAsync("https://raw.githubusercontent.com/landfallgames/tabg-word-list/main/all_words.txt").Result;
+            string[] allowedWordsArray = allowedWordsPage.Split("\n");
+            foreach (Room room in RoomManager.ActiveRooms.Values)
+            {
+                // Find a more performant way of doing this, as it will be needed to be done every time a room is made and on every string.
+                // Description, gameMode, squadmode, not just the name.
+                string name = room.m_RoomName;
+                foreach (string word in allowedWordsArray)
+                {
+                    if (name.Contains(word))
+                    {
+                        List<string> randomWords = new List<string>();
+                        for (int i = 0; i < 3; i++)
+                        {
+                            int randomIndex = Misc.RandomNumber.Next(0, allowedWordsArray.Length);
+                            randomWords.Add(allowedWordsArray[randomIndex]);
+                        }
+                        string combinedWords = string.Join(" ", randomWords);
+                        CUTSLogger.Log($"Room name: {name} contains disallowed word, Renaming too: {combinedWords}", LogLevel.Error);
+                        room.m_RoomName = combinedWords;
+                        break;
+                    }
+                }
+            }
+
             heartbeatTimer = new Timer(ServerListHeartbeat, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
         }
 
@@ -32,7 +64,7 @@ namespace ComputerysUltimateTABGServer.TabgServerList
                     password = "", // have this defined by room
                     gameMode = "testing", // have this defined by room
                     acceptingPlayers = true, // have this defined by room
-                    serverType = "dedicated", // have this defined by room
+                    serverType = "dedicated",
                     squadMode = "n/a", // have this defined by room
                 };
 
